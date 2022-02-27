@@ -96,7 +96,7 @@ namespace AnimatorAsCode.V0
         public List<AacFlBoolParameter> ToList() => _names.Select(AacFlBoolParameter.Internally).ToList();
 
         public IAacFlCondition AreGreaterThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Greater, other));
-        public IAacFlCondition AreLesserThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Less, other));
+        public IAacFlCondition AreLessThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Less, other));
     }
 
     public class AacFlIntParameterGroup
@@ -107,7 +107,7 @@ namespace AnimatorAsCode.V0
         public List<AacFlBoolParameter> ToList() => _names.Select(AacFlBoolParameter.Internally).ToList();
 
         public IAacFlCondition AreGreaterThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Greater, other));
-        public IAacFlCondition AreLesserThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Less, other));
+        public IAacFlCondition AreLessThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Less, other));
         public IAacFlCondition AreEqualTo(float other) => ForEach(_names, (name, condition) => condition.Add(name, AnimatorConditionMode.Equals, other));
         public IAacFlCondition AreNotEqualTo(float other) => ForEach(_names, (name, condition) => condition.Add(name, NotEqual, other));
     }
