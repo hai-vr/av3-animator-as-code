@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 184941775}
   - component: {fileID: 184941774}
   - component: {fileID: 184941773}
+  - component: {fileID: 184941776}
   m_Layer: 0
   m_Name: Avatar
   m_TagString: Untagged
@@ -156,7 +157,7 @@ MonoBehaviour:
   blueprintId: 
   contentType: 0
   assetBundleUnityVersion: 
-  fallbackStatus: 0
+  fallbackStatus: 2
 --- !u!114 &184941774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +181,7 @@ MonoBehaviour:
   VisemeSkinnedMesh: {fileID: 0}
   MouthOpenBlendShapeName: Facial_Blends.Jaw_Down
   VisemeBlendShapes: []
-  unityVersion: 
+  unityVersion: 2019.4.31f1
   portraitCameraPositionOffset: {x: 0, y: 0, z: 0}
   portraitCameraRotationOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   customExpressions: 1
@@ -265,16 +266,6 @@ MonoBehaviour:
     mask: {fileID: 0}
     isDefault: 1
   - isEnabled: 0
-    type: 2
-    animatorController: {fileID: 0}
-    mask: {fileID: 0}
-    isDefault: 1
-  - isEnabled: 0
-    type: 3
-    animatorController: {fileID: 0}
-    mask: {fileID: 0}
-    isDefault: 1
-  - isEnabled: 0
     type: 4
     animatorController: {fileID: 0}
     mask: {fileID: 0}
@@ -302,7 +293,173 @@ MonoBehaviour:
     mask: {fileID: 0}
     isDefault: 1
   AnimationPreset: {fileID: 0}
-  animationHashSet: []
+  animationHashSet:
+  - hash: -964479259
+    name: Hidden
+  - hash: -715026049
+    name: Shown
+  - hash: 170473083
+    name: Hidden
+  - hash: 1930861259
+    name: Shown
+  - hash: -117081651
+    name: Motion
+  - hash: -1082328979
+    name: Animate To NoChange
+  - hash: -1531058531
+    name: NoChange
+  - hash: 991039891
+    name: Animate To Changing
+  - hash: 550702947
+    name: Changing
+  - hash: -1792137550
+    name: Still Changing
+  - hash: 730906104
+    name: Reevaluating
+  - hash: 1512935611
+    name: Gesture 0 0
+  - hash: 757768237
+    name: Gesture 0 1
+  - hash: -1272712809
+    name: Gesture 0 2
+  - hash: -1021001471
+    name: Gesture 0 3
+  - hash: 1564497058
+    name: Gesture 0 4
+  - hash: 709321780
+    name: Gesture 0 5
+  - hash: -1286720114
+    name: Gesture 0 6
+  - hash: -1001847528
+    name: Gesture 0 7
+  - hash: 1542453900
+    name: Gesture 1 0
+  - hash: 753453594
+    name: Gesture 1 1
+  - hash: -1243505760
+    name: Gesture 1 2
+  - hash: -1025070282
+    name: Gesture 1 3
+  - hash: 1552039573
+    name: Gesture 1 4
+  - hash: 730140163
+    name: Gesture 1 5
+  - hash: -1299423303
+    name: Gesture 1 6
+  - hash: -980717777
+    name: Gesture 1 7
+  - hash: 1504265429
+    name: Gesture 2 0
+  - hash: 783184963
+    name: Gesture 2 1
+  - hash: -1213782535
+    name: Gesture 2 2
+  - hash: -1063250577
+    name: Gesture 2 3
+  - hash: 1589936332
+    name: Gesture 2 4
+  - hash: 700690522
+    name: Gesture 2 5
+  - hash: -1328881184
+    name: Gesture 2 6
+  - hash: -942812810
+    name: Gesture 2 7
+  - hash: 1483419362
+    name: Gesture 3 0
+  - hash: 795614836
+    name: Gesture 3 1
+  - hash: -1234874418
+    name: Gesture 3 2
+  - hash: -1050509480
+    name: Gesture 3 3
+  - hash: 1594288891
+    name: Gesture 3 4
+  - hash: 671210093
+    name: Gesture 3 5
+  - hash: -1324839977
+    name: Gesture 3 6
+  - hash: -972047551
+    name: Gesture 3 7
+  - hash: 1562654823
+    name: Gesture 4 0
+  - hash: 706939121
+    name: Gesture 4 1
+  - hash: -1289070261
+    name: Gesture 4 2
+  - hash: -1003656739
+    name: Gesture 4 3
+  - hash: 1514798206
+    name: Gesture 4 4
+  - hash: 760138984
+    name: Gesture 4 5
+  - hash: -1270375086
+    name: Gesture 4 6
+  - hash: -1019171388
+    name: Gesture 4 7
+  - hash: 1558598224
+    name: Gesture 5 0
+  - hash: 736191174
+    name: Gesture 5 1
+  - hash: -1293405316
+    name: Gesture 5 2
+  - hash: -974191638
+    name: Gesture 5 3
+  - hash: 1535874633
+    name: Gesture 5 4
+  - hash: 747415263
+    name: Gesture 5 5
+  - hash: -1249511579
+    name: Gesture 5 6
+  - hash: -1031616525
+    name: Gesture 5 7
+  - hash: 1587604489
+    name: Gesture 6 0
+  - hash: 698866847
+    name: Gesture 6 1
+  - hash: -1330737883
+    name: Gesture 6 2
+  - hash: -945177165
+    name: Gesture 6 3
+  - hash: 1506617360
+    name: Gesture 6 4
+  - hash: 784996486
+    name: Gesture 6 5
+  - hash: -1211938500
+    name: Gesture 6 6
+  - hash: -1060865622
+    name: Gesture 6 7
+  - hash: 1600292414
+    name: Gesture 7 0
+  - hash: 677754536
+    name: Gesture 7 1
+  - hash: -1318263022
+    name: Gesture 7 2
+  - hash: -966011004
+    name: Gesture 7 3
+  - hash: 1477394983
+    name: Gesture 7 4
+  - hash: 789082801
+    name: Gesture 7 5
+  - hash: -1241439477
+    name: Gesture 7 6
+  - hash: -1056566371
+    name: Gesture 7 7
+  - hash: -1093676708
+    name: Init
+  - hash: 1582741954
+    name: A
+  - hash: -950015880
+    name: B
+  - hash: -1336354578
+    name: C
+  - hash: 775703885
+    name: D
+  - hash: 1497071067
+    name: E
+  - hash: 362245016
+    name: Alternate
+  - hash: 1699785858
+    name: Reset
   autoFootsteps: 1
   autoLocomotion: 1
   collidersMirrored: 1
@@ -418,9 +575,29 @@ Transform:
   - {fileID: 1189859516}
   - {fileID: 581794151}
   - {fileID: 580664844}
+  - {fileID: 525614571}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &184941776
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184941772}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &264349323
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,8 +725,119 @@ Transform:
   - {fileID: 1431350100}
   - {fileID: 1919112887}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &525614570
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 184941775}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 63527d990aefbfd4889bdd854f8389e2,
+        type: 3}
+      propertyPath: m_Name
+      value: 3_Detect
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 63527d990aefbfd4889bdd854f8389e2, type: 3}
+--- !u!4 &525614571 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 63527d990aefbfd4889bdd854f8389e2,
+    type: 3}
+  m_PrefabInstance: {fileID: 525614570}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &525614572 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: 63527d990aefbfd4889bdd854f8389e2,
+    type: 3}
+  m_PrefabInstance: {fileID: 525614570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &580664843
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -790,12 +1078,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 801675899}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.21586904, y: 0.97061026, z: 5.2468147}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 580664844}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!215 &801675901
 ReflectionProbe:
@@ -983,12 +1271,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1189859515}
   m_PrefabAsset: {fileID: 0}
---- !u!137 &1189859517 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: 63527d990aefbfd4889bdd854f8389e2,
-    type: 3}
-  m_PrefabInstance: {fileID: 1189859515}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1189859518 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 63527d990aefbfd4889bdd854f8389e2,
@@ -1041,7 +1323,7 @@ MonoBehaviour:
   avatar: {fileID: 184941774}
   assetContainer: {fileID: 9100000, guid: bbcd8ae9108f27f44aacfe48a78785d4, type: 2}
   assetKey: e70c00f61088f674d82d80421febd5f9
-  iconMesh: {fileID: 1189859517}
+  iconMesh: {fileID: 525614572}
 --- !u!1 &1919112886
 GameObject:
   m_ObjectHideFlags: 0

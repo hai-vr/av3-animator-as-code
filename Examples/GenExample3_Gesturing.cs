@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#if UNITY_EDITOR
+using System.Linq;
 using AnimatorAsCode.V0;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -22,9 +23,6 @@ namespace AnimatorAsCodeFramework.Examples
 
         private GenExample3_Gesturing my;
         private AacFlBase aac;
-
-        private const string MaxBlendshape = "blendShape.KPIN_A_Major_Max";
-        private const string MinBlendshape = "blendShape.KPIN_A_Major_Min";
 
         public override void OnInspectorGUI()
         {
@@ -127,10 +125,8 @@ namespace AnimatorAsCodeFramework.Examples
         {
             return aac.NewClip().Animating(clip =>
             {
-                clip.Animates(my.iconMesh, MaxBlendshape)
-                    .WithFrameCountUnit(keyframes => keyframes.Easing(0, 1.001f).Easing(10, 0f));
-                clip.Animates(my.iconMesh, MinBlendshape)
-                    .WithOneFrame(0f);
+                clip.Animates(my.iconMesh, "blendShape.Wedge")
+                    .WithFrameCountUnit(keyframes => keyframes.Easing(0, 0f).Easing(10, 100f));
             });
         }
 
@@ -138,11 +134,10 @@ namespace AnimatorAsCodeFramework.Examples
         {
             return aac.NewClip().Animating(clip =>
             {
-                clip.Animates(my.iconMesh, MaxBlendshape)
-                    .WithFrameCountUnit(keyframes => keyframes.Easing(0, 0f).Easing(30, 0f));
-                clip.Animates(my.iconMesh, MinBlendshape)
-                    .WithFrameCountUnit(keyframes => keyframes.Easing(0, 0f).Easing(10, 100f));
+                clip.Animates(my.iconMesh, "blendShape.Wedge")
+                    .WithFrameCountUnit(keyframes => keyframes.Easing(0f, 100f).Easing(10, 0f));
             });
         }
     }
 }
+#endif

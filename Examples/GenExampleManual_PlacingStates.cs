@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿#if UNITY_EDITOR
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using UnityEditor;
@@ -35,9 +35,10 @@ namespace AnimatorAsCodeFramework.Examples
             var b = fx.NewState("B"); // This will be placed under A.
             var c = fx.NewState("C").RightOf(a); // This will be placed right of A.
             var d = fx.NewState("D"); // This will be placed under C.
+            var e = fx.NewState("E").RightOf(); // This will be placed right of D.
             var alternate = fx.NewState("Alternate").Over(c); // This will be placed over C.
 
-// This will be placed next to Alternate: 2 blocks over, and 1 to the right.
+            // This will be placed relative to Alternate: 2 blocks over, and 1 to the right.
             var reset = fx.NewState("Reset").Shift(alternate, 1, -2);
         }
 
@@ -50,3 +51,4 @@ namespace AnimatorAsCodeFramework.Examples
         }
     }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using AnimatorAsCode.V0;
 using UnityEditor;
 using UnityEngine;
@@ -110,3 +111,4 @@ namespace AnimatorAsCodeFramework.Examples
         }
     }
 }
+#endif

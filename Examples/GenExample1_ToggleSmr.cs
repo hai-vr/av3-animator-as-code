@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿#if UNITY_EDITOR
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using UnityEditor;
@@ -74,3 +74,4 @@ namespace AnimatorAsCodeFramework.Examples
         }
     }
 }
+#endif
