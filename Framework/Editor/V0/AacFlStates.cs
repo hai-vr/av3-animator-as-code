@@ -353,6 +353,28 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlState DrivingIncreases(AacFlIntParameter parameter, int additiveValue)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Add,
+                name = parameter.Name, value = additiveValue
+            });
+            return this;
+        }
+
+        public AacFlState DrivingDecreases(AacFlIntParameter parameter, int positiveValueToDecreaseBy)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Add,
+                name = parameter.Name, value = -positiveValueToDecreaseBy
+            });
+            return this;
+        }
+
         public AacFlState DrivingRandomizesLocally(AacFlFloatParameter parameter, float min, float max)
         {
             CreateDriverBehaviorIfNotExists();
@@ -360,6 +382,18 @@ namespace AnimatorAsCode.V0
             {
                 type = VRC_AvatarParameterDriver.ChangeType.Random,
                 name = parameter.Name, valueMin = min, valueMax = max
+            });
+            _driver.localOnly = true;
+            return this;
+        }
+
+        public AacFlState DrivingRandomizesLocally(AacFlBoolParameter parameter, float chance)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Random,
+                name = parameter.Name, chance = chance
             });
             _driver.localOnly = true;
             return this;
