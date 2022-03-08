@@ -290,6 +290,14 @@ namespace AnimatorAsCode.V0
                 AnimationUtility.SetEditorCurve(_clip, binding, new AnimationCurve(mutatedKeyframes.ToArray()));
             }
         }
+
+        public void WithAnimationCurve(AnimationCurve animationCurve)
+        {
+            foreach (var binding in _bindings)
+            {
+                AnimationUtility.SetEditorCurve(_clip, binding, animationCurve);
+            }
+        }
     }
 
     public class AacFlSettingCurveColor

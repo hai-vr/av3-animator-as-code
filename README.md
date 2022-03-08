@@ -747,6 +747,7 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `void WithSecondsUnit(Action<AacFlSettingKeyframes> action)` /// Start defining the keyframes with a lambda expression, expressing the unit to be in seconds.
 - `void WithFrameCountUnit(Action<AacFlSettingKeyframes> action)` /// Start defining the keyframes with a lambda expression, expressing the unit in frames.
 - `void WithUnit(AacFlUnit unit, Action<AacFlSettingKeyframes> action)` /// Start defining the keyframes with a lambda expression, expressing the unit.
+- `void WithAnimationCurve(AnimationCurve animationCurve)` /// Define the curve using a traditional AnimationCurve.
 
 # Curve of type Color (AacFlSettingCurveColor)
 
