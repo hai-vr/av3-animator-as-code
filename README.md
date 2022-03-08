@@ -608,6 +608,7 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `AacFlLayer WithAvatarMask(AvatarMask avatarMask)` /// Set the Avatar Mask of the layer.
 - `void WithAvatarMaskNoTransforms()` /// Set the Avatar Mask of the layer to be an Avatar Mask which denies all transforms. The asset is generated into the container.
 - `void ResolveAvatarMask(Transform[] paths)` /// Set the Avatar Mask of the layer to be an Avatar Mask that allows the specified transforms. If `paths` is an empty array, all transforms are denied, which is effectively the same as calling `.WithAvatarMaskNoTransforms()`. The asset is generated into the container.
+- `AacFlLayer WithDefaultState(AacFlState newDefaultState)` /// Set the default state of the layer upon entry.
 
 # Avatars 3.0 (AacAv3)
 

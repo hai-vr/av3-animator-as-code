@@ -239,6 +239,12 @@ namespace AnimatorAsCode.V0
 
             WithAvatarMask(avatarMask);
         }
+
+        public AacFlLayer WithDefaultState(AacFlState newDefaultState)
+        {
+            _stateMachine.WithDefaultState(newDefaultState);
+            return this;
+        }
     }
 
     public class AacFlBase

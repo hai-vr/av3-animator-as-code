@@ -197,6 +197,12 @@ namespace AnimatorAsCode.V0
         {
             return new Vector3(x * _gridShiftX , y * _gridShiftY, 0);
         }
+
+        public AacStateMachine WithDefaultState(AacFlState newDefaultState)
+        {
+            _machine.defaultState = newDefaultState.State;
+            return this;
+        }
     }
 
     public class AacFlState
