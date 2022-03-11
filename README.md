@@ -734,8 +734,8 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `AacFlSettingCurve Animates(string path, Type type, string propertyName)` /// Animates a path the traditional way.
 - `AacFlSettingCurve Animates(Transform transform, Type type, string propertyName)` /// Animates an object in the hierarchy relative to the animator root, the traditional way.
 - `AacFlSettingCurve Animates(GameObject gameObject)` /// Animates the active property of a GameObject, toggling it.
-- `AacFlSettingCurve Animates(Component anyComponent, string property)` /// Animates the enabled property of a component, toggling it. The runtime type of the component will be used.
-- `AacFlSettingCurve Animates(Component[] anyComponents, string property)` /// Animates the enabled property of several components, toggling them. The runtime type of the component will be used. // FIXME: Safety is not provived on nulls. It should probably be, for convenience.
+- `AacFlSettingCurve Animates(Component anyComponent, string property)` /// Animates a property of a component. The runtime type of the component will be used.
+- `AacFlSettingCurve Animates(Component[] anyComponents, string property)` /// Animates a property of several components. The runtime type of the component will be used. // FIXME: Safety is not provived on nulls. It should probably be, for convenience.
 - `AacFlSettingCurve AnimatesAnimator(AacFlParameter floatParameter)` /// Animates a Float parameter of the animator (may sometimes be referred to as an Animated Animator Parameter, or AAP).
 - `AacFlSettingCurveColor AnimatesColor(Component anyComponent, string property)` /// Animates a color property of a component. The runtime type of the component will be used.
 - `AacFlSettingCurveColor AnimatesColor(Component[] anyComponents, string property)` /// Animates a color property of several components. The runtime type of the component will be used. // FIXME: Safety is not provived on nulls. It should probably be, for convenience.
