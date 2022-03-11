@@ -588,7 +588,7 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `AacFlState NewState(string name)` /// Create a new state, initially positioned below the last generated state of this layer.
 - `AacFlState NewState(string name, int x, int y)` /// Create a new state at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.
 - `AacFlTransition AnyTransitionsTo(AacFlState destination)` /// Create a transition from Any to the `destination` state.
-- `AacFlEntryTransition EntryTransitionsTo(AacFlState destination)` /// Create a transition from the Entry to the `destination` state.
+- `AacFlEntryTransition EntryTransitionsTo(AacFlState destination)` /// Create a transition from the Entry to the `destination` state. This differs from the default state of a layer: Calling this function will not define this state to be the default state; use `AacFlLayer WithDefaultState(...)` instead. Note that the first created state is the default state, so generally no functions need to be invoked onto the first created state.
 - `AacFlBoolParameter BoolParameter(string parameterName)` /// Create a Bool parameter in the animator.
 - `AacFlBoolParameter TriggerParameterAsBool(string parameterName)` /// Create a Trigger parameter in the animator, but returns a Bool parameter for use in AAC.
 - `AacFlFloatParameter FloatParameter(string parameterName)` /// Create a Float parameter in the animator.
@@ -608,7 +608,7 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `AacFlLayer WithAvatarMask(AvatarMask avatarMask)` /// Set the Avatar Mask of the layer.
 - `void WithAvatarMaskNoTransforms()` /// Set the Avatar Mask of the layer to be an Avatar Mask which denies all transforms. The asset is generated into the container.
 - `void ResolveAvatarMask(Transform[] paths)` /// Set the Avatar Mask of the layer to be an Avatar Mask that allows the specified transforms. If `paths` is an empty array, all transforms are denied, which is effectively the same as calling `.WithAvatarMaskNoTransforms()`. The asset is generated into the container.
-- `AacFlLayer WithDefaultState(AacFlState newDefaultState)` /// Set the default state of the layer upon entry.
+- `AacFlLayer WithDefaultState(AacFlState newDefaultState)` /// Set the default state of the layer upon entry. Note that the first created state is the default state, so generally no functions need to be invoked onto the first created state.
 
 # Avatars 3.0 (AacAv3)
 
@@ -674,7 +674,7 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 
 - `AacFlTransition TransitionsTo(AacFlState destination)` /// Create a new transition from this state to the destination state.
 - `AacFlTransition TransitionsFromAny()` /// Create a new transition from Any to this state.
-- `AacFlEntryTransition TransitionsFromEntry()` /// Create a new transition from Entry to this state. Note that the first created state is the default state, so generally this function does not need to be invoked onto the first created state. Calling this function will not define this state to be the default state.
+- `AacFlEntryTransition TransitionsFromEntry()` /// Create a new transition from Entry to this state. This differs from the default state of a layer: Calling this function will not define this state to be the default state; use `AacFlLayer WithDefaultState(...)` instead. Note that the first created state is the default state, so generally no functions need to be invoked onto the first created state.
 - `AacFlState AutomaticallyMovesTo(AacFlState destination)` /// Create a transition with no exit time to the destination state, and does not return the transition.
 - `AacFlTransition Exits()` /// Create a transition from this state to the exit.
 
