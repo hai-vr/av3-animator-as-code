@@ -668,7 +668,10 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `AacFlState WithAnimation(AacFlClip clip)` /// Set a specific clip for the state. See `(AacFlBase).NewClip()` and similar.
 - `AacFlState MotionTime(AacFlFloatParameter floatParam)` /// Set the Motion Time, formerly known as Normalized Time.
 - `AacFlState WithSpeed(AacFlFloatParameter parameter)` /// Set the Speed.
+- `AacFlState WithSpeedSetTo(float speed)` /// Set the Speed to a specific value.
 - `AacFlState WithWriteDefaultsSetTo(bool shouldWriteDefaults)` /// Set Write Defaults. If you need to do this to many states, consider changing the AacConfiguration DefaultsProvider when creating Animator As Code.
+- `AacFlState WithCycleOffset(AacFlFloatParameter floatParam)` /// Set the Cycle Offset.
+- `AacFlState WithCycleOffsetSetTo(float cycleOffset)` /// Set the Cycle Offset to a specific value.
 
 ## Transitions
 

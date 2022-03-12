@@ -536,6 +536,22 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlState WithCycleOffset(AacFlFloatParameter floatParam)
+        {
+            State.cycleOffsetParameterActive = false;
+            State.cycleOffsetParameter = floatParam.Name;
+
+            return this;
+        }
+
+        public AacFlState WithCycleOffsetSetTo(float cycleOffset)
+        {
+            State.cycleOffsetParameterActive = false;
+            State.cycleOffset = cycleOffset;
+
+            return this;
+        }
+
         private void SettingElementTo(TrackingElement element, VRC_AnimatorTrackingControl.TrackingType target)
         {
             switch (element)
@@ -604,8 +620,16 @@ namespace AnimatorAsCode.V0
 
         public AacFlState WithSpeed(AacFlFloatParameter parameter)
         {
-            State.speedParameter = parameter.Name;
             State.speedParameterActive = true;
+            State.speedParameter = parameter.Name;
+
+            return this;
+        }
+
+        public AacFlState WithSpeedSetTo(float speed)
+        {
+            State.speedParameterActive = false;
+            State.speed = speed;
 
             return this;
         }
