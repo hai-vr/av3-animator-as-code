@@ -508,6 +508,26 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlState PlayableEnables(VRC_PlayableLayerControl.BlendableLayer blendable, float blendDurationSeconds = 0f)
+        {
+            return PlayableSets(blendable, blendDurationSeconds, 1.0f);
+        }
+
+        public AacFlState PlayableDisables(VRC_PlayableLayerControl.BlendableLayer blendable, float blendDurationSeconds = 0f)
+        {
+            return PlayableSets(blendable, blendDurationSeconds, 0.0f);
+        }
+
+        public AacFlState PlayableSets(VRC_PlayableLayerControl.BlendableLayer blendable, float blendDurationSeconds, float weight)
+        {
+            var playable = State.AddStateMachineBehaviour<VRCPlayableLayerControl>();
+            playable.layer = blendable;
+            playable.goalWeight = weight;
+            playable.blendDuration = blendDurationSeconds;
+
+            return this;
+        }
+
         public AacFlState MotionTime(AacFlFloatParameter floatParam)
         {
             State.timeParameterActive = true;

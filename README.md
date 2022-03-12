@@ -701,6 +701,11 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `AacFlState TrackingSets(TrackingElement element, VRC_AnimatorTrackingControl.TrackingType trackingType)` /// Use an Animator Tracking Control to set the element to be the value of `trackingType`. Create an Animator Tracking Control state behaviour if it does not exist.
 - `AacFlState LocomotionEnabled()` /// Enable locomotion. Create an Animator Locomotion Control if it does not exist.
 - `AacFlState LocomotionDisabled()` /// Disable locomotion. Create an Animator Locomotion Control if it does not exist.
+- `public AacFlState PlayableEnables(VRC_PlayableLayerControl.BlendableLayer blendable)` /// Use a Playable Layer Control to set the playable layer weight to 1, enabling it immediately. Create an Playable Layer Control no matter what.
+- `public AacFlState PlayableDisables(VRC_PlayableLayerControl.BlendableLayer blendable)` /// Use a Playable Layer Control to set the playable layer weight to 0, disabling it immediately. Create an Playable Layer Control no matter what.
+- `public AacFlState PlayableEnables(VRC_PlayableLayerControl.BlendableLayer blendable, float blendDurationSeconds)` /// Use a Playable Layer Control to set the playable layer weight to 1, blending it over a duration, enabling it. Create an Playable Layer Control no matter what.
+- `public AacFlState PlayableDisables(VRC_PlayableLayerControl.BlendableLayer blendable, float blendDurationSeconds)` /// Use a Playable Layer Control to set the playable layer weight to 0, blending it over a duration, disabling it. Create an Playable Layer Control no matter what.
+- `public AacFlState PlayableSets(VRC_PlayableLayerControl.BlendableLayer blendable, float blendDurationSeconds, float weight)` /// Use a Playable Layer Control to set the playable layer weight to a specified value, blending it over a duration. Create an Playable Layer Control no matter what.
 
 # Clip (AacFlClip)
 
