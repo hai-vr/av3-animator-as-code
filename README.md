@@ -776,7 +776,8 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 
 ## Attributes (AacFlTransition : AacFlNewTransitionContinuation)
 
-- `AacFlTransition WithSourceInterruption()` /// Set interruption source to be Source. // FIXME: Clunky interface.
+- `AacFlTransition WithSourceInterruption()` /// Set interruption source to be Source. // FIXME: Clunky interface. Will likely be deprecated in favor of `AacFlTransition WithInterruption(...)`
+- `AacFlTransition WithInterruption(TransitionInterruptionSource interruptionSource)` /// Set an interruption source.
 - `AacFlTransition WithTransitionDurationSeconds(float transitionDuration)` /// Set a fixed transition duration in seconds.
 - `AacFlTransition WithTransitionDurationPercent(float transitionDurationNormalized)` /// Set a non-fixed transition duration in a normalized amount. // FIXME: Percent is a misnomer.
 - `AacFlTransition WithOrderedInterruption()` /// Enable ordered interruption.

@@ -626,6 +626,12 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlTransition WithInterruption(TransitionInterruptionSource interruptionSource)
+        {
+            _transition.interruptionSource = interruptionSource;
+            return this;
+        }
+
         public AacFlTransition WithTransitionDurationSeconds(float transitionDuration)
         {
             _transition.duration = transitionDuration;
