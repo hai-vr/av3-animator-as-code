@@ -602,12 +602,12 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `AacFlFloatParameterGroup FloatParameters(params AacFlFloatParameter[] parameters)` /// Combine multiple Int parameters into a group.
 - `AacFlIntParameterGroup IntParameters(params AacFlIntParameter[] parameters)` /// Combine multiple Int parameters into a group.
 - `AacAv3 Av3()` /// Return an AacAv3 object, letting you select various standard Avatars 3.0 Animator Parameters. Subsequently invoking its functions will create invoked parameters in that layer.
-- `void OverrideValue(AacFlBoolParameter toBeForced, bool value)` /// Set the Bool value of `toBeForced` parameter to `value` in the animator.
-- `void OverrideValue(AacFlFloatParameter toBeForced, float value)` /// Set the Float value of `toBeForced` parameter to `value` in the animator.
-- `void OverrideValue(AacFlIntParameter toBeForced, int value)` /// Set the Int value of `toBeForced` parameter to `value` in the animator.
+- `AacFlLayer OverrideValue(AacFlBoolParameter toBeForced, bool value)` /// Set the Bool value of `toBeForced` parameter to `value` in the animator.
+- `AacFlLayer OverrideValue(AacFlFloatParameter toBeForced, float value)` /// Set the Float value of `toBeForced` parameter to `value` in the animator.
+- `AacFlLayer OverrideValue(AacFlIntParameter toBeForced, int value)` /// Set the Int value of `toBeForced` parameter to `value` in the animator.
 - `AacFlLayer WithAvatarMask(AvatarMask avatarMask)` /// Set the Avatar Mask of the layer.
-- `void WithAvatarMaskNoTransforms()` /// Set the Avatar Mask of the layer to be an Avatar Mask which denies all transforms. The asset is generated into the container.
-- `void ResolveAvatarMask(Transform[] paths)` /// Set the Avatar Mask of the layer to be an Avatar Mask that allows the specified transforms. If `paths` is an empty array, all transforms are denied, which is effectively the same as calling `.WithAvatarMaskNoTransforms()`. The asset is generated into the container.
+- `AacFlLayer WithAvatarMaskNoTransforms()` /// Set the Avatar Mask of the layer to be an Avatar Mask which denies all transforms. The asset is generated into the container.
+- `AacFlLayer ResolveAvatarMask(Transform[] paths)` /// Set the Avatar Mask of the layer to be an Avatar Mask that allows the specified transforms. If `paths` is an empty array, all transforms are denied, which is effectively the same as calling `.WithAvatarMaskNoTransforms()`. The asset is generated into the container.
 - `AacFlLayer WithDefaultState(AacFlState newDefaultState)` /// Set the default state of the layer upon entry. Note that the first created state is the default state, so generally no functions need to be invoked onto the first created state.
 
 # Avatars 3.0 (AacAv3)

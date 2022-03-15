@@ -141,7 +141,7 @@ namespace AnimatorAsCode.V0
         public AacFlIntParameterGroup IntParameters(params AacFlIntParameter[] parameters) => _stateMachine.BackingAnimator().IntParameters(parameters);
         public AacAv3 Av3() => new AacAv3(_stateMachine.BackingAnimator());
 
-        public void OverrideValue(AacFlBoolParameter toBeForced, bool value)
+        public AacFlLayer OverrideValue(AacFlBoolParameter toBeForced, bool value)
         {
             var parameters = _animatorController.parameters;
             foreach (var param in parameters)
@@ -153,9 +153,11 @@ namespace AnimatorAsCode.V0
             }
 
             _animatorController.parameters = parameters;
+
+            return this;
         }
 
-        public void OverrideValue(AacFlFloatParameter toBeForced, float value)
+        public AacFlLayer OverrideValue(AacFlFloatParameter toBeForced, float value)
         {
             var parameters = _animatorController.parameters;
             foreach (var param in parameters)
@@ -167,9 +169,11 @@ namespace AnimatorAsCode.V0
             }
 
             _animatorController.parameters = parameters;
+
+            return this;
         }
 
-        public void OverrideValue(AacFlIntParameter toBeForced, int value)
+        public AacFlLayer OverrideValue(AacFlIntParameter toBeForced, int value)
         {
             var parameters = _animatorController.parameters;
             foreach (var param in parameters)
@@ -181,6 +185,8 @@ namespace AnimatorAsCode.V0
             }
 
             _animatorController.parameters = parameters;
+
+            return this;
         }
 
         public AacFlLayer WithAvatarMask(AvatarMask avatarMask)
@@ -201,12 +207,14 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
-        public void WithAvatarMaskNoTransforms()
+        public AacFlLayer WithAvatarMaskNoTransforms()
         {
             ResolveAvatarMask(new Transform[0]);
+
+            return this;
         }
 
-        public void ResolveAvatarMask(Transform[] paths)
+        public AacFlLayer ResolveAvatarMask(Transform[] paths)
         {
             // FIXME: Fragile
             var avatarMask = new AvatarMask();
@@ -238,6 +246,8 @@ namespace AnimatorAsCode.V0
             AssetDatabase.AddObjectToAsset(avatarMask, _animatorController);
 
             WithAvatarMask(avatarMask);
+
+            return this;
         }
 
         public AacFlLayer WithDefaultState(AacFlState newDefaultState)
