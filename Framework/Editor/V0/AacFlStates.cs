@@ -214,6 +214,7 @@ namespace AnimatorAsCode.V0
         private VRCAvatarParameterDriver _driver;
         private VRCAnimatorTrackingControl _tracking;
         private VRCAnimatorLocomotionControl _locomotionControl;
+        private VRCAnimatorTemporaryPoseSpace _temporaryPoseSpace;
 
         public AacFlState(AnimatorState state, AnimatorStateMachine machine, IAacDefaultsProvider defaultsProvider)
         {
@@ -528,6 +529,46 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlState PoseSpaceEntered(float delaySeconds = 0f)
+        {
+            CreateTemporaryPoseSpaceBehaviorIfNotExists();
+            _temporaryPoseSpace.enterPoseSpace = true;
+            _temporaryPoseSpace.fixedDelay = true;
+            _temporaryPoseSpace.delayTime = delaySeconds;
+
+            return this;
+        }
+
+        public AacFlState PoseSpaceExited(float delaySeconds = 0f)
+        {
+            CreateTemporaryPoseSpaceBehaviorIfNotExists();
+            _temporaryPoseSpace.enterPoseSpace = false;
+            _temporaryPoseSpace.fixedDelay = true;
+            _temporaryPoseSpace.delayTime = delaySeconds;
+
+            return this;
+        }
+
+        public AacFlState PoseSpaceEnteredPercent(float delayNormalized)
+        {
+            CreateTemporaryPoseSpaceBehaviorIfNotExists();
+            _temporaryPoseSpace.enterPoseSpace = true;
+            _temporaryPoseSpace.fixedDelay = false;
+            _temporaryPoseSpace.delayTime = delayNormalized;
+
+            return this;
+        }
+
+        public AacFlState PoseSpaceExitedPercent(float delayNormalized)
+        {
+            CreateTemporaryPoseSpaceBehaviorIfNotExists();
+            _temporaryPoseSpace.enterPoseSpace = false;
+            _temporaryPoseSpace.fixedDelay = false;
+            _temporaryPoseSpace.delayTime = delayNormalized;
+
+            return this;
+        }
+
         public AacFlState MotionTime(AacFlFloatParameter floatParam)
         {
             State.timeParameterActive = true;
@@ -597,11 +638,16 @@ namespace AnimatorAsCode.V0
             _tracking = State.AddStateMachineBehaviour<VRCAnimatorTrackingControl>();
         }
 
-
         private void CreateLocomotionBehaviorIfNotExists()
         {
             if (_locomotionControl != null) return;
             _locomotionControl = State.AddStateMachineBehaviour<VRCAnimatorLocomotionControl>();
+        }
+
+        private void CreateTemporaryPoseSpaceBehaviorIfNotExists()
+        {
+            if (_temporaryPoseSpace != null) return;
+            _temporaryPoseSpace = State.AddStateMachineBehaviour<VRCAnimatorTemporaryPoseSpace>();
         }
 
         public enum TrackingElement
