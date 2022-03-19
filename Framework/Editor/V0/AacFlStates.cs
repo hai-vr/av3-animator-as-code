@@ -206,7 +206,6 @@ namespace AnimatorAsCode.V0
             return EntryTransition(this, ParentMachine.Machine);
         }
 
-
         public AacFlNewTransitionContinuation TransitionsTo(AacFlState destination)
         {
             return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineTransition(Machine, destination.State), ParentMachine.Machine, Machine, destination.State);
@@ -215,6 +214,11 @@ namespace AnimatorAsCode.V0
         public AacFlNewTransitionContinuation TransitionsTo(AacFlStateMachine destination)
         {
             return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineTransition(Machine, destination.Machine), ParentMachine.Machine, Machine, destination.Machine);
+        }
+
+        public AacFlNewTransitionContinuation Restarts()
+        {
+            return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineTransition(Machine, Machine), ParentMachine.Machine, Machine, Machine);
         }
 
         public AacFlNewTransitionContinuation Exits()
