@@ -95,9 +95,9 @@ namespace AnimatorAsCode.V0
         private readonly AnimatorController _animatorController;
         private readonly AacConfiguration _configuration;
         private readonly string _fullLayerName;
-        private readonly AacStateMachine _stateMachine;
+        private readonly AacFlStateMachine _stateMachine;
 
-        internal AacFlLayer(AnimatorController animatorController, AacConfiguration configuration, AacStateMachine stateMachine, string fullLayerName)
+        internal AacFlLayer(AnimatorController animatorController, AacConfiguration configuration, AacFlStateMachine stateMachine, string fullLayerName)
         {
             _animatorController = animatorController;
             _configuration = configuration;
@@ -107,7 +107,7 @@ namespace AnimatorAsCode.V0
 
         public AacFlState NewState(string name)
         {
-            var lastState = _stateMachine.LastStatePosition();
+            var lastState = _stateMachine.LastNodePosition();
             var state = _stateMachine.NewState(name, 0, 0).Shift(lastState, 0, 1);
             return state;
         }
@@ -117,12 +117,27 @@ namespace AnimatorAsCode.V0
             return _stateMachine.NewState(name, x, y);
         }
 
+        public AacFlStateMachine NewStateMachine(string name)
+        {
+            return _stateMachine.NewStateMachine(name);
+        }
+
+        public AacFlStateMachine NewStateMachine(string name, int x, int y)
+        {
+            return _stateMachine.NewStateMachine(name, x, y);
+        }
+
         public AacFlTransition AnyTransitionsTo(AacFlState destination)
         {
             return _stateMachine.AnyTransitionsTo(destination);
         }
 
         public AacFlEntryTransition EntryTransitionsTo(AacFlState destination)
+        {
+            return _stateMachine.EntryTransitionsTo(destination);
+        }
+        
+        public AacFlEntryTransition EntryTransitionsTo(AacFlStateMachine destination)
         {
             return _stateMachine.EntryTransitionsTo(destination);
         }
@@ -564,7 +579,7 @@ namespace AnimatorAsCode.V0
         }
 
         // DEPRECATED: This causes the editor window to glitch by deselecting, which is jarring for experimentation
-        internal AacStateMachine CreateOrRemakeLayerAtSameIndex(string layerName, float weightWhenCreating, AvatarMask maskWhenCreating = null)
+        internal AacFlStateMachine CreateOrRemakeLayerAtSameIndex(string layerName, float weightWhenCreating, AvatarMask maskWhenCreating = null)
         {
             var originalIndexToPreserveOrdering = FindIndexOf(layerName);
             if (originalIndexToPreserveOrdering != -1)
@@ -583,14 +598,14 @@ namespace AnimatorAsCode.V0
             }
 
             var layer = TryGetLayer(layerName);
-            var machinist = new AacStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider);
+            var machinist = new AacFlStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider);
             return machinist
                 .WithAnyStatePosition(0, 7)
                 .WithEntryPosition(0, -1)
                 .WithExitPosition(7, -1);
         }
 
-        internal AacStateMachine CreateOrClearLayerAtSameIndex(string layerName, float weightWhenCreating, AvatarMask maskWhenCreating = null)
+        internal AacFlStateMachine CreateOrClearLayerAtSameIndex(string layerName, float weightWhenCreating, AvatarMask maskWhenCreating = null)
         {
             var originalIndexToPreserveOrdering = FindIndexOf(layerName);
             if (originalIndexToPreserveOrdering != -1)
@@ -618,7 +633,7 @@ namespace AnimatorAsCode.V0
             _animatorController.layers = layers;
 
             var layer = TryGetLayer(layerName);
-            var machinist = new AacStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider);
+            var machinist = new AacFlStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider);
             return machinist
                 .WithAnyStatePosition(0, 7)
                 .WithEntryPosition(0, -1)
