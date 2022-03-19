@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEditor.Animations;
-using System.Linq;
 
 namespace AnimatorAsCode.V0
 {
