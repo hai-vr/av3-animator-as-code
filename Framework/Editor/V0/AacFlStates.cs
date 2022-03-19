@@ -247,7 +247,7 @@ namespace AnimatorAsCode.V0
 
         internal Vector3 LastNodePosition()
         {
-            return _childNodes.LastOrDefault()?.GetPosition() ?? Vector3.zero;
+            return _childNodes.LastOrDefault()?.GetPosition() ?? Vector3.right * _gridShiftX * 2;
         }
 
         private Vector3 GridPosition(int x, int y)
