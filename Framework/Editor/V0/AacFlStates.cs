@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
 
@@ -110,25 +112,28 @@ namespace AnimatorAsCode.V0
         }
     }
 
-    internal class AacStateMachine
+    public class AacFlStateMachine : AacAnimatorNode<AacFlStateMachine>
     {
-        private readonly AnimatorStateMachine _machine;
+        public readonly AnimatorStateMachine Machine;
         private readonly AnimationClip _emptyClip;
         private readonly AacBackingAnimator _backingAnimator;
-        private readonly IAacDefaultsProvider _defaultsProvider;
         private readonly float _gridShiftX;
         private readonly float _gridShiftY;
 
-        public AacStateMachine(AnimatorStateMachine machine, AnimationClip emptyClip, AacBackingAnimator backingAnimator, IAacDefaultsProvider defaultsProvider)
+        private readonly List<AacAnimatorNode> _childNodes;
+
+        internal AacFlStateMachine(AnimatorStateMachine machine, AnimationClip emptyClip, AacBackingAnimator backingAnimator, IAacDefaultsProvider defaultsProvider, AacFlStateMachine parent = null) 
+            : base(parent, defaultsProvider)
         {
-            _machine = machine;
+            Machine = machine;
             _emptyClip = emptyClip;
             _backingAnimator = backingAnimator;
-            _defaultsProvider = defaultsProvider;
 
             var grid = defaultsProvider.Grid();
             _gridShiftX = grid.x;
             _gridShiftY = grid.y;
+            
+            _childNodes = new List<AacAnimatorNode>();
         }
 
         internal AacBackingAnimator BackingAnimator()
@@ -136,40 +141,87 @@ namespace AnimatorAsCode.V0
             return _backingAnimator;
         }
 
-        public AacStateMachine WithEntryPosition(int x, int y)
+        public AacFlStateMachine NewStateMachine(string name)
         {
-            _machine.entryPosition = GridPosition(x, y);
+            var lastState = LastNodePosition();
+            return NewStateMachine(name, 0, 0).Shift(lastState, 0, 1);
+        }
+        
+        public AacFlStateMachine NewStateMachine(string name, int x, int y)
+        {
+            var stateMachine = Machine.AddStateMachine(name, GridPosition(x, y));
+            var aacMachine = new AacFlStateMachine(stateMachine, _emptyClip, _backingAnimator, DefaultsProvider, this);
+            _childNodes.Add(aacMachine);
+            return aacMachine;
+        }
+
+        public AacFlStateMachine WithEntryPosition(int x, int y)
+        {
+            Machine.entryPosition = GridPosition(x, y);
             return this;
         }
 
-        public AacStateMachine WithExitPosition(int x, int y)
+        public AacFlStateMachine WithExitPosition(int x, int y)
         {
-            _machine.exitPosition = GridPosition(x, y);
+            Machine.exitPosition = GridPosition(x, y);
             return this;
         }
 
-        public AacStateMachine WithAnyStatePosition(int x, int y)
+        public AacFlStateMachine WithAnyStatePosition(int x, int y)
         {
-            _machine.anyStatePosition = GridPosition(x, y);
+            Machine.anyStatePosition = GridPosition(x, y);
             return this;
+        }
+
+        public AacFlState NewState(string name)
+        {
+            var lastState = LastNodePosition();
+            return NewState(name, 0, 0).Shift(lastState, 0, 1);
         }
 
         public AacFlState NewState(string name, int x, int y)
         {
-            var state = _machine.AddState(name, GridPosition(x, y));
-            _defaultsProvider.ConfigureState(state, _emptyClip);
-
-            return new AacFlState(state, _machine, _defaultsProvider);
+            var state = Machine.AddState(name, GridPosition(x, y));
+            DefaultsProvider.ConfigureState(state, _emptyClip);
+            var aacState = new AacFlState(state, this, DefaultsProvider);
+            _childNodes.Add(aacState);
+            return aacState;
         }
 
         public AacFlTransition AnyTransitionsTo(AacFlState destination)
         {
-            return AnyTransition(destination, _machine);
+            return AnyTransition(destination, Machine);
         }
 
         public AacFlEntryTransition EntryTransitionsTo(AacFlState destination)
         {
-            return EntryTransition(destination, _machine);
+            return EntryTransition(destination, Machine);
+        }        
+        
+        public AacFlEntryTransition EntryTransitionsTo(AacFlStateMachine destination)
+        {
+            return EntryTransition(destination, Machine);
+        }
+        
+        public AacFlEntryTransition TransitionsFromEntry()
+        {
+            return EntryTransition(this, ParentMachine.Machine);
+        }
+        
+        
+        public AacFlNewTransitionContinuation TransitionsTo(AacFlState destination)
+        {
+            return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineTransition(Machine, destination.State), ParentMachine.Machine, Machine, destination.State);
+        }
+
+        public AacFlNewTransitionContinuation TransitionsTo(AacFlStateMachine destination)
+        {
+            return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineTransition(Machine, destination.Machine), ParentMachine.Machine, Machine, destination.Machine);
+        }
+        
+        public AacFlNewTransitionContinuation Exits()
+        {
+            return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineExitTransition(Machine), ParentMachine.Machine, Machine, null);
         }
 
         private AacFlTransition AnyTransition(AacFlState destination, AnimatorStateMachine animatorStateMachine)
@@ -179,7 +231,7 @@ namespace AnimatorAsCode.V0
 
         private AnimatorStateTransition ConfigureTransition(AnimatorStateTransition transition)
         {
-            _defaultsProvider.ConfigureTransition(transition);
+            DefaultsProvider.ConfigureTransition(transition);
             return transition;
         }
 
@@ -187,81 +239,61 @@ namespace AnimatorAsCode.V0
         {
             return new AacFlEntryTransition(animatorStateMachine.AddEntryTransition(destination.State), animatorStateMachine, null, destination.State);
         }
-
-        internal Vector3 LastStatePosition()
+        
+        private AacFlEntryTransition EntryTransition(AacFlStateMachine destination, AnimatorStateMachine animatorStateMachine)
         {
-            return _machine.states.Length > 0 ? _machine.states.Last().position : Vector3.zero;
+            return new AacFlEntryTransition(animatorStateMachine.AddEntryTransition(destination.Machine), animatorStateMachine, null, destination.Machine);
+        }
+
+        internal Vector3 LastNodePosition()
+        {
+            return _childNodes.LastOrDefault()?.GetPosition() ?? Vector3.zero;
         }
 
         private Vector3 GridPosition(int x, int y)
         {
-            return new Vector3(x * _gridShiftX , y * _gridShiftY, 0);
+            return new Vector3(x * _gridShiftX, y * _gridShiftY, 0);
+        }
+
+        internal IReadOnlyList<AacAnimatorNode> GetChildNodes()
+        {
+            return _childNodes;
+        }
+
+        protected internal override Vector3 GetPosition()
+        {
+            return ParentMachine.Machine.stateMachines.First(x => x.stateMachine == Machine).position;
+        }
+
+        protected internal override void SetPosition(Vector3 position)
+        {
+            var stateMachines = ParentMachine.Machine.stateMachines;
+            for (var i = 0; i < stateMachines.Length; i++)
+            {
+                var m = stateMachines[i];
+                if (m.stateMachine == Machine)
+                {
+                    m.position = position;
+                    stateMachines[i] = m;
+                    break;
+                }
+            }
+            ParentMachine.Machine.stateMachines = stateMachines;
         }
     }
 
-    public class AacFlState
+    public class AacFlState : AacAnimatorNode<AacFlState>
     {
         public readonly AnimatorState State;
         private readonly AnimatorStateMachine _machine;
-        private readonly IAacDefaultsProvider _defaultsProvider;
-        private readonly AacBackingAnimator _backingAnimator;
         private VRCAvatarParameterDriver _driver;
         private VRCAnimatorTrackingControl _tracking;
         private VRCAnimatorLocomotionControl _locomotionControl;
 
-        public AacFlState(AnimatorState state, AnimatorStateMachine machine, IAacDefaultsProvider defaultsProvider)
+        public AacFlState(AnimatorState state, AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider) : base(parentMachine, defaultsProvider)
         {
             State = state;
-            _machine = machine;
-            _defaultsProvider = defaultsProvider;
-        }
-
-        public AacFlState LeftOf(AacFlState otherState) => MoveNextTo(otherState, -1, 0);
-        public AacFlState RightOf(AacFlState otherState) => MoveNextTo(otherState, 1, 0);
-        public AacFlState Over(AacFlState otherState) => MoveNextTo(otherState, 0, -1);
-        public AacFlState Under(AacFlState otherState) => MoveNextTo(otherState, 0, 1);
-
-        public AacFlState LeftOf() => MoveNextTo(null, -1, 0);
-        public AacFlState RightOf() => MoveNextTo(null, 1, 0);
-        public AacFlState Over() => MoveNextTo(null, 0, -1);
-        public AacFlState Under() => MoveNextTo(null, 0, 1);
-
-        public AacFlState Shift(AacFlState otherState, int shiftX, int shiftY) => MoveNextTo(otherState, shiftX, shiftY);
-
-        private AacFlState MoveNextTo(AacFlState otherStateOrSecondToLastWhenNull, int x, int y)
-        {
-            if (otherStateOrSecondToLastWhenNull == null)
-            {
-                var other = _machine.states[_machine.states.Length - 2];
-                Shift(other.position, x, y);
-
-                return this;
-            }
-            else
-            {
-                var other = _machine.states.First(animatorState => animatorState.state == otherStateOrSecondToLastWhenNull.State);
-                Shift(other.position, x, y);
-
-                return this;
-            }
-        }
-
-        public AacFlState Shift(Vector3 otherPosition, int shiftX, int shiftY)
-        {
-            var states = _machine.states;
-            for (var index = 0; index < states.Length; index++)
-            {
-                var childAnimatorState = states[index];
-                if (childAnimatorState.state == State)
-                {
-                    var cms = childAnimatorState;
-                    cms.position = otherPosition + new Vector3(shiftX * _defaultsProvider.Grid().x, shiftY * _defaultsProvider.Grid().y, 0);
-                    states[index] = cms;
-                    break;
-                }
-            }
-            _machine.states = states;
-            return this;
+            _machine = parentMachine.Machine;
         }
 
         public AacFlState WithAnimation(Motion clip)
@@ -279,6 +311,11 @@ namespace AnimatorAsCode.V0
         public AacFlTransition TransitionsTo(AacFlState destination)
         {
             return new AacFlTransition(ConfigureTransition(State.AddTransition(destination.State)), _machine, State, destination.State);
+        }
+        
+        public AacFlTransition TransitionsTo(AacFlStateMachine destination)
+        {
+            return new AacFlTransition(State.AddTransition(destination.Machine), _machine, State, destination.Machine);
         }
 
         public AacFlTransition TransitionsFromAny()
@@ -305,7 +342,7 @@ namespace AnimatorAsCode.V0
 
         private AnimatorStateTransition ConfigureTransition(AnimatorStateTransition transition)
         {
-            _defaultsProvider.ConfigureTransition(transition);
+            DefaultsProvider.ConfigureTransition(transition);
             return transition;
         }
 
@@ -583,13 +620,34 @@ namespace AnimatorAsCode.V0
 
             return this;
         }
+        
+        protected internal override Vector3 GetPosition()
+        {
+            return _machine.states.First(x => x.state == State).position;
+        }
+
+        protected internal override void SetPosition(Vector3 position)
+        {
+            var states = _machine.states;
+            for (var i = 0; i < states.Length; i++)
+            {
+                var m = states[i];
+                if (m.state == State)
+                {
+                    m.position = position;
+                    states[i] = m;
+                    break;
+                }
+            }
+            _machine.states = states;
+        }
     }
 
     public class AacFlTransition : AacFlNewTransitionContinuation
     {
         private readonly AnimatorStateTransition _transition;
 
-        public AacFlTransition(AnimatorStateTransition transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        public AacFlTransition(AnimatorStateTransition transition, AnimatorStateMachine machine, AacFlTransitionEndpoint sourceNullableIfAny, AacFlTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
             _transition = transition;
         }
@@ -657,7 +715,7 @@ namespace AnimatorAsCode.V0
 
     public class AacFlEntryTransition : AacFlNewTransitionContinuation
     {
-        public AacFlEntryTransition(AnimatorTransition transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        public AacFlEntryTransition(AnimatorTransition transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AacFlTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
         }
     }
@@ -692,10 +750,10 @@ namespace AnimatorAsCode.V0
     {
         public readonly AnimatorTransitionBase Transition;
         private readonly AnimatorStateMachine _machine;
-        private readonly AnimatorState _sourceNullableIfAny;
-        private readonly AnimatorState _destinationNullableIfExits;
+        private readonly AacFlTransitionEndpoint _sourceNullableIfAny;
+        private readonly AacFlTransitionEndpoint _destinationNullableIfExits;
 
-        public AacFlNewTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits)
+        public AacFlNewTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacFlTransitionEndpoint sourceNullableIfAny, AacFlTransitionEndpoint destinationNullableIfExits)
         {
             Transition = transition;
             _machine = machine;
@@ -776,7 +834,7 @@ namespace AnimatorAsCode.V0
 
     public class AacFlTransitionContinuation : AacFlTransitionContinuationAbstractWithOr
     {
-        public AacFlTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        public AacFlTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacFlTransitionEndpoint sourceNullableIfAny, AacFlTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
         }
 
@@ -816,7 +874,7 @@ namespace AnimatorAsCode.V0
     {
         private readonly List<AacFlTransitionContinuation> _pendingContinuations;
 
-        public AacFlMultiTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits, List<AacFlTransitionContinuation> pendingContinuations) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        public AacFlMultiTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacFlTransitionEndpoint sourceNullableIfAny, AacFlTransitionEndpoint destinationNullableIfExits, List<AacFlTransitionContinuation> pendingContinuations) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
             _pendingContinuations = pendingContinuations;
         }
@@ -863,7 +921,7 @@ namespace AnimatorAsCode.V0
 
     public class AacFlTransitionContinuationOnlyOr : AacFlTransitionContinuationAbstractWithOr
     {
-        public AacFlTransitionContinuationOnlyOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        public AacFlTransitionContinuationOnlyOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacFlTransitionEndpoint sourceNullableIfAny, AacFlTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
         }
     }
@@ -872,10 +930,10 @@ namespace AnimatorAsCode.V0
     {
         protected readonly AnimatorTransitionBase Transition;
         private readonly AnimatorStateMachine _machine;
-        private readonly AnimatorState _sourceNullableIfAny;
-        private readonly AnimatorState _destinationNullableIfExits;
+        private readonly AacFlTransitionEndpoint _sourceNullableIfAny;
+        private readonly AacFlTransitionEndpoint _destinationNullableIfExits;
 
-        public AacFlTransitionContinuationAbstractWithOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits)
+        public AacFlTransitionContinuationAbstractWithOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacFlTransitionEndpoint sourceNullableIfAny, AacFlTransitionEndpoint destinationNullableIfExits)
         {
             Transition = transition;
             _machine = machine;
@@ -922,25 +980,65 @@ namespace AnimatorAsCode.V0
             }
             else
             {
-                newTransition = _machine.AddEntryTransition(_destinationNullableIfExits);
+                if (_sourceNullableIfAny == null)
+                {
+                    if (_destinationNullableIfExits.TryGetState(out var state))
+                        newTransition = _machine.AddEntryTransition(state);
+                    else if (_destinationNullableIfExits.TryGetStateMachine(out var stateMachine))
+                        newTransition = _machine.AddEntryTransition(stateMachine);
+                    else
+                        throw new InvalidOperationException("_destinationNullableIfExits is not null but does not contain an AnimatorState or AnimatorStateMachine");
+                }
+                // source will never be a state if we're cloning an AnimatorTransition
+                else if (_sourceNullableIfAny.TryGetStateMachine(out var stateMachine))
+                {
+                    if (_destinationNullableIfExits == null)
+                        newTransition = _machine.AddStateMachineExitTransition(stateMachine);
+                    else if (_destinationNullableIfExits.TryGetState(out var destinationState))
+                        newTransition = _machine.AddStateMachineTransition(stateMachine, destinationState);
+                    else if (_destinationNullableIfExits.TryGetStateMachine(out var destinationStateMachine))
+                        newTransition = _machine.AddStateMachineTransition(stateMachine, destinationStateMachine);
+                    else
+                        throw new InvalidOperationException("_destinationNullableIfExits is not null but does not contain an AnimatorState or AnimatorStateMachine");
+                }
+                else
+                    throw new InvalidOperationException("_sourceNullableIfAny is not null but does not contain an AnimatorStateMachine");
             }
-
             return newTransition;
         }
 
         private AnimatorStateTransition NewTransition()
         {
+            AnimatorState state;
+            AnimatorStateMachine stateMachine;
+            
             if (_sourceNullableIfAny == null)
             {
-                return _machine.AddAnyStateTransition(_destinationNullableIfExits);
+                if (_destinationNullableIfExits.TryGetState(out state))
+                    return _machine.AddAnyStateTransition(state);
+                if (_destinationNullableIfExits.TryGetStateMachine(out stateMachine))
+                    return _machine.AddAnyStateTransition(stateMachine);
+                throw new InvalidOperationException("Transition has no source nor destination.");
             }
-
-            if (_destinationNullableIfExits == null)
+            
+            // source will never be a state machine if we're cloning an AnimatorStateTransition
+            if (_sourceNullableIfAny.TryGetState(out var sourceState))
             {
-                return _sourceNullableIfAny.AddExitTransition();
-            }
+                if (_destinationNullableIfExits == null)
+                {
+                    return sourceState.AddExitTransition();
+                }
 
-            return _sourceNullableIfAny.AddTransition(_destinationNullableIfExits);
+                if (_destinationNullableIfExits.TryGetState(out state))
+                {
+                    return sourceState.AddTransition(state);
+                }
+
+                if (_destinationNullableIfExits.TryGetStateMachine(out stateMachine))
+                    return sourceState.AddTransition(stateMachine);
+                throw new InvalidOperationException("_destinationNullableIfExits is not null but does not contain an AnimatorState or AnimatorStateMachine");
+            }
+            throw new InvalidOperationException("_sourceNullableIfAny is not null but does not contain an AnimatorState");
         }
     }
 
@@ -968,6 +1066,44 @@ namespace AnimatorAsCode.V0
         {
             action(this);
             return this;
+        }
+    }
+    
+    public class AacFlTransitionEndpoint
+    {
+        private readonly AnimatorState _state;
+        private readonly AnimatorStateMachine _stateMachine;
+
+        public AacFlTransitionEndpoint([NotNull] AnimatorState state)
+        {
+            _state = state;
+        }
+        
+        public AacFlTransitionEndpoint([NotNull] AnimatorStateMachine stateMachine)
+        {
+            _stateMachine = stateMachine;
+        }
+
+        public static implicit operator AacFlTransitionEndpoint([NotNull] AnimatorState state)
+        {
+            return new AacFlTransitionEndpoint(state);
+        }
+        
+        public static implicit operator AacFlTransitionEndpoint([NotNull] AnimatorStateMachine stateMachine)
+        {
+            return new AacFlTransitionEndpoint(stateMachine);
+        }
+
+        public bool TryGetState(out AnimatorState state)
+        {
+            state = _state;
+            return _state != null;
+        }
+        
+        public bool TryGetStateMachine(out AnimatorStateMachine stateMachine)
+        {
+            stateMachine = _stateMachine;
+            return _stateMachine != null;
         }
     }
 }
