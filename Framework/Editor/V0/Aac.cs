@@ -216,12 +216,12 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
-        public void WithAvatarMaskNoTransforms()
+        public AvatarMask WithAvatarMaskNoTransforms()
         {
-            ResolveAvatarMask(new Transform[0]);
+            return ResolveAvatarMask(new Transform[0]);
         }
 
-        public void ResolveAvatarMask(Transform[] paths)
+        public AvatarMask ResolveAvatarMask(Transform[] paths)
         {
             // FIXME: Fragile
             var avatarMask = new AvatarMask();
@@ -253,6 +253,7 @@ namespace AnimatorAsCode.V0
             AssetDatabase.AddObjectToAsset(avatarMask, _animatorController);
 
             WithAvatarMask(avatarMask);
+            return avatarMask;
         }
     }
 
