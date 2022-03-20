@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V0
 {
     public abstract class AacAnimatorNode
@@ -7,8 +8,8 @@ namespace AnimatorAsCode.V0
         protected internal abstract Vector3 GetPosition();
         protected internal abstract void SetPosition(Vector3 position);
     }
-    
-    public abstract class AacAnimatorNode<T> : AacAnimatorNode where T: AacAnimatorNode<T>
+
+    public abstract class AacAnimatorNode<TNode> : AacAnimatorNode where TNode : AacAnimatorNode<TNode>
     {
         protected readonly AacFlStateMachine ParentMachine;
         protected readonly IAacDefaultsProvider DefaultsProvider;
@@ -19,19 +20,19 @@ namespace AnimatorAsCode.V0
             DefaultsProvider = defaultsProvider;
         }
 
-        public T LeftOf(T otherNode) => MoveNextTo(otherNode, -1, 0);
-        public T RightOf(T otherNode) => MoveNextTo(otherNode, 1, 0);
-        public T Over(T otherNode) => MoveNextTo(otherNode, 0, -1);
-        public T Under(T otherNode) => MoveNextTo(otherNode, 0, 1);
+        public TNode LeftOf(TNode otherNode) => MoveNextTo(otherNode, -1, 0);
+        public TNode RightOf(TNode otherNode) => MoveNextTo(otherNode, 1, 0);
+        public TNode Over(TNode otherNode) => MoveNextTo(otherNode, 0, -1);
+        public TNode Under(TNode otherNode) => MoveNextTo(otherNode, 0, 1);
 
-        public T LeftOf() => MoveNextTo(null, -1, 0);
-        public T RightOf() => MoveNextTo(null, 1, 0);
-        public T Over() => MoveNextTo(null, 0, -1);
-        public T Under() => MoveNextTo(null, 0, 1);
-        
-        public T Shift(T otherState, int shiftX, int shiftY) => MoveNextTo(otherState, shiftX, shiftY);
-        
-        private T MoveNextTo(T otherStateOrSecondToLastWhenNull, int x, int y)
+        public TNode LeftOf() => MoveNextTo(null, -1, 0);
+        public TNode RightOf() => MoveNextTo(null, 1, 0);
+        public TNode Over() => MoveNextTo(null, 0, -1);
+        public TNode Under() => MoveNextTo(null, 0, 1);
+
+        public TNode Shift(TNode otherState, int shiftX, int shiftY) => MoveNextTo(otherState, shiftX, shiftY);
+
+        private TNode MoveNextTo(TNode otherStateOrSecondToLastWhenNull, int x, int y)
         {
             if (otherStateOrSecondToLastWhenNull == null)
             {
@@ -39,18 +40,18 @@ namespace AnimatorAsCode.V0
                 var other = siblings[siblings.Count - 2];
                 Shift(other.GetPosition(), x, y);
 
-                return (T) this;
+                return (TNode) this;
             }
 
             Shift(otherStateOrSecondToLastWhenNull.GetPosition(), x, y);
-            
-            return (T) this;
+
+            return (TNode) this;
         }
 
-        public T Shift(Vector3 otherPosition, int shiftX, int shiftY)
+        public TNode Shift(Vector3 otherPosition, int shiftX, int shiftY)
         {
             SetPosition(otherPosition + new Vector3(shiftX * DefaultsProvider.Grid().x, shiftY * DefaultsProvider.Grid().y, 0));
-            return (T) this;
+            return (TNode) this;
         }
     }
 }
