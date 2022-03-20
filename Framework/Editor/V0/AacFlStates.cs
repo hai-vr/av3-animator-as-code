@@ -171,6 +171,12 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlStateMachine WithParentStateMachinePosition(int x, int y)
+        {
+            Machine.parentStateMachinePosition = GridPosition(x, y);
+            return this;
+        }
+
         public AacFlState NewState(string name)
         {
             var lastState = LastNodePosition();
