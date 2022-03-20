@@ -205,8 +205,18 @@ namespace AnimatorAsCode.V0
         {
             ResolveAvatarMask(new Transform[0]);
         }
-
+        
+        public void ResolveAvatarMask(AvatarMaskBodyPart[] bodyParts)
+        {
+            ResolveAvatarMask(new Transform[0], bodyParts);
+        }
+        
         public void ResolveAvatarMask(Transform[] paths)
+        {
+            ResolveAvatarMask(paths, new AvatarMaskBodyPart[0]);
+        }
+
+        public void ResolveAvatarMask(Transform[] paths, AvatarMaskBodyPart[] bodyParts)
         {
             // FIXME: Fragile
             var avatarMask = new AvatarMask();
@@ -232,7 +242,7 @@ namespace AnimatorAsCode.V0
 
             for (int i = 0; i < (int) AvatarMaskBodyPart.LastBodyPart; i++)
             {
-                avatarMask.SetHumanoidBodyPartActive((AvatarMaskBodyPart) i, false);
+                avatarMask.SetHumanoidBodyPartActive((AvatarMaskBodyPart) i, bodyParts.Contains((AvatarMaskBodyPart)i));
             }
 
             AssetDatabase.AddObjectToAsset(avatarMask, _animatorController);
