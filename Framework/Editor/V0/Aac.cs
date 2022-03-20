@@ -117,14 +117,14 @@ namespace AnimatorAsCode.V0
             return _stateMachine.NewState(name, x, y);
         }
 
-        public AacFlStateMachine NewStateMachine(string name)
+        public AacFlStateMachine NewSubStateMachine(string name)
         {
-            return _stateMachine.NewStateMachine(name);
+            return _stateMachine.NewSubStateMachine(name);
         }
 
-        public AacFlStateMachine NewStateMachine(string name, int x, int y)
+        public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
-            return _stateMachine.NewStateMachine(name, x, y);
+            return _stateMachine.NewSubStateMachine(name, x, y);
         }
 
         public AacFlTransition AnyTransitionsTo(AacFlState destination)

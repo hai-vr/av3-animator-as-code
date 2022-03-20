@@ -139,13 +139,13 @@ namespace AnimatorAsCode.V0
             return _backingAnimator;
         }
 
-        public AacFlStateMachine NewStateMachine(string name)
+        public AacFlStateMachine NewSubStateMachine(string name)
         {
             var lastState = LastNodePosition();
-            return NewStateMachine(name, 0, 0).Shift(lastState, 0, 1);
+            return NewSubStateMachine(name, 0, 0).Shift(lastState, 0, 1);
         }
 
-        public AacFlStateMachine NewStateMachine(string name, int x, int y)
+        public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
             var stateMachine = Machine.AddStateMachine(name, GridPosition(x, y));
             var aacMachine = new AacFlStateMachine(stateMachine, _emptyClip, _backingAnimator, DefaultsProvider, this);
