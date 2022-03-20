@@ -634,10 +634,8 @@ namespace AnimatorAsCode.V0
 
             var layer = TryGetLayer(layerName);
             var machinist = new AacFlStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider);
-            return machinist
-                .WithAnyStatePosition(0, 7)
-                .WithEntryPosition(0, -1)
-                .WithExitPosition(7, -1);
+            _defaultsProvider.ConfigureStateMachine(layer.stateMachine);
+            return machinist;
         }
 
         private int FindIndexOf(string layerName)

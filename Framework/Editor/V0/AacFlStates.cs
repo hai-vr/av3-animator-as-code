@@ -115,6 +115,7 @@ namespace AnimatorAsCode.V0
         public readonly AnimatorStateMachine Machine;
         private readonly AnimationClip _emptyClip;
         private readonly AacBackingAnimator _backingAnimator;
+        private readonly IAacDefaultsProvider _defaultsProvider;
         private readonly float _gridShiftX;
         private readonly float _gridShiftY;
 
@@ -126,6 +127,7 @@ namespace AnimatorAsCode.V0
             Machine = machine;
             _emptyClip = emptyClip;
             _backingAnimator = backingAnimator;
+            _defaultsProvider = defaultsProvider;
 
             var grid = defaultsProvider.Grid();
             _gridShiftX = grid.x;
@@ -149,6 +151,7 @@ namespace AnimatorAsCode.V0
         {
             var stateMachine = Machine.AddStateMachine(name, GridPosition(x, y));
             var aacMachine = new AacFlStateMachine(stateMachine, _emptyClip, _backingAnimator, DefaultsProvider, this);
+            _defaultsProvider.ConfigureStateMachine(stateMachine);
             _childNodes.Add(aacMachine);
             return aacMachine;
         }

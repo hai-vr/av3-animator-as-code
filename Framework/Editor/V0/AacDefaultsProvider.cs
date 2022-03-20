@@ -11,6 +11,7 @@ namespace AnimatorAsCode.V0
         string ConvertLayerName(string systemName);
         string ConvertLayerNameWithSuffix(string systemName, string suffix);
         Vector2 Grid();
+        void ConfigureStateMachine(AnimatorStateMachine stateMachine);
     }
 
     public class AacDefaultsProvider : IAacDefaultsProvider
@@ -53,6 +54,15 @@ namespace AnimatorAsCode.V0
         public Vector2 Grid()
         {
             return new Vector2(250, 70);
+        }
+
+        public void ConfigureStateMachine(AnimatorStateMachine stateMachine)
+        {
+            var grid = Grid();
+            stateMachine.anyStatePosition = grid * new Vector2(0, 7);
+            stateMachine.entryPosition = grid * new Vector2(0, -1);
+            stateMachine.exitPosition = grid * new Vector2(7, -1);
+            stateMachine.parentStateMachinePosition = grid * new Vector2(3, -1);
         }
     }
 }
