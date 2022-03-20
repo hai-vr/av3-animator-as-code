@@ -610,12 +610,8 @@ namespace AnimatorAsCode.V0
             var originalIndexToPreserveOrdering = FindIndexOf(layerName);
             if (originalIndexToPreserveOrdering != -1)
             {
-                foreach (var childAnimatorStateMachine in _animatorController.layers[originalIndexToPreserveOrdering].stateMachine.stateMachines)
-                {
-                    childAnimatorStateMachine.stateMachine.states = new ChildAnimatorState[0];
-                    childAnimatorStateMachine.stateMachine.entryTransitions = new AnimatorTransition[0];
-                    childAnimatorStateMachine.stateMachine.anyStateTransitions = new AnimatorStateTransition[0];
-                }
+                RecursivelyClearChildrenMachines(_animatorController.layers[originalIndexToPreserveOrdering].stateMachine);
+
                 _animatorController.layers[originalIndexToPreserveOrdering].stateMachine.stateMachines = new ChildAnimatorStateMachine[0];
                 _animatorController.layers[originalIndexToPreserveOrdering].stateMachine.states = new ChildAnimatorState[0];
                 _animatorController.layers[originalIndexToPreserveOrdering].stateMachine.entryTransitions = new AnimatorTransition[0];
@@ -636,6 +632,16 @@ namespace AnimatorAsCode.V0
             var machinist = new AacFlStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider);
             _defaultsProvider.ConfigureStateMachine(layer.stateMachine);
             return machinist;
+        }
+
+        private void RecursivelyClearChildrenMachines(AnimatorStateMachine parentMachine)
+        {
+            // TODO: RemoveStateMachine might already be recursive
+            foreach (var childStateMachineHolder in parentMachine.stateMachines)
+            {
+                RecursivelyClearChildrenMachines(childStateMachineHolder.stateMachine);
+                parentMachine.RemoveStateMachine(childStateMachineHolder.stateMachine);
+            }
         }
 
         private int FindIndexOf(string layerName)
