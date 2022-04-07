@@ -284,6 +284,16 @@ namespace AnimatorAsCode.V0
                     .WithUnit(unit, keyframes => keyframes.Constant(0, 0f).Constant(duration, 0f)));
         }
 
+        // you should remove layers before calling this
+        public void RemoveAllParameterIfNotUsed(string parameterName)
+        {
+            var layers = _configuration.AvatarDescriptor.baseAnimationLayers.Select(layer => layer.animatorController).Where(layer => layer != null).Distinct().ToList();
+            foreach (var customAnimLayer in layers)
+            {
+                new AacParameterRemoval((AnimatorController)customAnimLayer).RemoveParameterIfNotUsed(parameterName);
+            }
+        }
+
         public void RemoveAllMainLayers()
         {
             var layerName = _configuration.SystemName;
@@ -498,6 +508,46 @@ namespace AnimatorAsCode.V0
         {
             return _animatorController.layers.ToList().FindIndex(layer => layer.name == layerName);
         }
+    }
+
+    public class AacParameterRemoval
+    {
+        private readonly AnimatorController _animatorController;
+        private string _parameterName;
+
+        public AacParameterRemoval(AnimatorController animatorController)
+        {
+            _animatorController = animatorController;
+        }
+
+        public void RemoveParameterIfNotUsed(string parameterName)
+        {
+            _parameterName = parameterName;
+            var index = FindIndexOf();
+            if (index == -1 || CheckIfUsed()) return;
+
+            _animatorController.RemoveParameter(index);
+        }
+
+        private int FindIndexOf()
+        {
+            return _animatorController.parameters.ToList().FindIndex(parameter => parameter.name == _parameterName);
+        }
+
+        private bool CheckIfUsed() => _animatorController.layers.Any(layer => CheckIfUsed(layer.stateMachine));
+
+        private bool CheckIfUsed(AnimatorStateMachine stateMachine) =>
+            stateMachine.entryTransitions.Any(CheckIfUsed)
+            || stateMachine.anyStateTransitions.Any(CheckIfUsed)
+            || stateMachine.states.Any(state =>
+                state.state.transitions.Any(CheckIfUsed)
+                || state.state.behaviours.Any(behaviour =>
+                    behaviour is VRCAvatarParameterDriver
+                    && ((VRCAvatarParameterDriver)behaviour).parameters.Any(paramater => paramater.name == _parameterName)))
+            || stateMachine.stateMachines.Any(child => CheckIfUsed(child.stateMachine));
+
+        private bool CheckIfUsed(AnimatorTransitionBase transition) =>
+            transition.conditions.Any(condition => condition.parameter == _parameterName);
     }
 
     public class AacAnimatorGenerator
