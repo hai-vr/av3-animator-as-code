@@ -564,6 +564,7 @@ foreach (var cancelWhenNotAllowed in new[] {auto, reverse, manual, custom, done}
 - `BlendTree NewBlendTreeAsRaw()` /// Create a new BlendTree asset. The asset is generated into the container.
 - `AacFlClip NewClip(string name)` /// Create a new clip with a name. However, the name is only used as a suffix for the asset. The asset is generated into the container. FIXME: This is quite pointless because the name is mangled anyways.
 - `AacFlClip DummyClipLasting(float numberOf, AacFlUnit unit)` /// Create a new clip which animates a dummy transform for a specific duration specified in an unit (Frames or Seconds).
+- `void RemoveAllParameter(string parameterName)` /// Remove parameter from all animators of the Avatar descriptor. The parameter would not be removed from animator that uses it.
 - `void RemoveAllMainLayers()` /// Remove all main layers matching that system from all animators of the Avatar descriptor.
 - `void RemoveAllSupportingLayers(string suffix)` /// Remove all supporting layers matching that system and suffix from all animators of the Avatar descriptor.
 - `AacFlLayer CreateMainFxLayer()` /// Create the main Fx layer of that system, clearing the previous one of the same system. You are not obligated to have a main layer.

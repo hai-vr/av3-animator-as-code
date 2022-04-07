@@ -285,7 +285,7 @@ namespace AnimatorAsCode.V0
         }
 
         // you should remove layers before calling this
-        public void RemoveAllParameterIfNotUsed(string parameterName)
+        public void RemoveAllParameter(string parameterName)
         {
             var layers = _configuration.AvatarDescriptor.baseAnimationLayers.Select(layer => layer.animatorController).Where(layer => layer != null).Distinct().ToList();
             foreach (var customAnimLayer in layers)
