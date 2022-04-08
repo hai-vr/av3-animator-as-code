@@ -18,6 +18,8 @@ namespace AnimatorAsCode.V0
             _generator = animatorGenerator;
         }
 
+        public List<string> GeneratedParameters => _generator.GeneratedParameters;
+
         public AacFlBoolParameter BoolParameter(string parameterName)
         {
             var result = AacFlBoolParameter.Internally(parameterName);

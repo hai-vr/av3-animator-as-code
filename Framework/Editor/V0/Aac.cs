@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -18,7 +19,12 @@ namespace AnimatorAsCode.V0
 
         internal static AnimatorController AnimatorOf(VRCAvatarDescriptor ad, VRCAvatarDescriptor.AnimLayerType animLayerType)
         {
-            return (AnimatorController) ad.baseAnimationLayers.First(it => it.type == animLayerType).animatorController;
+            return (AnimatorController)ad.baseAnimationLayers.First(it => it.type == animLayerType).animatorController;
+        }
+
+        internal static List<VRCAvatarDescriptor.CustomAnimLayer> CustomAnimLayers(VRCAvatarDescriptor ad)
+        {
+            return ad.baseAnimationLayers.Where(layer => layer.animatorController != null).Distinct().ToList();
         }
 
         internal static AnimationClip NewClip(AacConfiguration component, string suffix)
@@ -75,7 +81,7 @@ namespace AnimatorAsCode.V0
 
         internal static EditorCurveBinding ToSubBinding(EditorCurveBinding binding, string suffix)
         {
-            return new EditorCurveBinding {path = binding.path, type = binding.type, propertyName = binding.propertyName + "." + suffix};
+            return new EditorCurveBinding { path = binding.path, type = binding.type, propertyName = binding.propertyName + "." + suffix };
         }
     }
 
@@ -104,6 +110,8 @@ namespace AnimatorAsCode.V0
             _fullLayerName = fullLayerName;
             _stateMachine = stateMachine;
         }
+
+        internal List<string> GeneratedParameters => _stateMachine.BackingAnimator().GeneratedParameters;
 
         public AacFlState NewState(string name)
         {
@@ -230,9 +238,9 @@ namespace AnimatorAsCode.V0
                 }
             }
 
-            for (int i = 0; i < (int) AvatarMaskBodyPart.LastBodyPart; i++)
+            for (int i = 0; i < (int)AvatarMaskBodyPart.LastBodyPart; i++)
             {
-                avatarMask.SetHumanoidBodyPartActive((AvatarMaskBodyPart) i, false);
+                avatarMask.SetHumanoidBodyPartActive((AvatarMaskBodyPart)i, false);
             }
 
             AssetDatabase.AddObjectToAsset(avatarMask, _animatorController);
@@ -245,9 +253,28 @@ namespace AnimatorAsCode.V0
     {
         private readonly AacConfiguration _configuration;
 
+        private struct AacGeneratedInAnimLayer
+        {
+            public bool mainLayer;
+            public List<string> supportingSuffixes;
+            public List<List<string>> parameters;
+        }
+
+        private AacGeneratedInAnimLayer[] _generated = new AacGeneratedInAnimLayer[9];
+
         internal AacFlBase(AacConfiguration configuration)
         {
             _configuration = configuration;
+            var layerTypes = _configuration.AvatarDescriptor.baseAnimationLayers.Where(layer => layer.animatorController != null).Select(layer => layer.type).Distinct().ToList();
+            foreach (var animLayerType in layerTypes)
+            {
+                _generated[(int)animLayerType] = new AacGeneratedInAnimLayer
+                {
+                    mainLayer = false,
+                    supportingSuffixes = new List<string>(),
+                    parameters = new List<List<string>>(),
+                };
+            }
         }
 
         public AacFlClip NewClip()
@@ -284,16 +311,64 @@ namespace AnimatorAsCode.V0
                     .WithUnit(unit, keyframes => keyframes.Constant(0, 0f).Constant(duration, 0f)));
         }
 
+
+        public void RemovePreviousParameters()
+        {
+            var customAnimLayers = AacV0.CustomAnimLayers(_configuration.AvatarDescriptor);
+            foreach (var customAnimLayer in customAnimLayers)
+            {
+                foreach (string parameter in _generated[(int)customAnimLayer.type].parameters.SelectMany(v => v))
+                {
+                    new AacAnimatorRemoval((AnimatorController)customAnimLayer.animatorController).RemoveParameter(parameter);
+                }
+                _generated[(int)customAnimLayer.type].parameters.Clear();
+            }
+        }
+
+        // you should remove layers before calling this
+        public void RemoveParameter(string parameterName)
+        {
+            var layers = _configuration.AvatarDescriptor.baseAnimationLayers.Select(layer => layer.animatorController).Where(layer => layer != null).Distinct().ToList();
+            foreach (var customAnimLayer in layers)
+            {
+                new AacAnimatorRemoval((AnimatorController)customAnimLayer).RemoveParameter(parameterName);
+            }
+        }
+
+        public void RemovePreviousLayers()
+        {
+            var layers = _configuration.AvatarDescriptor.baseAnimationLayers.Where(layer => layer.animatorController != null).Distinct().ToList();
+            foreach (var customAnimLayer in layers)
+            {
+                var layerName = _configuration.SystemName;
+                // var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, customAnimLayer.type);
+                var animator = (AnimatorController)customAnimLayer.animatorController;
+                RemoveLayer(animator, _configuration.DefaultsProvider.ConvertLayerName(layerName));
+                foreach (var suffix in _generated[(int)customAnimLayer.type].supportingSuffixes)
+                    RemoveLayer(animator, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(layerName, suffix));
+                _generated[(int)customAnimLayer.type].mainLayer = false;
+                _generated[(int)customAnimLayer.type].supportingSuffixes.Clear();
+            }
+        }
+
         public void RemoveAllMainLayers()
         {
             var layerName = _configuration.SystemName;
             RemoveLayerOnAllControllers(_configuration.DefaultsProvider.ConvertLayerName(layerName));
+            for (int animType = 0; animType < _generated.Length; animType++)
+            {
+                _generated[animType].mainLayer = false;
+            }
         }
 
         public void RemoveAllSupportingLayers(string suffix)
         {
             var layerName = _configuration.SystemName;
             RemoveLayerOnAllControllers(_configuration.DefaultsProvider.ConvertLayerNameWithSuffix(layerName, suffix));
+            for (int animType = 0; animType < _generated.Length; animType++)
+            {
+                _generated[animType].supportingSuffixes.Remove(suffix);
+            }
         }
 
         private void RemoveLayerOnAllControllers(string layerName)
@@ -303,6 +378,11 @@ namespace AnimatorAsCode.V0
             {
                 new AacAnimatorRemoval((AnimatorController) customAnimLayer).RemoveLayer(_configuration.DefaultsProvider.ConvertLayerName(layerName));
             }
+        }
+
+        private void RemoveLayer(AnimatorController controller, string layerName)
+        {
+            new AacAnimatorRemoval(controller).RemoveLayer(_configuration.DefaultsProvider.ConvertLayerName(layerName));
         }
 
         public AacFlLayer CreateMainFxLayer() => DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType.FX);
@@ -328,7 +408,10 @@ namespace AnimatorAsCode.V0
             var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, animType);
             var layerName = _configuration.DefaultsProvider.ConvertLayerName(_configuration.SystemName);
 
-            return DoCreateLayer(animator, layerName);
+            _generated[(int)animType].mainLayer = true;
+            var layer = DoCreateLayer(animator, layerName);
+            _generated[(int)animType].parameters.Add(layer.GeneratedParameters);
+            return layer;
         }
 
         private AacFlLayer DoCreateSupportingLayerOnController(VRCAvatarDescriptor.AnimLayerType animType, string suffix)
@@ -336,7 +419,10 @@ namespace AnimatorAsCode.V0
             var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, animType);
             var layerName = _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix);
 
-            return DoCreateLayer(animator, layerName);
+            var layer = DoCreateLayer(animator, layerName);
+            _generated[(int)animType].supportingSuffixes.Add(suffix);
+            _generated[(int)animType].parameters.Add(layer.GeneratedParameters);
+            return layer;
         }
 
         private AacFlLayer DoCreateLayer(AnimatorController animator, string layerName)
@@ -488,15 +574,55 @@ namespace AnimatorAsCode.V0
 
         public void RemoveLayer(string layerName)
         {
-            var index = FindIndexOf(layerName);
+            var index = FindIndexOfLayer(layerName);
             if (index == -1) return;
 
             _animatorController.RemoveLayer(index);
         }
 
-        private int FindIndexOf(string layerName)
+        private int FindIndexOfLayer(string layerName)
         {
             return _animatorController.layers.ToList().FindIndex(layer => layer.name == layerName);
+        }
+
+        public void RemoveParameter(string parameterName)
+        {
+            var index = FindIndexOfParameter(parameterName);
+            if (index == -1 || new CheckParameterUsage(_animatorController, parameterName).CheckIfUsed()) return;
+
+            _animatorController.RemoveParameter(index);
+        }
+
+        private int FindIndexOfParameter(string parameterName)
+        {
+            return _animatorController.parameters.ToList().FindIndex(parameter => parameter.name == parameterName);
+        }
+
+        private class CheckParameterUsage
+        {
+            private AnimatorController _animatorController;
+            private string _parameterName;
+
+            internal CheckParameterUsage(AnimatorController animatorController, string parameterName)
+            {
+                _animatorController = animatorController;
+                _parameterName = parameterName;
+            }
+
+            internal bool CheckIfUsed() => _animatorController.layers.Any(layer => CheckIfUsed(layer.stateMachine));
+
+            private bool CheckIfUsed(AnimatorStateMachine stateMachine) =>
+                stateMachine.entryTransitions.Any(CheckIfUsed)
+                || stateMachine.anyStateTransitions.Any(CheckIfUsed)
+                || stateMachine.states.Any(state =>
+                    state.state.transitions.Any(CheckIfUsed)
+                    || state.state.behaviours.Any(behaviour =>
+                        behaviour is VRCAvatarParameterDriver
+                        && ((VRCAvatarParameterDriver)behaviour).parameters.Any(paramater => paramater.name == _parameterName)))
+                || stateMachine.stateMachines.Any(child => CheckIfUsed(child.stateMachine));
+
+            private bool CheckIfUsed(AnimatorTransitionBase transition) =>
+                transition.conditions.Any(condition => condition.parameter == _parameterName);
         }
     }
 
@@ -505,13 +631,17 @@ namespace AnimatorAsCode.V0
         private readonly AnimatorController _animatorController;
         private readonly AnimationClip _emptyClip;
         private readonly IAacDefaultsProvider _defaultsProvider;
+        private List<string> _parameters;
 
         internal AacAnimatorGenerator(AnimatorController animatorController, AnimationClip emptyClip, IAacDefaultsProvider defaultsProvider)
         {
             _animatorController = animatorController;
             _emptyClip = emptyClip;
             _defaultsProvider = defaultsProvider;
+            _parameters = new List<string>();
         }
+
+        internal List<string> GeneratedParameters => _parameters;
 
         internal void CreateParamsAsNeeded(params AacFlParameter[] parameters)
         {
@@ -545,6 +675,7 @@ namespace AnimatorAsCode.V0
             {
                 _animatorController.AddParameter(paramName, type);
             }
+            _parameters.Add(paramName);
         }
 
         // DEPRECATED: This causes the editor window to glitch by deselecting, which is jarring for experimentation
