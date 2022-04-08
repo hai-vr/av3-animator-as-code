@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -245,9 +246,25 @@ namespace AnimatorAsCode.V0
     {
         private readonly AacConfiguration _configuration;
 
+        private struct LayersInAnimLayer
+        {
+            public bool hasMainLayer;
+            public List<string> supportingSuffixes;
+        }
+        private LayersInAnimLayer[] _layersInAnimLayer = new LayersInAnimLayer[9];
+
         internal AacFlBase(AacConfiguration configuration)
         {
             _configuration = configuration;
+            var layerTypes = _configuration.AvatarDescriptor.baseAnimationLayers.Where(layer => layer.animatorController != null).Select(layer => layer.type).Distinct().ToList();
+            foreach (var animLayerType in layerTypes)
+            {
+                _layersInAnimLayer[(int)animLayerType] = new LayersInAnimLayer
+                {
+                    hasMainLayer = false,
+                    supportingSuffixes = new List<string>(),
+                };
+            }
         }
 
         public AacFlClip NewClip()
@@ -284,16 +301,40 @@ namespace AnimatorAsCode.V0
                     .WithUnit(unit, keyframes => keyframes.Constant(0, 0f).Constant(duration, 0f)));
         }
 
+        public void RemovePreviousLayers()
+        {
+            var layers = _configuration.AvatarDescriptor.baseAnimationLayers.Where(layer => layer.animatorController != null).Distinct().ToList();
+            foreach (var customAnimLayer in layers)
+            {
+                var layerName = _configuration.SystemName;
+                // var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, customAnimLayer.type);
+                var animator = (AnimatorController)customAnimLayer.animatorController;
+                RemoveLayer(animator, _configuration.DefaultsProvider.ConvertLayerName(layerName));
+                foreach (var suffix in _layersInAnimLayer[(int)customAnimLayer.type].supportingSuffixes)
+                    RemoveLayer(animator, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(layerName, suffix));
+                _layersInAnimLayer[(int)customAnimLayer.type].hasMainLayer = false;
+                _layersInAnimLayer[(int)customAnimLayer.type].supportingSuffixes.Clear();
+            }
+        }
+
         public void RemoveAllMainLayers()
         {
             var layerName = _configuration.SystemName;
             RemoveLayerOnAllControllers(_configuration.DefaultsProvider.ConvertLayerName(layerName));
+            for (int animType = 0; animType < _layersInAnimLayer.Length; animType++)
+            {
+                _layersInAnimLayer[animType].hasMainLayer = false;
+            }
         }
 
         public void RemoveAllSupportingLayers(string suffix)
         {
             var layerName = _configuration.SystemName;
             RemoveLayerOnAllControllers(_configuration.DefaultsProvider.ConvertLayerNameWithSuffix(layerName, suffix));
+            for(int animType = 0; animType < _layersInAnimLayer.Length; animType++)
+            {
+                _layersInAnimLayer[animType].supportingSuffixes.Remove(suffix);
+            }
         }
 
         private void RemoveLayerOnAllControllers(string layerName)
@@ -301,8 +342,12 @@ namespace AnimatorAsCode.V0
             var layers = _configuration.AvatarDescriptor.baseAnimationLayers.Select(layer => layer.animatorController).Where(layer => layer != null).Distinct().ToList();
             foreach (var customAnimLayer in layers)
             {
-                new AacAnimatorRemoval((AnimatorController) customAnimLayer).RemoveLayer(_configuration.DefaultsProvider.ConvertLayerName(layerName));
+                RemoveLayer((AnimatorController)customAnimLayer, layerName);
             }
+        }
+        private void RemoveLayer(AnimatorController controller, string layerName)
+        {
+            new AacAnimatorRemoval(controller).RemoveLayer(_configuration.DefaultsProvider.ConvertLayerName(layerName));
         }
 
         public AacFlLayer CreateMainFxLayer() => DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType.FX);
@@ -328,6 +373,7 @@ namespace AnimatorAsCode.V0
             var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, animType);
             var layerName = _configuration.DefaultsProvider.ConvertLayerName(_configuration.SystemName);
 
+            _layersInAnimLayer[(int)animType].hasMainLayer = true;
             return DoCreateLayer(animator, layerName);
         }
 
@@ -336,6 +382,7 @@ namespace AnimatorAsCode.V0
             var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, animType);
             var layerName = _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix);
 
+            _layersInAnimLayer[(int)animType].supportingSuffixes.Add(suffix);
             return DoCreateLayer(animator, layerName);
         }
 
