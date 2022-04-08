@@ -251,7 +251,7 @@ namespace AnimatorAsCode.V0
             public bool hasMainLayer;
             public List<string> supportingSuffixes;
         }
-        private LayersInAnimLayer[] _layersInAnimLayer = new LayersInAnimLayer[9];
+        private LayersInAnimLayer[] _generatedLayers = new LayersInAnimLayer[9];
 
         internal AacFlBase(AacConfiguration configuration)
         {
@@ -259,7 +259,7 @@ namespace AnimatorAsCode.V0
             var layerTypes = _configuration.AvatarDescriptor.baseAnimationLayers.Where(layer => layer.animatorController != null).Select(layer => layer.type).Distinct().ToList();
             foreach (var animLayerType in layerTypes)
             {
-                _layersInAnimLayer[(int)animLayerType] = new LayersInAnimLayer
+                _generatedLayers[(int)animLayerType] = new LayersInAnimLayer
                 {
                     hasMainLayer = false,
                     supportingSuffixes = new List<string>(),
@@ -310,10 +310,10 @@ namespace AnimatorAsCode.V0
                 // var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, customAnimLayer.type);
                 var animator = (AnimatorController)customAnimLayer.animatorController;
                 RemoveLayer(animator, _configuration.DefaultsProvider.ConvertLayerName(layerName));
-                foreach (var suffix in _layersInAnimLayer[(int)customAnimLayer.type].supportingSuffixes)
+                foreach (var suffix in _generatedLayers[(int)customAnimLayer.type].supportingSuffixes)
                     RemoveLayer(animator, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(layerName, suffix));
-                _layersInAnimLayer[(int)customAnimLayer.type].hasMainLayer = false;
-                _layersInAnimLayer[(int)customAnimLayer.type].supportingSuffixes.Clear();
+                _generatedLayers[(int)customAnimLayer.type].hasMainLayer = false;
+                _generatedLayers[(int)customAnimLayer.type].supportingSuffixes.Clear();
             }
         }
 
@@ -321,9 +321,9 @@ namespace AnimatorAsCode.V0
         {
             var layerName = _configuration.SystemName;
             RemoveLayerOnAllControllers(_configuration.DefaultsProvider.ConvertLayerName(layerName));
-            for (int animType = 0; animType < _layersInAnimLayer.Length; animType++)
+            for (int animType = 0; animType < _generatedLayers.Length; animType++)
             {
-                _layersInAnimLayer[animType].hasMainLayer = false;
+                _generatedLayers[animType].hasMainLayer = false;
             }
         }
 
@@ -331,9 +331,9 @@ namespace AnimatorAsCode.V0
         {
             var layerName = _configuration.SystemName;
             RemoveLayerOnAllControllers(_configuration.DefaultsProvider.ConvertLayerNameWithSuffix(layerName, suffix));
-            for(int animType = 0; animType < _layersInAnimLayer.Length; animType++)
+            for(int animType = 0; animType < _generatedLayers.Length; animType++)
             {
-                _layersInAnimLayer[animType].supportingSuffixes.Remove(suffix);
+                _generatedLayers[animType].supportingSuffixes.Remove(suffix);
             }
         }
 
@@ -373,7 +373,7 @@ namespace AnimatorAsCode.V0
             var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, animType);
             var layerName = _configuration.DefaultsProvider.ConvertLayerName(_configuration.SystemName);
 
-            _layersInAnimLayer[(int)animType].hasMainLayer = true;
+            _generatedLayers[(int)animType].hasMainLayer = true;
             return DoCreateLayer(animator, layerName);
         }
 
@@ -382,7 +382,7 @@ namespace AnimatorAsCode.V0
             var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, animType);
             var layerName = _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix);
 
-            _layersInAnimLayer[(int)animType].supportingSuffixes.Add(suffix);
+            _generatedLayers[(int)animType].supportingSuffixes.Add(suffix);
             return DoCreateLayer(animator, layerName);
         }
 
