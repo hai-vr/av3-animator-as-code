@@ -77,6 +77,53 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlClip MaterialProperty(Renderer renderer, string propertyName, float value)
+        {
+            MaterialProperty<Renderer>(renderer.transform, $"material.{propertyName}", value);
+
+            return this;
+        }
+
+        public AacFlClip MaterialProperty(ParticleSystemRenderer renderer, string propertyName, float value)
+        {
+            MaterialProperty<ParticleSystemRenderer>(renderer.transform, $"material.{propertyName}", value);
+
+            return this;
+        }
+        
+        public AacFlClip MaterialProperty(Renderer renderer, string propertyName, Vector4 value)
+        {
+            MaterialPropertyVector4<Renderer>(renderer.transform, propertyName, value);
+
+            return this;
+        }
+
+        public AacFlClip MaterialProperty(ParticleSystemRenderer renderer, string propertyName, Vector4 value)
+        {
+            MaterialPropertyVector4<ParticleSystemRenderer>(renderer.transform, propertyName, value);
+
+            return this;
+        }
+        
+        private AacFlClip MaterialPropertyVector4<T>(Transform transform, string propertyName, Vector4 value)
+        {
+            MaterialProperty<T>(transform, $"material.{propertyName}.x", value.x);
+            MaterialProperty<T>(transform, $"material.{propertyName}.y", value.y);
+            MaterialProperty<T>(transform, $"material.{propertyName}.z", value.z);
+            MaterialProperty<T>(transform, $"material.{propertyName}.w", value.w);
+
+            return this;
+        }
+        
+        private AacFlClip MaterialProperty<T>(Transform transform, string attribute, float value)
+        {
+            var binding = AacV0.Binding(_component, typeof(T), transform, attribute);
+
+            AnimationUtility.SetEditorCurve(Clip, binding, AacV0.OneFrame(value));
+
+            return this;
+        }
+        
         public AacFlClip Scaling(GameObject[] gameObjectsWithNulls, Vector3 scale)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
