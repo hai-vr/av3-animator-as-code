@@ -816,6 +816,14 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlTransition Automatically()
+        {
+            _transition.hasExitTime = true;
+            _transition.exitTime = 0;
+
+            return this;
+        }
+
         public AacFlTransition AfterAnimationIsAtLeastAtPercent(float exitTimeNormalized)
         {
             _transition.hasExitTime = true;
