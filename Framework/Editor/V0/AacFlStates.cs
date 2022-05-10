@@ -344,6 +344,13 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlState AutomaticallyMovesTo(AacFlStateMachine destination)
+        {
+            var transition = ConfigureTransition(State.AddTransition(destination.Machine));
+            transition.hasExitTime = true;
+            return this;
+        }
+
         public AacFlTransition Exits()
         {
             return new AacFlTransition(ConfigureTransition(State.AddExitTransition()), _machine, State, null);
