@@ -503,6 +503,100 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlState DrivingCopies(AacFlIntParameter source, AacFlIntParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = false
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCopies(AacFlFloatParameter source, AacFlFloatParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = false
+            });
+            return this;
+        }
+
+        public AacFlState DrivingRemaps(AacFlIntParameter source, int sourceMin, int sourceMax, AacFlIntParameter destination, int destinationMin, int destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
+        public AacFlState DrivingRemaps(AacFlFloatParameter source, float sourceMin, float sourceMax, AacFlFloatParameter destination, float destinationMin, float destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlFloatParameter source, float sourceMin, float sourceMax, AacFlIntParameter destination, int destinationMin, int destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlIntParameter source, int sourceMin, int sourceMax, AacFlFloatParameter destination, float destinationMin, float destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
         private void CreateDriverBehaviorIfNotExists()
         {
             if (_driver != null) return;
