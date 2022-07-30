@@ -119,6 +119,8 @@ namespace AnimatorAsCode.V1
 
         private readonly List<AacAnimatorNode> _childNodes;
 
+        private readonly HashSet<string> _stateNames;
+
         internal AacFlStateMachine(AnimatorStateMachine machine, AnimationClip emptyClip, AacBackingAnimator backingAnimator, IAacDefaultsProvider defaultsProvider, AacFlStateMachine parent = null)
             : base(parent, defaultsProvider)
         {
@@ -126,6 +128,7 @@ namespace AnimatorAsCode.V1
             _emptyClip = emptyClip;
             _backingAnimator = backingAnimator;
             _defaultsProvider = defaultsProvider;
+            _stateNames = new HashSet<string>();
 
             var grid = defaultsProvider.Grid();
             _gridShiftX = grid.x;
@@ -190,6 +193,17 @@ namespace AnimatorAsCode.V1
             DefaultsProvider.ConfigureState(state, _emptyClip);
             var aacState = new AacFlState(state, this, DefaultsProvider);
             _childNodes.Add(aacState);
+
+            int suffix = 0;
+            string stateName = name;
+            while (_stateNames.Contains(stateName))
+            {
+                stateName = name + " " + (++suffix);
+            }
+
+            state.name = stateName;
+            _stateNames.Add(state.name);
+            
             return aacState;
         }
 
