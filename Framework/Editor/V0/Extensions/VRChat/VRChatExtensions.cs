@@ -4,9 +4,8 @@ using VRC.SDKBase;
 
 namespace AnimatorAsCode.V0.Extensions.VRChat
 {
-    public static class VrcStateExtensions
+    public static class VRChatExtensions
     {
-        
         public static TNode Drives<TNode>(this TNode node,AacFlIntParameter parameter, int value) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
