@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -13,6 +15,8 @@ namespace AnimatorAsCode.V0
     {
         protected readonly AacFlStateMachine ParentMachine;
         protected readonly IAacDefaultsProvider DefaultsProvider;
+
+        protected Dictionary<Type, object> behaviorCache = new Dictionary<Type, object>();
 
         protected AacAnimatorNode(AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider)
         {
@@ -53,5 +57,7 @@ namespace AnimatorAsCode.V0
             SetPosition(otherPosition + new Vector3(shiftX * DefaultsProvider.Grid().x, shiftY * DefaultsProvider.Grid().y, 0));
             return (TNode) this;
         }
+
+        public abstract TBehaviour EnsureBehaviour<TBehaviour>() where TBehaviour : StateMachineBehaviour;
     }
 }

@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
 using AnimatorAsCode.V0;
+using AnimatorAsCode.V0.Extensions.VRChat;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using UnityEditor;
