@@ -72,6 +72,35 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
             });
             return node;
         }
+        
+        public static TNode DrivingRemaps<TNode>(this TNode node, AacFlParameter sourceParameter, float sourceMin, float sourceMax, AacFlParameter destParameter, float destMin, float destMax) where TNode : AacAnimatorNode<TNode>
+        {
+            var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
+            driver.EnsureParameter(new VRC_AvatarParameterDriver.Parameter
+            {
+                name = destParameter.Name,
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = sourceParameter.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destMin,
+                destMax = destMax
+            });
+            return node;
+        }
+
+        public static TNode DrivingCopies<TNode>(this TNode node, AacFlParameter sourceParameter, AacFlParameter destParameter) where TNode : AacAnimatorNode<TNode>
+        {
+            var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
+            driver.EnsureParameter(new VRC_AvatarParameterDriver.Parameter
+            {
+                name = destParameter.Name,
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = sourceParameter.Name,
+            });
+            return node;
+        }
 
         public static TNode DrivingRandomizesLocally<TNode>(this TNode node,AacFlFloatParameter parameter, float min, float max) where TNode : AacAnimatorNode<TNode>
         {
@@ -137,6 +166,18 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.localOnly = true;
             return node;
+        }
+
+        private static void EnsureParameter(this VRC_AvatarParameterDriver driver, VRC_AvatarParameterDriver.Parameter p)
+        {
+            for (var i = 0; i < driver.parameters.Count; i++)
+            {
+                if (driver.parameters[i].name != p.name) continue;
+                
+                driver.parameters[i] = p;
+                return;
+            }
+            driver.parameters.Add(p);
         }
         
         public static TNode PrintsToLogUsingTrackingBehaviour<TNode>(this TNode node, string value) where TNode : AacAnimatorNode<TNode>
@@ -240,7 +281,7 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
             return node;
         }
 
-        public static void PlayableSets(VRCPlayableLayerControl playable, VRC_PlayableLayerControl.BlendableLayer blendable, float blendDurationSeconds, float weight)
+        private static void PlayableSets(VRCPlayableLayerControl playable, VRC_PlayableLayerControl.BlendableLayer blendable, float blendDurationSeconds, float weight)
         {
             playable.layer = blendable;
             playable.goalWeight = weight;
