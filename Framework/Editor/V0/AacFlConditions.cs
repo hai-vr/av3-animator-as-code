@@ -49,15 +49,36 @@ namespace AnimatorAsCode.V0
         }
     }
 
-    public class AacFlFloatParameter : AacFlParameter
+    public abstract class AacFlParameter<TParam> : AacFlParameter
+    {
+        protected AacFlParameter(string name) : base(name)
+        {
+        }
+
+        protected internal abstract float ValueToFloat(TParam value);
+    }
+    
+    public abstract class AacFlNumericParameter<TParam> : AacFlParameter<TParam>
+    {
+        protected AacFlNumericParameter(string name) : base(name)
+        {
+        }
+    }
+
+    public class AacFlFloatParameter : AacFlNumericParameter<float>
     {
         internal static AacFlFloatParameter Internally(string name) => new AacFlFloatParameter(name);
         protected AacFlFloatParameter(string name) : base(name) { }
         public IAacFlCondition IsGreaterThan(float other) => Just(condition => condition.Add(Name, Greater, other));
         public IAacFlCondition IsLessThan(float other) => Just(condition => condition.Add(Name, Less, other));
+        
+        protected internal override float ValueToFloat(float value)
+        {
+            return value;
+        }
     }
 
-    public class AacFlIntParameter : AacFlParameter
+    public class AacFlIntParameter : AacFlNumericParameter<int>
     {
         internal static AacFlIntParameter Internally(string name) => new AacFlIntParameter(name);
         protected AacFlIntParameter(string name) : base(name) { }
@@ -65,6 +86,11 @@ namespace AnimatorAsCode.V0
         public IAacFlCondition IsLessThan(int other) => Just(condition => condition.Add(Name, Less, other));
         public IAacFlCondition IsEqualTo(int other) => Just(condition => condition.Add(Name, AnimatorConditionMode.Equals, other));
         public IAacFlCondition IsNotEqualTo(int other) => Just(condition => condition.Add(Name, NotEqual, other));
+        
+        protected internal override float ValueToFloat(int value)
+        {
+            return value;
+        }
     }
 
     public class AacFlEnumIntParameter<TEnum> : AacFlIntParameter where TEnum : Enum
@@ -78,7 +104,7 @@ namespace AnimatorAsCode.V0
         public IAacFlCondition IsNotEqualTo(TEnum other) => IsNotEqualTo((int)(object)other);
     }
 
-    public class AacFlBoolParameter : AacFlParameter
+    public class AacFlBoolParameter : AacFlParameter<bool>
     {
         internal static AacFlBoolParameter Internally(string name) => new AacFlBoolParameter(name);
         protected AacFlBoolParameter(string name) : base(name) { }
@@ -86,6 +112,11 @@ namespace AnimatorAsCode.V0
         public IAacFlCondition IsFalse() => Just(condition => condition.Add(Name, IfNot, 0));
         public IAacFlCondition IsEqualTo(bool other) => Just(condition => condition.Add(Name, other ? If : IfNot, 0));
         public IAacFlCondition IsNotEqualTo(bool other) => Just(condition => condition.Add(Name, other ? IfNot : If, 0));
+        
+        protected internal override float ValueToFloat(bool value)
+        {
+            return value ? 1f : 0f;
+        }
     }
 
     public class AacFlFloatParameterGroup

@@ -6,73 +6,54 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
 {
     public static class VRChatExtensions
     {
-        public static TNode Drives<TNode>(this TNode node,AacFlIntParameter parameter, int value) where TNode : AacAnimatorNode<TNode>
+        /// <summary>
+        /// Set <i>parameter</i> to a given <i>value</i>. For unsynced parameters, also see <i>DrivingLocally</i>.
+        /// </summary>
+        public static TNode Drives<TNode, TParam>(this TNode node, AacFlParameter<TParam> parameter, TParam value) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
             {
                 type = VRC_AvatarParameterDriver.ChangeType.Set,
-                name = parameter.Name, value = value
+                name = parameter.Name, value = parameter.ValueToFloat(value)
             });
             return node;
         }
 
-        public static TNode Drives<TNode>(this TNode node,AacFlFloatParameter parameter, float value) where TNode : AacAnimatorNode<TNode>
-        {
-            var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
-            driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Set,
-                name = parameter.Name, value = value
-            });
-            return node;
-        }
-
-        public static TNode DrivingIncreases<TNode>(this TNode node,AacFlFloatParameter parameter, float additiveValue) where TNode : AacAnimatorNode<TNode>
+        /// <summary>
+        /// Set <i>parameter</i> by increasing its current value by <i>additiveValue</i>.
+        /// </summary>
+        public static TNode DrivingIncreases<TNode, TParam>(this TNode node, AacFlParameter<TParam> parameter, TParam additiveValue) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
             {
                 type = VRC_AvatarParameterDriver.ChangeType.Add,
-                name = parameter.Name, value = additiveValue
+                name = parameter.Name, value = parameter.ValueToFloat(additiveValue)
             });
             return node;
         }
 
-        public static TNode DrivingDecreases<TNode>(this TNode node,AacFlFloatParameter parameter, float positiveValueToDecreaseBy) where TNode : AacAnimatorNode<TNode>
+        /// <summary>
+        /// Set <i>parameter</i> by decreasing its current value by <i>positiveValueToDecreaseBy</i>.
+        /// </summary>
+        public static TNode DrivingDecreases<TNode, TParam>(this TNode node, AacFlParameter<TParam> parameter, TParam positiveValueToDecreaseBy) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
             {
                 type = VRC_AvatarParameterDriver.ChangeType.Add,
-                name = parameter.Name, value = -positiveValueToDecreaseBy
-            });
-            return node;
-        }
-
-        public static TNode DrivingIncreases<TNode>(this TNode node,AacFlIntParameter parameter, int additiveValue) where TNode : AacAnimatorNode<TNode>
-        {
-            var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
-            driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Add,
-                name = parameter.Name, value = additiveValue
-            });
-            return node;
-        }
-
-        public static TNode DrivingDecreases<TNode>(this TNode node,AacFlIntParameter parameter, int positiveValueToDecreaseBy) where TNode : AacAnimatorNode<TNode>
-        {
-            var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
-            driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Add,
-                name = parameter.Name, value = -positiveValueToDecreaseBy
+                name = parameter.Name, 
+                value = parameter.ValueToFloat(positiveValueToDecreaseBy) * -1
             });
             return node;
         }
         
-        public static TNode DrivingRemaps<TNode>(this TNode node, AacFlParameter sourceParameter, float sourceMin, float sourceMax, AacFlParameter destParameter, float destMin, float destMax) where TNode : AacAnimatorNode<TNode>
+        /// <summary>
+        /// Copies <i>sourceParameter</i> to <i>destParameter</i> with the given custom ranges.
+        /// https://docs.vrchat.com/docs/state-behaviors#copy
+        /// </summary>
+        public static TNode DrivingRemaps<TNode, TSource, TDest>(this TNode node, AacFlParameter<TSource> sourceParameter, TSource sourceMin, TSource sourceMax, AacFlParameter<TDest> destParameter, TDest destMin, TDest destMax) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.EnsureParameter(new VRC_AvatarParameterDriver.Parameter
@@ -81,15 +62,19 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
                 type = VRC_AvatarParameterDriver.ChangeType.Copy,
                 source = sourceParameter.Name,
                 convertRange = true,
-                sourceMin = sourceMin,
-                sourceMax = sourceMax,
-                destMin = destMin,
-                destMax = destMax
+                sourceMin = sourceParameter.ValueToFloat(sourceMin),
+                sourceMax = sourceParameter.ValueToFloat(sourceMax),
+                destMin = destParameter.ValueToFloat(destMin),
+                destMax = destParameter.ValueToFloat(destMax)
             });
             return node;
         }
 
-        public static TNode DrivingCopies<TNode>(this TNode node, AacFlParameter sourceParameter, AacFlParameter destParameter) where TNode : AacAnimatorNode<TNode>
+        /// <summary>
+        /// Copies <i>sourceParameter</i> to <i>destParameter</i> with no custom ranges.
+        /// https://docs.vrchat.com/docs/state-behaviors#copy
+        /// </summary>
+        public static TNode DrivingCopies<TNode, TSource, TDest>(this TNode node, AacFlParameter<TSource> sourceParameter, AacFlParameter<TDest> destParameter) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.EnsureParameter(new VRC_AvatarParameterDriver.Parameter
@@ -101,19 +86,29 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
             return node;
         }
 
-        public static TNode DrivingRandomizesLocally<TNode>(this TNode node,AacFlFloatParameter parameter, float min, float max) where TNode : AacAnimatorNode<TNode>
+        /// <summary>
+        /// Sets <i>parameter</i> to a random value between <i>min</i> and <i>max</i>.
+        /// This is only ran for the person wearing the avatar, and usually needs to be backed by a synced variable.
+        /// https://docs.vrchat.com/docs/state-behaviors#random
+        /// </summary>
+        public static TNode DrivingRandomizesLocally<TNode, TParam>(this TNode node, AacFlNumericParameter<TParam> parameter, TParam min, TParam max) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
             {
                 type = VRC_AvatarParameterDriver.ChangeType.Random,
-                name = parameter.Name, valueMin = min, valueMax = max
+                name = parameter.Name, valueMin = parameter.ValueToFloat(min), valueMax = parameter.ValueToFloat(max)
             });
             driver.localOnly = true;
             return node;
         }
 
-        public static TNode DrivingRandomizesLocally<TNode>(this TNode node,AacFlBoolParameter parameter, float chance) where TNode : AacAnimatorNode<TNode>
+        /// <summary>
+        /// Sets <i>parameter</i> to either true or false, with the given <i>chance</i>.
+        /// This is only ran for the person wearing the avatar, and usually needs to be backed by a synced variable.
+        /// https://docs.vrchat.com/docs/state-behaviors#random
+        /// </summary>
+        public static TNode DrivingRandomizesLocally<TNode>(this TNode node, AacFlBoolParameter parameter, float chance) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
@@ -124,25 +119,35 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
             driver.localOnly = true;
             return node;
         }
-
-        public static TNode DrivingRandomizesLocally<TNode>(this TNode node,AacFlIntParameter parameter, int min, int max) where TNode : AacAnimatorNode<TNode>
+        
+        /// <summary>
+        /// Sets <i>parameter</i> to a random value between <i>min</i> and <i>max</i>.
+        /// For use with unsynced parameters. <b>Warning: The resulting value will be different for everyone seeing your avatar.</b>
+        /// https://docs.vrchat.com/docs/state-behaviors#random
+        /// </summary>
+        public static TNode DrivingRandomizesUnsynced<TNode, TParam>(this TNode node, AacFlNumericParameter<TParam> parameter, TParam min, TParam max) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
             {
                 type = VRC_AvatarParameterDriver.ChangeType.Random,
-                name = parameter.Name, valueMin = min, valueMax = max
+                name = parameter.Name, valueMin = parameter.ValueToFloat(min), valueMax = parameter.ValueToFloat(max)
             });
-            driver.localOnly = true;
             return node;
         }
 
-        public static TNode Drives<TNode>(this TNode node,AacFlBoolParameter parameter, bool value) where TNode : AacAnimatorNode<TNode>
+        /// <summary>
+        /// Sets <i>parameter</i> to either true or false, with the given <i>chance</i>.
+        /// For use with unsynced parameters. <b>Warning: The resulting value will be different for everyone seeing your avatar.</b>
+        /// https://docs.vrchat.com/docs/state-behaviors#random
+        /// </summary>
+        public static TNode DrivingRandomizesUnsynced<TNode>(this TNode node, AacFlBoolParameter parameter, float chance) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
             {
-                name = parameter.Name, value = value ? 1 : 0
+                type = VRC_AvatarParameterDriver.ChangeType.Random,
+                name = parameter.Name, chance = chance
             });
             return node;
         }
@@ -159,11 +164,14 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
             }
             return node;
         }
-
-        public static TNode DrivingLocally<TNode>(this TNode node, bool wantLocal = true) where TNode : AacAnimatorNode<TNode>
+        
+        /// <summary>
+        /// Only set this parameter for the person wearing the avatar (recommended for synced parameters).
+        /// </summary>
+        public static TNode DrivingLocally<TNode>(this TNode node) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
-            driver.localOnly = wantLocal;
+            driver.localOnly = true;
             return node;
         }
 
