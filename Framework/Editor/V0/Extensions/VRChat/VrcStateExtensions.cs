@@ -161,10 +161,10 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
             return node;
         }
 
-        public static TNode DrivingLocally<TNode>(this TNode node) where TNode : AacAnimatorNode<TNode>
+        public static TNode DrivingLocally<TNode>(this TNode node, bool wantLocal = true) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
-            driver.localOnly = true;
+            driver.localOnly = wantLocal;
             return node;
         }
 
