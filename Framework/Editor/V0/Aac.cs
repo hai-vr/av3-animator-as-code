@@ -309,10 +309,9 @@ namespace AnimatorAsCode.V0
         {
             var dummyClip = AacV0.NewClip(_configuration, $"D({numberOf} {Enum.GetName(typeof(AacFlUnit), unit)})");
 
-            var duration = unit == AacFlUnit.Frames ? numberOf / 60f : numberOf;
             return new AacFlClip(_configuration, dummyClip)
                 .Animating(clip => clip.Animates("_ignored", typeof(GameObject), "m_IsActive")
-                    .WithUnit(unit, keyframes => keyframes.Constant(0, 0f).Constant(duration, 0f)));
+                    .WithUnit(unit, keyframes => keyframes.Constant(0, 0f).Constant(numberOf, 0f)));
         }
 
         public void RemoveAllMainLayers()
