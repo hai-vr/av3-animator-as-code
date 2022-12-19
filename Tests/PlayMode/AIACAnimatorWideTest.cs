@@ -13,7 +13,6 @@ namespace av3_animator_as_code.Tests.PlayMode
         {
             var aac = TestAac();
             var controller = new AnimatorController();
-            AssetDatabase.CreateAsset(controller, "Assets/dmp.controller");
             var fx = aac.CreateMainArbitraryControllerLayer(controller);
 
             // Exercise
@@ -41,7 +40,6 @@ namespace av3_animator_as_code.Tests.PlayMode
         {
             var aac = TestAac();
             var controller = new AnimatorController();
-            AssetDatabase.CreateAsset(controller, "Assets/dmp.controller");
             var fx = aac.CreateMainArbitraryControllerLayer(controller);
 
             // Exercise
@@ -69,7 +67,6 @@ namespace av3_animator_as_code.Tests.PlayMode
         {
             var aac = TestAac();
             var controller = new AnimatorController();
-            AssetDatabase.CreateAsset(controller, "Assets/dmp.controller");
             var fx = aac.CreateMainArbitraryControllerLayer(controller);
 
             // Exercise
