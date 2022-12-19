@@ -339,7 +339,7 @@ namespace AnimatorAsCode.V0
 
         public AacFlTransition TransitionsTo(AacFlStateMachine destination)
         {
-            return new AacFlTransition(State.AddTransition(destination.Machine), _machine, State, destination.Machine);
+            return new AacFlTransition(ConfigureTransition(State.AddTransition(destination.Machine)), _machine, State, destination.Machine);
         }
 
         public AacFlTransition TransitionsFromAny()
