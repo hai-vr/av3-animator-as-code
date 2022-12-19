@@ -112,6 +112,99 @@ namespace av3_animator_as_code.Tests.PlayMode
             Assert.IsTrue(Info0(animator).IsName("SSM One"));
             yield break;
         }
+        
+        [UnityTest]
+        public IEnumerator It_should_enter_a_SSM_conditionally__Entry_created_through_SSM_instance()
+        {
+            var aac = TestAac();
+            var controller = new AnimatorController();
+            var fx = aac.CreateMainArbitraryControllerLayer(controller);
+
+            // Exercise
+            var first = fx.NewState("First");
+            var ssm = fx.NewSubStateMachine("SSM");
+            ssm.NewState("SSM One");
+
+            var two = ssm.NewState("SSM Two");
+            first.TransitionsTo(ssm).AfterAnimationFinishes();
+            ssm.EntryTransitionsTo(two).When(fx.BoolParameter("MyBool").IsTrue());
+
+            var animator = _root.AddComponent<Animator>();
+            animator.runtimeAnimatorController = controller;
+            animator.enabled = false;
+
+            // Verify
+            // Frame 0
+            Assert.IsTrue(Info0(animator).IsName("First"));
+            
+            // Frame 1
+            animator.SetBool("MyBool", true);
+            animator.Update(1 / 60f);
+            Assert.IsTrue(Info0(animator).IsName("SSM Two"));
+            yield break;
+        }
+        
+        [UnityTest]
+        public IEnumerator It_should_enter_a_SSM_conditionally__Entry_created_through_state_instance()
+        {
+            var aac = TestAac();
+            var controller = new AnimatorController();
+            var fx = aac.CreateMainArbitraryControllerLayer(controller);
+
+            // Exercise
+            var first = fx.NewState("First");
+            var ssm = fx.NewSubStateMachine("SSM");
+            ssm.NewState("SSM One");
+
+            var two = ssm.NewState("SSM Two");
+            first.TransitionsTo(ssm).AfterAnimationFinishes();
+            two.TransitionsFromEntry().When(fx.BoolParameter("MyBool").IsTrue()); 
+
+            var animator = _root.AddComponent<Animator>();
+            animator.runtimeAnimatorController = controller;
+            animator.enabled = false;
+
+            // Verify
+            // Frame 0
+            Assert.IsTrue(Info0(animator).IsName("First"));
+            
+            // Frame 1
+            animator.SetBool("MyBool", true);
+            animator.Update(1 / 60f);
+            Assert.IsTrue(Info0(animator).IsName("SSM Two"));
+            yield break;
+        }
+        
+        [UnityTest]
+        public IEnumerator It_should_enter_the_default_SSM_entry_state_when_conditions_do_not_pass()
+        {
+            var aac = TestAac();
+            var controller = new AnimatorController();
+            var fx = aac.CreateMainArbitraryControllerLayer(controller);
+
+            // Exercise
+            var first = fx.NewState("First");
+            var ssm = fx.NewSubStateMachine("SSM");
+            ssm.NewState("SSM One");
+
+            var two = ssm.NewState("SSM Two");
+            first.TransitionsTo(ssm).AfterAnimationFinishes();
+            ssm.EntryTransitionsTo(two).When(fx.BoolParameter("MyBool").IsTrue());
+
+            var animator = _root.AddComponent<Animator>();
+            animator.runtimeAnimatorController = controller;
+            animator.enabled = false;
+
+            // Verify
+            // Frame 0
+            Assert.IsTrue(Info0(animator).IsName("First"));
+            
+            // Frame 1
+            animator.SetBool("MyBool", false);
+            animator.Update(1 / 60f);
+            Assert.IsTrue(Info0(animator).IsName("SSM One"));
+            yield break;
+        }
 
         private static AnimatorStateInfo Info0(Animator animator)
         {
