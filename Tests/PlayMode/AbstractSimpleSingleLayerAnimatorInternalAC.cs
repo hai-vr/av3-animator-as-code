@@ -14,13 +14,15 @@ namespace av3_animator_as_code.Tests.PlayMode
         protected GameObject _root;
         private AnimatorController _container;
         private string _containerPath;
+        private AnimatorController _controller;
+        private string _controllerPath;
 
         [UnitySetUp]
         public IEnumerator SetUp()
         {
             _root = new GameObject("Root");
             _container = new AnimatorController();
-            _containerPath = $"Assets/temp_aac_test__{Guid.NewGuid()}.asset";
+            _containerPath = $"Assets/temp_aac_test__container_{Guid.NewGuid()}.asset";
             AssetDatabase.CreateAsset(_container, _containerPath);
             yield return null;
         }
@@ -30,10 +32,21 @@ namespace av3_animator_as_code.Tests.PlayMode
         {
             Object.Destroy(_root);
             AssetDatabase.DeleteAsset(_containerPath);
+            if (_controllerPath != null) AssetDatabase.DeleteAsset(_controllerPath);
             _root = null;
             _container = null;
             _containerPath = null;
+            _controller = null;
+            _controllerPath = null;
             yield return null;
+        }
+
+        protected AnimatorController NewPersistentController()
+        {
+            _controller = new AnimatorController();
+            _controllerPath = $"Assets/temp_aac_test__ctrl_{Guid.NewGuid()}.asset";
+            AssetDatabase.CreateAsset(_controller, _controllerPath);
+            return _controller;
         }
 
         protected AacFlBase TestAac()
