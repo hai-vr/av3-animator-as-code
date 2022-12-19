@@ -23,7 +23,7 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
         /// <summary>
         /// Set <i>parameter</i> by increasing its current value by <i>additiveValue</i>.
         /// </summary>
-        public static TNode DrivingIncreases<TNode, TParam>(this TNode node, AacFlParameter<TParam> parameter, TParam additiveValue) where TNode : AacAnimatorNode<TNode>
+        public static TNode DrivingIncreases<TNode, TParam>(this TNode node, AacFlNumericParameter<TParam> parameter, TParam additiveValue) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
@@ -37,7 +37,7 @@ namespace AnimatorAsCode.V0.Extensions.VRChat
         /// <summary>
         /// Set <i>parameter</i> by decreasing its current value by <i>positiveValueToDecreaseBy</i>.
         /// </summary>
-        public static TNode DrivingDecreases<TNode, TParam>(this TNode node, AacFlParameter<TParam> parameter, TParam positiveValueToDecreaseBy) where TNode : AacAnimatorNode<TNode>
+        public static TNode DrivingDecreases<TNode, TParam>(this TNode node, AacFlNumericParameter<TParam> parameter, TParam positiveValueToDecreaseBy) where TNode : AacAnimatorNode<TNode>
         {
             var driver = node.EnsureBehaviour<VRCAvatarParameterDriver>();
             driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
