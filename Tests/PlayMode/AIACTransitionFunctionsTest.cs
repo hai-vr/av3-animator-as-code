@@ -6,7 +6,7 @@ using Assert = UnityEngine.Assertions.Assert;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
-    public class AnimatorInternalACTransitionFunctionsTest : AbstractSimpleSingleLayerAnimatorInternalAC
+    public class AIACTransitionFunctionsTest : AbstractSimpleSingleLayerAIAC
     {
         [Test]
         public void It_should_transition_after_animation_finishes()

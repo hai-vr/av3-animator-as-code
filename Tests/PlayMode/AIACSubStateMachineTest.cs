@@ -5,7 +5,7 @@ using Assert = UnityEngine.Assertions.Assert;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
-    public class AnimatorInternalACSubStateMachineTest : AbstractSimpleSingleLayerAnimatorInternalAC
+    public class AIACSubStateMachineTest : AbstractSimpleSingleLayerAIAC
     {
         [Test]
         public void It_should_transition_to_a_SSM()

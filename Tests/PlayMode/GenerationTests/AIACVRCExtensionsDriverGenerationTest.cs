@@ -5,7 +5,7 @@ using VRC.SDKBase;
 
 namespace av3_animator_as_code.Tests.PlayMode.GenerationTests
 {
-    public class AIACVRCExtensionsGenerationTest : AbstractSimpleSingleLayerAnimatorInternalAC
+    public class AIACVRCExtensionsDriverGenerationTest : AbstractSimpleSingleLayerAIAC
     {
         [Test]
         public void It_generates_a_driver_that_sets_bool_to_true()

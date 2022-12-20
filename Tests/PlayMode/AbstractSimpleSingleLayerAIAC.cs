@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
-    public abstract class AbstractSimpleSingleLayerAnimatorInternalAC
+    public abstract class AbstractSimpleSingleLayerAIAC
     {
         protected GameObject _root;
         private AnimatorController _container;

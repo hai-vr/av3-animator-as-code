@@ -1,12 +1,11 @@
-﻿using AnimatorAsCode.V0;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using UnityEditor.Animations;
 using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
-    public class AIACStateTest : AbstractSimpleSingleLayerAnimatorInternalAC
+    public class AIACStateTest : AbstractSimpleSingleLayerAIAC
     {
         [Test]
         public void It_should_create_layer_with_state()

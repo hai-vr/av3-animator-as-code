@@ -5,7 +5,7 @@ using VRC.SDKBase;
 
 namespace av3_animator_as_code.Tests.PlayMode.GenerationTests
 {
-    public class AIACVRCExtensionsMiscGenerationTest : AbstractSimpleSingleLayerAnimatorInternalAC
+    public class AIACVRCExtensionsMiscGenerationTest : AbstractSimpleSingleLayerAIAC
     {
         [Test]
         public void It_generates_a_tracking_that_tracks_head()

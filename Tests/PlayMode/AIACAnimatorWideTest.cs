@@ -1,12 +1,11 @@
 ﻿using NUnit.Framework;
-using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
-    public class AIACAnimatorWideTest : AbstractSimpleSingleLayerAnimatorInternalAC
+    public class AIACAnimatorWideTest : AbstractSimpleSingleLayerAIAC
     {
         [Test]
         public void It_should_override_bool()

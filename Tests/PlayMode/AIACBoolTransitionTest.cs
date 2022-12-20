@@ -5,7 +5,7 @@ using Assert = UnityEngine.Assertions.Assert;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
-    public class AnimatorInternalACBoolTransitionTest : AbstractSimpleSingleLayerAnimatorInternalAC
+    public class AIACBoolTransitionTest : AbstractSimpleSingleLayerAIAC
     {
         [Test]
         public void It_should_transition_when_bool_is_true()
