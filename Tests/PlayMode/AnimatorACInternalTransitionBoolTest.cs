@@ -1,16 +1,14 @@
-﻿using System.Collections;
-using AnimatorAsCode.V0;
+﻿using NUnit.Framework;
 using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.TestTools;
+using Assert = UnityEngine.Assertions.Assert;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
     public class AnimatorInternalACBoolTransitionTest : AbstractSimpleSingleLayerAnimatorInternalAC
     {
-        [UnityTest]
-        public IEnumerator It_should_transition_when_bool_is_true()
+        [Test]
+        public void It_should_transition_when_bool_is_true()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -38,11 +36,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBool", true);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_bool_is_false()
+        [Test]
+        public void It_should_transition_when_bool_is_false()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -71,11 +68,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBool", false);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_both_bools_are_true()
+        [Test]
+        public void It_should_transition_when_both_bools_are_true()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -112,11 +108,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolTwo", true);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_second_bool_is_true()
+        [Test]
+        public void It_should_transition_when_second_bool_is_true()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -145,11 +140,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolTwo", true);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_group_of_bools_are_true()
+        [Test]
+        public void It_should_transition_when_group_of_bools_are_true()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -178,11 +172,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolTwo", true);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_group_of_bools_are_false()
+        [Test]
+        public void It_should_transition_when_group_of_bools_are_false()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -213,11 +206,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolTwo", false);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_group_of_bools_are_true_except_one_of_them()
+        [Test]
+        public void It_should_transition_when_group_of_bools_are_true_except_one_of_them()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -250,11 +242,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolThree", false);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_group_of_bools_are_true_except_another_group_of_them()
+        [Test]
+        public void It_should_transition_when_group_of_bools_are_true_except_another_group_of_them()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -289,11 +280,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolFour", false);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_any_of_group_of_bools_is_true()
+        [Test]
+        public void It_should_transition_when_any_of_group_of_bools_is_true()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -321,11 +311,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolTwo", true);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_any_of_group_of_bools_is_false()
+        [Test]
+        public void It_should_transition_when_any_of_group_of_bools_is_false()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -355,11 +344,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolTwo", false);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_when_any_of_group_of_bools_is_true_and_another_bool_is_also_true()
+        [Test]
+        public void It_should_transition_when_any_of_group_of_bools_is_true_and_another_bool_is_also_true()
         {
             var controller = new AnimatorController();
             var aac = TestAac();
@@ -409,7 +397,6 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBoolMandatory", true);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
         private static AnimatorStateInfo Info0(Animator animator)

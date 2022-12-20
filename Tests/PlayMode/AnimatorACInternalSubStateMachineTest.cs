@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using AnimatorAsCode.V0;
-using UnityEditor;
+﻿using NUnit.Framework;
 using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.TestTools;
+using Assert = UnityEngine.Assertions.Assert;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
     public class AnimatorInternalACSubStateMachineTest : AbstractSimpleSingleLayerAnimatorInternalAC
     {
-        [UnityTest]
-        public IEnumerator It_should_transition_to_a_SSM()
+        [Test]
+        public void It_should_transition_to_a_SSM()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -35,11 +32,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             // Frame 1
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("SSM One"));
-            yield break;
         }
         
-        [UnityTest]
-        public IEnumerator It_should_exit_out_of_a_SSM()
+        [Test]
+        public void It_should_exit_out_of_a_SSM()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -70,11 +66,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             // Frame 2
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
         
-        [UnityTest]
-        public IEnumerator It_should_restart_the_SSM()
+        [Test]
+        public void It_should_restart_the_SSM()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -110,11 +105,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             // Frame 3
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("SSM One"));
-            yield break;
         }
         
-        [UnityTest]
-        public IEnumerator It_should_enter_a_SSM_conditionally__Entry_created_through_SSM_instance()
+        [Test]
+        public void It_should_enter_a_SSM_conditionally__Entry_created_through_SSM_instance()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -141,11 +135,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBool", true);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("SSM Two"));
-            yield break;
         }
         
-        [UnityTest]
-        public IEnumerator It_should_enter_a_SSM_conditionally__Entry_created_through_state_instance()
+        [Test]
+        public void It_should_enter_a_SSM_conditionally__Entry_created_through_state_instance()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -172,11 +165,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBool", true);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("SSM Two"));
-            yield break;
         }
         
-        [UnityTest]
-        public IEnumerator It_should_enter_the_default_SSM_entry_state_when_conditions_do_not_pass()
+        [Test]
+        public void It_should_enter_the_default_SSM_entry_state_when_conditions_do_not_pass()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -203,7 +195,6 @@ namespace av3_animator_as_code.Tests.PlayMode
             animator.SetBool("MyBool", false);
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("SSM One"));
-            yield break;
         }
 
         private static AnimatorStateInfo Info0(Animator animator)

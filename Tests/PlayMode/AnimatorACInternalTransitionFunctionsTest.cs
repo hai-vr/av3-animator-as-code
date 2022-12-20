@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using AnimatorAsCode.V0;
+﻿using AnimatorAsCode.V0;
+using NUnit.Framework;
 using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.TestTools;
+using Assert = UnityEngine.Assertions.Assert;
 
 namespace av3_animator_as_code.Tests.PlayMode
 {
     public class AnimatorInternalACTransitionFunctionsTest : AbstractSimpleSingleLayerAnimatorInternalAC
     {
-        [UnityTest]
-        public IEnumerator It_should_transition_after_animation_finishes()
+        [Test]
+        public void It_should_transition_after_animation_finishes()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -32,11 +31,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             // Frame 1
             animator.Update(1 / 60f);
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
         
-        [UnityTest]
-        public IEnumerator It_should_transition_after_animation_finishes_in_2_frames()
+        [Test]
+        public void It_should_transition_after_animation_finishes_in_2_frames()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -62,11 +60,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             
             // Frame 2
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
         
-        [UnityTest]
-        public IEnumerator It_should_transition_after_animation_finishes_in_3_frames()
+        [Test]
+        public void It_should_transition_after_animation_finishes_in_3_frames()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -92,11 +89,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             
             // Frame 3
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_after_animation_finishes_in_59_frames()
+        [Test]
+        public void It_should_transition_after_animation_finishes_in_59_frames()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -122,11 +118,10 @@ namespace av3_animator_as_code.Tests.PlayMode
             
             // Frame 60
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
-        [UnityTest]
-        public IEnumerator It_should_transition_after_animation_finishes_in_60_frames_with_plus_one_error()
+        [Test]
+        public void It_should_transition_after_animation_finishes_in_60_frames_with_plus_one_error()
         {
             var aac = TestAac();
             var controller = new AnimatorController();
@@ -153,7 +148,6 @@ namespace av3_animator_as_code.Tests.PlayMode
             
             // Frame 62
             Assert.IsTrue(Info0(animator).IsName("Second"));
-            yield break;
         }
 
         private static AnimatorStateInfo Info0(Animator animator)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using AnimatorAsCode.V0;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -17,18 +18,17 @@ namespace av3_animator_as_code.Tests.PlayMode
         private AnimatorController _controller;
         private string _controllerPath;
 
-        [UnitySetUp]
-        public IEnumerator SetUp()
+        [SetUp]
+        public void SetUp()
         {
             _root = new GameObject("Root");
             _container = new AnimatorController();
             _containerPath = $"Assets/temp_aac_test__container_{Guid.NewGuid()}.asset";
             AssetDatabase.CreateAsset(_container, _containerPath);
-            yield return null;
         }
         
-        [UnityTearDown]
-        public IEnumerator TearDown()
+        [TearDown]
+        public void TearDown()
         {
             Object.Destroy(_root);
             AssetDatabase.DeleteAsset(_containerPath);
@@ -38,7 +38,6 @@ namespace av3_animator_as_code.Tests.PlayMode
             _containerPath = null;
             _controller = null;
             _controllerPath = null;
-            yield return null;
         }
 
         protected AnimatorController NewPersistentController()
