@@ -53,6 +53,8 @@ namespace AnimatorAsCode.V1
 
     public class AacFlLayer
     {
+        public AacFlStateMachine StateMachine => _stateMachine;
+
         private readonly AnimatorController _animatorController;
         private readonly AacConfiguration _configuration;
         private readonly string _fullLayerName;
