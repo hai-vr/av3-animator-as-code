@@ -92,6 +92,8 @@ namespace AnimatorAsCode.V0
 
     public struct AacFlLayer
     {
+        public AacFlStateMachine StateMachine => _stateMachine;
+
         private readonly AnimatorController _animatorController;
         private readonly AacConfiguration _configuration;
         private readonly string _fullLayerName;
