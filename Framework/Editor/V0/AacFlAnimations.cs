@@ -77,6 +77,15 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlClip BlendShape(SkinnedMeshRenderer renderer, string blendShapeName, AnimationCurve animationCurve)
+        {
+            var binding = AacV0.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
+
+            AnimationUtility.SetEditorCurve(Clip, binding, animationCurve);
+
+            return this;
+        }
+
         public AacFlClip Scaling(GameObject[] gameObjectsWithNulls, Vector3 scale)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
