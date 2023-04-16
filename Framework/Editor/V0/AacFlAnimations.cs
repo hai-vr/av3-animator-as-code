@@ -86,6 +86,32 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlClip Positioning(GameObject[] gameObjectsWithNulls, Vector3 position)
+        {
+            var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
+            foreach (var component in defensiveObjects)
+            {
+                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.x"), AacV0.OneFrame(position.x));
+                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.y"), AacV0.OneFrame(position.y));
+                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.z"), AacV0.OneFrame(position.z));
+            }
+
+            return this;
+        }
+
+        public AacFlClip Rotationing(GameObject[] gameObjectsWithNulls, Vector3 localEulerAngles)
+        {
+            var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
+            foreach (var component in defensiveObjects)
+            {
+                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "localEulerAnglesRaw.x"), AacV0.OneFrame(localEulerAngles.x));
+                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "localEulerAnglesRaw.y"), AacV0.OneFrame(localEulerAngles.y));
+                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "localEulerAnglesRaw.z"), AacV0.OneFrame(localEulerAngles.z));
+            }
+
+            return this;
+        }
+
         public AacFlClip Scaling(GameObject[] gameObjectsWithNulls, Vector3 scale)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
