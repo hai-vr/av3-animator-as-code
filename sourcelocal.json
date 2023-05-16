@@ -1,0 +1,12 @@
+{
+    "name":"Animator As Code",
+    "id":"com.haivr.animatorascode.repo",
+    "url":"https://www.matthewherber.com/Happys-VRC-tools/index.json",
+    "author": {
+        "name": "Hai-VR"
+    },
+    "description":"The main level repository for Animator As Code",
+    "githubRepos": [
+        "happyrobot33/av3-animator-as-code"
+    ]
+}
