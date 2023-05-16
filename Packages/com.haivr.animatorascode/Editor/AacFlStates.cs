@@ -47,7 +47,8 @@ namespace AnimatorAsCode.V0
             return result;
         }
 
-        public AacFlEnumIntParameter<TEnum> EnumParameter<TEnum>(string parameterName) where TEnum : Enum
+        public AacFlEnumIntParameter<TEnum> EnumParameter<TEnum>(string parameterName)
+            where TEnum : Enum
         {
             var result = AacFlEnumIntParameter<TEnum>.Internally<TEnum>(parameterName);
             _generator.CreateParamsAsNeeded(result);
@@ -84,28 +85,36 @@ namespace AnimatorAsCode.V0
 
         public AacFlBoolParameterGroup BoolParameters(params AacFlBoolParameter[] parameters)
         {
-            var result = AacFlBoolParameterGroup.Internally(parameters.Select(parameter => parameter.Name).ToArray());
+            var result = AacFlBoolParameterGroup.Internally(
+                parameters.Select(parameter => parameter.Name).ToArray()
+            );
             _generator.CreateParamsAsNeeded(parameters);
             return result;
         }
 
         public AacFlBoolParameterGroup TriggerParameters(params AacFlBoolParameter[] parameters)
         {
-            var result = AacFlBoolParameterGroup.Internally(parameters.Select(parameter => parameter.Name).ToArray());
+            var result = AacFlBoolParameterGroup.Internally(
+                parameters.Select(parameter => parameter.Name).ToArray()
+            );
             _generator.CreateTriggerParamsAsNeeded(parameters);
             return result;
         }
 
         public AacFlFloatParameterGroup FloatParameters(params AacFlFloatParameter[] parameters)
         {
-            var result = AacFlFloatParameterGroup.Internally(parameters.Select(parameter => parameter.Name).ToArray());
+            var result = AacFlFloatParameterGroup.Internally(
+                parameters.Select(parameter => parameter.Name).ToArray()
+            );
             _generator.CreateParamsAsNeeded(parameters);
             return result;
         }
 
         public AacFlIntParameterGroup IntParameters(params AacFlIntParameter[] parameters)
         {
-            var result = AacFlIntParameterGroup.Internally(parameters.Select(parameter => parameter.Name).ToArray());
+            var result = AacFlIntParameterGroup.Internally(
+                parameters.Select(parameter => parameter.Name).ToArray()
+            );
             _generator.CreateParamsAsNeeded(parameters);
             return result;
         }
@@ -113,8 +122,11 @@ namespace AnimatorAsCode.V0
 
     internal class AacStateMachine
     {
-        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorStateMachine).GetProperty("pushUndo",
-                BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly PropertyInfo PropPushUndo =
+            typeof(AnimatorStateMachine).GetProperty(
+                "pushUndo",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
         private readonly AnimatorStateMachine _machine;
         private readonly AnimationClip _emptyClip;
         private readonly AacBackingAnimator _backingAnimator;
@@ -122,7 +134,12 @@ namespace AnimatorAsCode.V0
         private readonly float _gridShiftX;
         private readonly float _gridShiftY;
 
-        public AacStateMachine(AnimatorStateMachine machine, AnimationClip emptyClip, AacBackingAnimator backingAnimator, IAacDefaultsProvider defaultsProvider)
+        public AacStateMachine(
+            AnimatorStateMachine machine,
+            AnimationClip emptyClip,
+            AacBackingAnimator backingAnimator,
+            IAacDefaultsProvider defaultsProvider
+        )
         {
             PropPushUndo.SetValue(machine, false);
             _machine = machine;
@@ -176,9 +193,17 @@ namespace AnimatorAsCode.V0
             return EntryTransition(destination, _machine);
         }
 
-        private AacFlTransition AnyTransition(AacFlState destination, AnimatorStateMachine animatorStateMachine)
+        private AacFlTransition AnyTransition(
+            AacFlState destination,
+            AnimatorStateMachine animatorStateMachine
+        )
         {
-            return new AacFlTransition(ConfigureTransition(animatorStateMachine.AddAnyStateTransition(destination.State)), animatorStateMachine, null, destination.State);
+            return new AacFlTransition(
+                ConfigureTransition(animatorStateMachine.AddAnyStateTransition(destination.State)),
+                animatorStateMachine,
+                null,
+                destination.State
+            );
         }
 
         private AnimatorStateTransition ConfigureTransition(AnimatorStateTransition transition)
@@ -187,9 +212,17 @@ namespace AnimatorAsCode.V0
             return transition;
         }
 
-        private AacFlEntryTransition EntryTransition(AacFlState destination, AnimatorStateMachine animatorStateMachine)
+        private AacFlEntryTransition EntryTransition(
+            AacFlState destination,
+            AnimatorStateMachine animatorStateMachine
+        )
         {
-            return new AacFlEntryTransition(animatorStateMachine.AddEntryTransition(destination.State), animatorStateMachine, null, destination.State);
+            return new AacFlEntryTransition(
+                animatorStateMachine.AddEntryTransition(destination.State),
+                animatorStateMachine,
+                null,
+                destination.State
+            );
         }
 
         internal Vector3 LastStatePosition()
@@ -199,14 +232,16 @@ namespace AnimatorAsCode.V0
 
         private Vector3 GridPosition(int x, int y)
         {
-            return new Vector3(x * _gridShiftX , y * _gridShiftY, 0);
+            return new Vector3(x * _gridShiftX, y * _gridShiftY, 0);
         }
     }
 
     public class AacFlState
     {
-        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorState).GetProperty("pushUndo",
-            BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorState).GetProperty(
+            "pushUndo",
+            BindingFlags.NonPublic | BindingFlags.Instance
+        );
         public readonly AnimatorState State;
         private readonly AnimatorStateMachine _machine;
         private readonly IAacDefaultsProvider _defaultsProvider;
@@ -215,7 +250,11 @@ namespace AnimatorAsCode.V0
         private VRCAnimatorTrackingControl _tracking;
         private VRCAnimatorLocomotionControl _locomotionControl;
 
-        public AacFlState(AnimatorState state, AnimatorStateMachine machine, IAacDefaultsProvider defaultsProvider)
+        public AacFlState(
+            AnimatorState state,
+            AnimatorStateMachine machine,
+            IAacDefaultsProvider defaultsProvider
+        )
         {
             PropPushUndo.SetValue(state, false);
             State = state;
@@ -224,16 +263,23 @@ namespace AnimatorAsCode.V0
         }
 
         public AacFlState LeftOf(AacFlState otherState) => MoveNextTo(otherState, -1, 0);
+
         public AacFlState RightOf(AacFlState otherState) => MoveNextTo(otherState, 1, 0);
+
         public AacFlState Over(AacFlState otherState) => MoveNextTo(otherState, 0, -1);
+
         public AacFlState Under(AacFlState otherState) => MoveNextTo(otherState, 0, 1);
 
         public AacFlState LeftOf() => MoveNextTo(null, -1, 0);
+
         public AacFlState RightOf() => MoveNextTo(null, 1, 0);
+
         public AacFlState Over() => MoveNextTo(null, 0, -1);
+
         public AacFlState Under() => MoveNextTo(null, 0, 1);
 
-        public AacFlState Shift(AacFlState otherState, int shiftX, int shiftY) => MoveNextTo(otherState, shiftX, shiftY);
+        public AacFlState Shift(AacFlState otherState, int shiftX, int shiftY) =>
+            MoveNextTo(otherState, shiftX, shiftY);
 
         private AacFlState MoveNextTo(AacFlState otherStateOrSecondToLastWhenNull, int x, int y)
         {
@@ -246,7 +292,9 @@ namespace AnimatorAsCode.V0
             }
             else
             {
-                var other = _machine.states.First(animatorState => animatorState.state == otherStateOrSecondToLastWhenNull.State);
+                var other = _machine.states.First(
+                    animatorState => animatorState.state == otherStateOrSecondToLastWhenNull.State
+                );
                 Shift(other.position, x, y);
 
                 return this;
@@ -262,7 +310,13 @@ namespace AnimatorAsCode.V0
                 if (childAnimatorState.state == State)
                 {
                     var cms = childAnimatorState;
-                    cms.position = otherPosition + new Vector3(shiftX * _defaultsProvider.Grid().x, shiftY * _defaultsProvider.Grid().y, 0);
+                    cms.position =
+                        otherPosition
+                        + new Vector3(
+                            shiftX * _defaultsProvider.Grid().x,
+                            shiftY * _defaultsProvider.Grid().y,
+                            0
+                        );
                     states[index] = cms;
                     break;
                 }
@@ -285,17 +339,32 @@ namespace AnimatorAsCode.V0
 
         public AacFlTransition TransitionsTo(AacFlState destination)
         {
-            return new AacFlTransition(ConfigureTransition(State.AddTransition(destination.State)), _machine, State, destination.State);
+            return new AacFlTransition(
+                ConfigureTransition(State.AddTransition(destination.State)),
+                _machine,
+                State,
+                destination.State
+            );
         }
 
         public AacFlTransition TransitionsFromAny()
         {
-            return new AacFlTransition(ConfigureTransition(_machine.AddAnyStateTransition(State)), _machine, null, State);
+            return new AacFlTransition(
+                ConfigureTransition(_machine.AddAnyStateTransition(State)),
+                _machine,
+                null,
+                State
+            );
         }
 
         public AacFlEntryTransition TransitionsFromEntry()
         {
-            return new AacFlEntryTransition(_machine.AddEntryTransition(State), _machine, null, State);
+            return new AacFlEntryTransition(
+                _machine.AddEntryTransition(State),
+                _machine,
+                null,
+                State
+            );
         }
 
         public AacFlState AutomaticallyMovesTo(AacFlState destination)
@@ -307,7 +376,12 @@ namespace AnimatorAsCode.V0
 
         public AacFlTransition Exits()
         {
-            return new AacFlTransition(ConfigureTransition(State.AddExitTransition()), _machine, State, null);
+            return new AacFlTransition(
+                ConfigureTransition(State.AddExitTransition()),
+                _machine,
+                State,
+                null
+            );
         }
 
         private AnimatorStateTransition ConfigureTransition(AnimatorStateTransition transition)
@@ -319,88 +393,124 @@ namespace AnimatorAsCode.V0
         public AacFlState Drives(AacFlIntParameter parameter, int value)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Set,
-                name = parameter.Name, value = value
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Set,
+                    name = parameter.Name,
+                    value = value
+                }
+            );
             return this;
         }
 
         public AacFlState Drives(AacFlFloatParameter parameter, float value)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Set,
-                name = parameter.Name, value = value
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Set,
+                    name = parameter.Name,
+                    value = value
+                }
+            );
             return this;
         }
 
         public AacFlState DrivingIncreases(AacFlFloatParameter parameter, float additiveValue)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Add,
-                name = parameter.Name, value = additiveValue
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Add,
+                    name = parameter.Name,
+                    value = additiveValue
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingDecreases(AacFlFloatParameter parameter, float positiveValueToDecreaseBy)
+        public AacFlState DrivingDecreases(
+            AacFlFloatParameter parameter,
+            float positiveValueToDecreaseBy
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Add,
-                name = parameter.Name, value = -positiveValueToDecreaseBy
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Add,
+                    name = parameter.Name,
+                    value = -positiveValueToDecreaseBy
+                }
+            );
             return this;
         }
 
         public AacFlState DrivingIncreases(AacFlIntParameter parameter, int additiveValue)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Add,
-                name = parameter.Name, value = additiveValue
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Add,
+                    name = parameter.Name,
+                    value = additiveValue
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingDecreases(AacFlIntParameter parameter, int positiveValueToDecreaseBy)
+        public AacFlState DrivingDecreases(
+            AacFlIntParameter parameter,
+            int positiveValueToDecreaseBy
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Add,
-                name = parameter.Name, value = -positiveValueToDecreaseBy
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Add,
+                    name = parameter.Name,
+                    value = -positiveValueToDecreaseBy
+                }
+            );
             return this;
         }
 
         public AacFlState DrivingRandomizes(AacFlIntParameter parameter, int min, int max)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Random,
-                name = parameter.Name, valueMin = min, valueMax = max
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Random,
+                    name = parameter.Name,
+                    valueMin = min,
+                    valueMax = max
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingRandomizesLocally(AacFlFloatParameter parameter, float min, float max)
+        public AacFlState DrivingRandomizesLocally(
+            AacFlFloatParameter parameter,
+            float min,
+            float max
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Random,
-                name = parameter.Name, valueMin = min, valueMax = max
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Random,
+                    name = parameter.Name,
+                    valueMin = min,
+                    valueMax = max
+                }
+            );
             _driver.localOnly = true;
             return this;
         }
@@ -408,11 +518,14 @@ namespace AnimatorAsCode.V0
         public AacFlState DrivingRandomizesLocally(AacFlBoolParameter parameter, float chance)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Random,
-                name = parameter.Name, chance = chance
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Random,
+                    name = parameter.Name,
+                    chance = chance
+                }
+            );
             _driver.localOnly = true;
             return this;
         }
@@ -420,11 +533,15 @@ namespace AnimatorAsCode.V0
         public AacFlState DrivingRandomizesLocally(AacFlIntParameter parameter, int min, int max)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Random,
-                name = parameter.Name, valueMin = min, valueMax = max
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Random,
+                    name = parameter.Name,
+                    valueMin = min,
+                    valueMax = max
+                }
+            );
             _driver.localOnly = true;
             return this;
         }
@@ -432,10 +549,13 @@ namespace AnimatorAsCode.V0
         public AacFlState Drives(AacFlBoolParameter parameter, bool value)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                name = parameter.Name, value = value ? 1 : 0
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    name = parameter.Name,
+                    value = value ? 1 : 0
+                }
+            );
             return this;
         }
 
@@ -444,10 +564,13 @@ namespace AnimatorAsCode.V0
             CreateDriverBehaviorIfNotExists();
             foreach (var parameter in parameters.ToList())
             {
-                _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-                {
-                    name = parameter.Name, value = value ? 1 : 0
-                });
+                _driver.parameters.Add(
+                    new VRC_AvatarParameterDriver.Parameter
+                    {
+                        name = parameter.Name,
+                        value = value ? 1 : 0
+                    }
+                );
             }
             return this;
         }
@@ -462,147 +585,208 @@ namespace AnimatorAsCode.V0
         public AacFlState DrivingCopies(AacFlIntParameter source, AacFlIntParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = false
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
             return this;
         }
 
         public AacFlState DrivingCopies(AacFlBoolParameter source, AacFlBoolParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = false
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
             return this;
         }
 
         public AacFlState DrivingCopies(AacFlFloatParameter source, AacFlFloatParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = false
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingRemaps(AacFlIntParameter source, int sourceMin, int sourceMax, AacFlIntParameter destination, int destinationMin, int destinationMax)
+        public AacFlState DrivingRemaps(
+            AacFlIntParameter source,
+            int sourceMin,
+            int sourceMax,
+            AacFlIntParameter destination,
+            int destinationMin,
+            int destinationMax
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = true,
-                sourceMin = sourceMin,
-                sourceMax = sourceMax,
-                destMin = destinationMin,
-                destMax = destinationMax
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = true,
+                    sourceMin = sourceMin,
+                    sourceMax = sourceMax,
+                    destMin = destinationMin,
+                    destMax = destinationMax
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingCasts(AacFlBoolParameter source, float sourceMin, float sourceMax, AacFlFloatParameter destination, float destinationMin, float destinationMax)
+        public AacFlState DrivingCasts(
+            AacFlBoolParameter source,
+            float sourceMin,
+            float sourceMax,
+            AacFlFloatParameter destination,
+            float destinationMin,
+            float destinationMax
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = true,
-                sourceMin = sourceMin,
-                sourceMax = sourceMax,
-                destMin = destinationMin,
-                destMax = destinationMax
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = true,
+                    sourceMin = sourceMin,
+                    sourceMax = sourceMax,
+                    destMin = destinationMin,
+                    destMax = destinationMax
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingCasts(AacFlFloatParameter source, float sourceMin, float sourceMax, AacFlBoolParameter destination, float destinationMin, float destinationMax)
+        public AacFlState DrivingCasts(
+            AacFlFloatParameter source,
+            float sourceMin,
+            float sourceMax,
+            AacFlBoolParameter destination,
+            float destinationMin,
+            float destinationMax
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = true,
-                sourceMin = sourceMin,
-                sourceMax = sourceMax,
-                destMin = destinationMin,
-                destMax = destinationMax
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = true,
+                    sourceMin = sourceMin,
+                    sourceMax = sourceMax,
+                    destMin = destinationMin,
+                    destMax = destinationMax
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingCasts(AacFlBoolParameter source, float sourceMin, float sourceMax, AacFlIntParameter destination, int destinationMin, int destinationMax)
+        public AacFlState DrivingCasts(
+            AacFlBoolParameter source,
+            float sourceMin,
+            float sourceMax,
+            AacFlIntParameter destination,
+            int destinationMin,
+            int destinationMax
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = true,
-                sourceMin = sourceMin,
-                sourceMax = sourceMax,
-                destMin = destinationMin,
-                destMax = destinationMax
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = true,
+                    sourceMin = sourceMin,
+                    sourceMax = sourceMax,
+                    destMin = destinationMin,
+                    destMax = destinationMax
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingCasts(AacFlIntParameter source, int sourceMin, int sourceMax, AacFlBoolParameter destination, float destinationMin, float destinationMax)
+        public AacFlState DrivingCasts(
+            AacFlIntParameter source,
+            int sourceMin,
+            int sourceMax,
+            AacFlBoolParameter destination,
+            float destinationMin,
+            float destinationMax
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = true,
-                sourceMin = sourceMin,
-                sourceMax = sourceMax,
-                destMin = destinationMin,
-                destMax = destinationMax
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = true,
+                    sourceMin = sourceMin,
+                    sourceMax = sourceMax,
+                    destMin = destinationMin,
+                    destMax = destinationMax
+                }
+            );
             return this;
         }
 
-        public AacFlState DrivingCasts(AacFlIntParameter source, int sourceMin, int sourceMax, AacFlFloatParameter destination, float destinationMin, float destinationMax)
+        public AacFlState DrivingCasts(
+            AacFlIntParameter source,
+            int sourceMin,
+            int sourceMax,
+            AacFlFloatParameter destination,
+            float destinationMin,
+            float destinationMax
+        )
         {
             CreateDriverBehaviorIfNotExists();
-            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
-            {
-                type = VRC_AvatarParameterDriver.ChangeType.Copy,
-                source = source.Name,
-                name = destination.Name,
-                convertRange = true,
-                sourceMin = sourceMin,
-                sourceMax = sourceMax,
-                destMin = destinationMin,
-                destMax = destinationMax
-            });
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = true,
+                    sourceMin = sourceMin,
+                    sourceMax = sourceMax,
+                    destMin = destinationMin,
+                    destMax = destinationMax
+                }
+            );
             return this;
         }
 
         private void CreateDriverBehaviorIfNotExists()
         {
-            if (_driver != null) return;
+            if (_driver != null)
+                return;
             _driver = State.AddStateMachineBehaviour<VRCAvatarParameterDriver>();
             _driver.parameters = new List<VRC_AvatarParameterDriver.Parameter>();
         }
@@ -637,7 +821,10 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
-        public AacFlState TrackingSets(TrackingElement element, VRC_AnimatorTrackingControl.TrackingType trackingType)
+        public AacFlState TrackingSets(
+            TrackingElement element,
+            VRC_AnimatorTrackingControl.TrackingType trackingType
+        )
         {
             CreateTrackingBehaviorIfNotExists();
             SettingElementTo(element, trackingType);
@@ -669,7 +856,10 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
-        private void SettingElementTo(TrackingElement element, VRC_AnimatorTrackingControl.TrackingType target)
+        private void SettingElementTo(
+            TrackingElement element,
+            VRC_AnimatorTrackingControl.TrackingType target
+        )
         {
             switch (element)
             {
@@ -710,14 +900,15 @@ namespace AnimatorAsCode.V0
 
         private void CreateTrackingBehaviorIfNotExists()
         {
-            if (_tracking != null) return;
+            if (_tracking != null)
+                return;
             _tracking = State.AddStateMachineBehaviour<VRCAnimatorTrackingControl>();
         }
 
-
         private void CreateLocomotionBehaviorIfNotExists()
         {
-            if (_locomotionControl != null) return;
+            if (_locomotionControl != null)
+                return;
             _locomotionControl = State.AddStateMachineBehaviour<VRCAnimatorLocomotionControl>();
         }
 
@@ -746,11 +937,20 @@ namespace AnimatorAsCode.V0
 
     public class AacFlTransition : AacFlNewTransitionContinuation
     {
-        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorTransitionBase).GetProperty("pushUndo",
-            BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly PropertyInfo PropPushUndo =
+            typeof(AnimatorTransitionBase).GetProperty(
+                "pushUndo",
+                BindingFlags.Instance | BindingFlags.NonPublic
+            );
         private readonly AnimatorStateTransition _transition;
 
-        public AacFlTransition(AnimatorStateTransition transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        public AacFlTransition(
+            AnimatorStateTransition transition,
+            AnimatorStateMachine machine,
+            AnimatorState sourceNullableIfAny,
+            AnimatorState destinationNullableIfExits
+        )
+            : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
             _transition = transition;
             PropPushUndo.SetValue(_transition, false);
@@ -819,9 +1019,13 @@ namespace AnimatorAsCode.V0
 
     public class AacFlEntryTransition : AacFlNewTransitionContinuation
     {
-        public AacFlEntryTransition(AnimatorTransition transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
-        {
-        }
+        public AacFlEntryTransition(
+            AnimatorTransition transition,
+            AnimatorStateMachine machine,
+            AnimatorState sourceNullableIfAny,
+            AnimatorState destinationNullableIfExits
+        )
+            : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits) { }
     }
 
     public interface IAacFlCondition
@@ -836,8 +1040,11 @@ namespace AnimatorAsCode.V0
 
     public class AacFlCondition
     {
-        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorTransitionBase).GetProperty("pushUndo",
-            BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly PropertyInfo PropPushUndo =
+            typeof(AnimatorTransitionBase).GetProperty(
+                "pushUndo",
+                BindingFlags.Instance | BindingFlags.NonPublic
+            );
         private readonly AnimatorTransitionBase _transition;
 
         public AacFlCondition(AnimatorTransitionBase transition)
@@ -860,7 +1067,12 @@ namespace AnimatorAsCode.V0
         private readonly AnimatorState _sourceNullableIfAny;
         private readonly AnimatorState _destinationNullableIfExits;
 
-        public AacFlNewTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits)
+        public AacFlNewTransitionContinuation(
+            AnimatorTransitionBase transition,
+            AnimatorStateMachine machine,
+            AnimatorState sourceNullableIfAny,
+            AnimatorState destinationNullableIfExits
+        )
         {
             Transition = transition;
             _machine = machine;
@@ -895,7 +1107,9 @@ namespace AnimatorAsCode.V0
         /// </summary>
         /// <param name="actionsWithoutOr"></param>
         /// <returns></returns>
-        public AacFlTransitionContinuation When(Action<AacFlTransitionContinuationWithoutOr> actionsWithoutOr)
+        public AacFlTransitionContinuation When(
+            Action<AacFlTransitionContinuationWithoutOr> actionsWithoutOr
+        )
         {
             actionsWithoutOr(new AacFlTransitionContinuationWithoutOr(Transition));
             return AsContinuationWithOr();
@@ -906,7 +1120,9 @@ namespace AnimatorAsCode.V0
         /// </summary>
         /// <param name="actionsWithOr"></param>
         /// <returns></returns>
-        public AacFlTransitionContinuationOnlyOr When(Action<AacFlNewTransitionContinuation> actionsWithOr)
+        public AacFlTransitionContinuationOnlyOr When(
+            Action<AacFlNewTransitionContinuation> actionsWithOr
+        )
         {
             actionsWithOr(this);
             return AsContinuationOnlyOr();
@@ -920,7 +1136,13 @@ namespace AnimatorAsCode.V0
         public AacFlMultiTransitionContinuation When(IAacFlOrCondition actionsWithOr)
         {
             var pendingContinuations = actionsWithOr.ApplyTo(this);
-            return new AacFlMultiTransitionContinuation(Transition, _machine, _sourceNullableIfAny, _destinationNullableIfExits, pendingContinuations);
+            return new AacFlMultiTransitionContinuation(
+                Transition,
+                _machine,
+                _sourceNullableIfAny,
+                _destinationNullableIfExits,
+                pendingContinuations
+            );
         }
 
         public AacFlTransitionContinuation WhenConditions()
@@ -930,20 +1152,34 @@ namespace AnimatorAsCode.V0
 
         private AacFlTransitionContinuation AsContinuationWithOr()
         {
-            return new AacFlTransitionContinuation(Transition, _machine, _sourceNullableIfAny, _destinationNullableIfExits);
+            return new AacFlTransitionContinuation(
+                Transition,
+                _machine,
+                _sourceNullableIfAny,
+                _destinationNullableIfExits
+            );
         }
 
         private AacFlTransitionContinuationOnlyOr AsContinuationOnlyOr()
         {
-            return new AacFlTransitionContinuationOnlyOr(Transition, _machine, _sourceNullableIfAny, _destinationNullableIfExits);
+            return new AacFlTransitionContinuationOnlyOr(
+                Transition,
+                _machine,
+                _sourceNullableIfAny,
+                _destinationNullableIfExits
+            );
         }
     }
 
     public class AacFlTransitionContinuation : AacFlTransitionContinuationAbstractWithOr
     {
-        public AacFlTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
-        {
-        }
+        public AacFlTransitionContinuation(
+            AnimatorTransitionBase transition,
+            AnimatorStateMachine machine,
+            AnimatorState sourceNullableIfAny,
+            AnimatorState destinationNullableIfExits
+        )
+            : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits) { }
 
         /// Adds an additional condition to the transition that requires all preceding conditions to be true.
         /// <example>
@@ -970,7 +1206,9 @@ namespace AnimatorAsCode.V0
         /// </summary>
         /// <param name="actionsWithoutOr"></param>
         /// <returns></returns>
-        public AacFlTransitionContinuation And(Action<AacFlTransitionContinuationWithoutOr> actionsWithoutOr)
+        public AacFlTransitionContinuation And(
+            Action<AacFlTransitionContinuationWithoutOr> actionsWithoutOr
+        )
         {
             actionsWithoutOr(new AacFlTransitionContinuationWithoutOr(Transition));
             return this;
@@ -981,7 +1219,14 @@ namespace AnimatorAsCode.V0
     {
         private readonly List<AacFlTransitionContinuation> _pendingContinuations;
 
-        public AacFlMultiTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits, List<AacFlTransitionContinuation> pendingContinuations) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        public AacFlMultiTransitionContinuation(
+            AnimatorTransitionBase transition,
+            AnimatorStateMachine machine,
+            AnimatorState sourceNullableIfAny,
+            AnimatorState destinationNullableIfExits,
+            List<AacFlTransitionContinuation> pendingContinuations
+        )
+            : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
             _pendingContinuations = pendingContinuations;
         }
@@ -1015,7 +1260,9 @@ namespace AnimatorAsCode.V0
         /// </summary>
         /// <param name="actionsWithoutOr"></param>
         /// <returns></returns>
-        public AacFlMultiTransitionContinuation And(Action<AacFlTransitionContinuationWithoutOr> actionsWithoutOr)
+        public AacFlMultiTransitionContinuation And(
+            Action<AacFlTransitionContinuationWithoutOr> actionsWithoutOr
+        )
         {
             foreach (var pendingContinuation in _pendingContinuations)
             {
@@ -1028,9 +1275,13 @@ namespace AnimatorAsCode.V0
 
     public class AacFlTransitionContinuationOnlyOr : AacFlTransitionContinuationAbstractWithOr
     {
-        public AacFlTransitionContinuationOnlyOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
-        {
-        }
+        public AacFlTransitionContinuationOnlyOr(
+            AnimatorTransitionBase transition,
+            AnimatorStateMachine machine,
+            AnimatorState sourceNullableIfAny,
+            AnimatorState destinationNullableIfExits
+        )
+            : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits) { }
     }
 
     public abstract class AacFlTransitionContinuationAbstractWithOr
@@ -1040,7 +1291,12 @@ namespace AnimatorAsCode.V0
         private readonly AnimatorState _sourceNullableIfAny;
         private readonly AnimatorState _destinationNullableIfExits;
 
-        public AacFlTransitionContinuationAbstractWithOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits)
+        public AacFlTransitionContinuationAbstractWithOr(
+            AnimatorTransitionBase transition,
+            AnimatorStateMachine machine,
+            AnimatorState sourceNullableIfAny,
+            AnimatorState destinationNullableIfExits
+        )
         {
             Transition = transition;
             _machine = machine;
@@ -1066,7 +1322,12 @@ namespace AnimatorAsCode.V0
         /// </example>
         public AacFlNewTransitionContinuation Or()
         {
-            return new AacFlNewTransitionContinuation(NewTransitionFromTemplate(), _machine, _sourceNullableIfAny, _destinationNullableIfExits);
+            return new AacFlNewTransitionContinuation(
+                NewTransitionFromTemplate(),
+                _machine,
+                _sourceNullableIfAny,
+                _destinationNullableIfExits
+            );
         }
 
         private AnimatorTransitionBase NewTransitionFromTemplate()
@@ -1129,7 +1390,9 @@ namespace AnimatorAsCode.V0
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public AacFlTransitionContinuationWithoutOr AndWhenever(Action<AacFlTransitionContinuationWithoutOr> action)
+        public AacFlTransitionContinuationWithoutOr AndWhenever(
+            Action<AacFlTransitionContinuationWithoutOr> action
+        )
         {
             action(this);
             return this;
