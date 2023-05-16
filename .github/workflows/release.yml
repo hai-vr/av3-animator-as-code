@@ -11,7 +11,7 @@ on:
 env:
   releaseTemplate: "RELEASE TEMPLATE.md"
   packagePrefix: "com"
-  overrideOwnerString: ${{ github.repository_owner }}
+  overrideOwnerString: "haivr"
 
 permissions:
   contents: write
