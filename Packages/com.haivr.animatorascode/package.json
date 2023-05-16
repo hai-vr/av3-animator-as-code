@@ -1,12 +1,14 @@
 {
   "name": "com.haivr.animatorascode",
   "displayName": "Animator As Code",
-  "version": "0.0.1",
+  "version": "1.0.0-beta.1",
   "description": "Write concise code to generate Avatars 3.0 Animators. ",
   "license": "MIT",
   "dependencies": {},
   "gitDependencies": {},
-  "vpmDependencies": {},
+  "vpmDependencies": {
+    "com.vrchat.avatars" : "^3.2.x"
+  },
   "legacyFolders": {},
   "legacyFiles": {}
 }
