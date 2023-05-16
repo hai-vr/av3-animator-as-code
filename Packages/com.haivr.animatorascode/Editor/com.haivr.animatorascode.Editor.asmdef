@@ -1,0 +1,14 @@
+{
+  "name": "com.haivr.animatorascode.Editor",
+  "references": [
+    "com.haivr.animatorascode"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "defineConstraints": [],
+  "optionalUnityReferences": []
+}
