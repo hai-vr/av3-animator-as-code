@@ -8,7 +8,7 @@ using VRC.SDKBase;
 using System.Reflection;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode.V0
+namespace AnimatorAsCode
 {
     internal class AacBackingAnimator
     {

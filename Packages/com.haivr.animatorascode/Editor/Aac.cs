@@ -7,9 +7,9 @@ using VRC.SDK3.Avatars.Components;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode.V0
+namespace AnimatorAsCode
 {
-    public static class AacV0
+    public static class Aac
     {
         public static AacFlBase Create(AacConfiguration configuration)
         {
@@ -288,7 +288,7 @@ namespace AnimatorAsCode.V0
                     avatarMask.SetTransformActive(index, true);
                     avatarMask.SetTransformPath(
                         index,
-                        AacV0.ResolveRelativePath(_configuration.AnimatorRoot, transform)
+                        Aac.ResolveRelativePath(_configuration.AnimatorRoot, transform)
                     );
                 }
             }
@@ -315,31 +315,31 @@ namespace AnimatorAsCode.V0
 
         public AacFlClip NewClip()
         {
-            var clip = AacV0.NewClip(_configuration, Guid.NewGuid().ToString());
+            var clip = Aac.NewClip(_configuration, Guid.NewGuid().ToString());
             return new AacFlClip(_configuration, clip);
         }
 
         public AacFlClip CopyClip(AnimationClip originalClip)
         {
             var newClip = UnityEngine.Object.Instantiate(originalClip);
-            var clip = AacV0.RegisterClip(_configuration, Guid.NewGuid().ToString(), newClip);
+            var clip = Aac.RegisterClip(_configuration, Guid.NewGuid().ToString(), newClip);
             return new AacFlClip(_configuration, clip);
         }
 
         public BlendTree NewBlendTreeAsRaw()
         {
-            return AacV0.NewBlendTreeAsRaw(_configuration, Guid.NewGuid().ToString());
+            return Aac.NewBlendTreeAsRaw(_configuration, Guid.NewGuid().ToString());
         }
 
         public AacFlClip NewClip(string name)
         {
-            var clip = AacV0.NewClip(_configuration, name);
+            var clip = Aac.NewClip(_configuration, name);
             return new AacFlClip(_configuration, clip);
         }
 
         public AacFlClip DummyClipLasting(float numberOf, AacFlUnit unit)
         {
-            var dummyClip = AacV0.NewClip(
+            var dummyClip = Aac.NewClip(
                 _configuration,
                 $"D({numberOf} {Enum.GetName(typeof(AacFlUnit), unit)})"
             );
@@ -447,7 +447,7 @@ namespace AnimatorAsCode.V0
 
         private AacFlLayer DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType animType)
         {
-            var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, animType);
+            var animator = Aac.AnimatorOf(_configuration.AvatarDescriptor, animType);
             var layerName = _configuration.DefaultsProvider.ConvertLayerName(
                 _configuration.SystemName
             );
@@ -460,7 +460,7 @@ namespace AnimatorAsCode.V0
             string suffix
         )
         {
-            var animator = AacV0.AnimatorOf(_configuration.AvatarDescriptor, animType);
+            var animator = Aac.AnimatorOf(_configuration.AvatarDescriptor, animType);
             var layerName = _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(
                 _configuration.SystemName,
                 suffix

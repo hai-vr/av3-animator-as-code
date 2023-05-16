@@ -1,6 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
-using AnimatorAsCode.V0;
+using AnimatorAsCode;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using UnityEditor;
@@ -31,7 +31,7 @@ namespace AnimatorAsCodeFramework.Examples
 
         private void Create()
         {
-            my = (GenExample3_Gesturing) target;
+            my = (GenExample3_Gesturing)target;
             aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
 
             CreateMainLayer();
@@ -40,8 +40,13 @@ namespace AnimatorAsCodeFramework.Examples
 
         private void Remove()
         {
-            var my = (GenExample3_Gesturing) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
+            var my = (GenExample3_Gesturing)target;
+            var aac = AacExample.AnimatorAsCode(
+                SystemName,
+                my.avatar,
+                my.assetContainer,
+                my.assetKey
+            );
 
             aac.RemoveAllMainLayers();
             aac.RemoveAllSupportingLayers("Detection");
@@ -54,30 +59,43 @@ namespace AnimatorAsCodeFramework.Examples
             var dirtyCheckParameter = layer.BoolParameter("AAC_INTERNAL_GesturingIcon_DirtyCheck");
 
             // ### Create states
-            var lackOfChangeDetected = layer.NewState("Animate To NoChange")
+            var lackOfChangeDetected = layer
+                .NewState("Animate To NoChange")
                 .WithAnimation(IconAppears());
 
             // By default, states have an animation that animates a dummy object for 1 frame.
             var noChange = layer.NewState("NoChange", 1, 0).RightOf();
 
-            var changeDetected = layer.NewState("Animate To Changing").Under()
+            var changeDetected = layer
+                .NewState("Animate To Changing")
+                .Under()
                 .WithAnimation(IconDisappears());
 
             // This creates a clip that animates a dummy object for 1.5f seconds.
-            var changing = layer.NewState("Changing", 0, 1).LeftOf()
+            var changing = layer
+                .NewState("Changing", 0, 1)
+                .LeftOf()
                 .WithAnimation(aac.DummyClipLasting(1.5f, AacFlUnit.Seconds));
 
             // When this state is entered, the parameter is driven to the value of false.
-            var stillChanging = layer.NewState("Still Changing", 0, 2).Under()
+            var stillChanging = layer
+                .NewState("Still Changing", 0, 2)
+                .Under()
                 .Drives(dirtyCheckParameter, false);
 
             // ------
 
             // ### Create transitions
-            lackOfChangeDetected.TransitionsTo(changeDetected).AfterAnimationIsAtLeastAtPercent(0.7f).When(dirtyCheckParameter.IsTrue());
+            lackOfChangeDetected
+                .TransitionsTo(changeDetected)
+                .AfterAnimationIsAtLeastAtPercent(0.7f)
+                .When(dirtyCheckParameter.IsTrue());
 
             // The transition duration is 30% of the animation duration.
-            lackOfChangeDetected.TransitionsTo(noChange).AfterAnimationFinishes().WithTransitionDurationPercent(0.3f);
+            lackOfChangeDetected
+                .TransitionsTo(noChange)
+                .AfterAnimationFinishes()
+                .WithTransitionDurationPercent(0.3f);
 
             noChange.TransitionsTo(changeDetected).When(dirtyCheckParameter.IsTrue());
 
@@ -104,16 +122,19 @@ namespace AnimatorAsCodeFramework.Examples
             {
                 foreach (var right in Enumerable.Range(0, 8))
                 {
-                    var state = layer.NewState($"Gesture {left} {right}", left, right)
+                    var state = layer
+                        .NewState($"Gesture {left} {right}", left, right)
                         // When this state is entered, the parameter is driven to the value of true.
                         .Drives(layer.BoolParameter("AAC_INTERNAL_GesturingIcon_DirtyCheck"), true);
 
-                    reevaluating.TransitionsTo(state)
+                    reevaluating
+                        .TransitionsTo(state)
                         // Use ".Av3" to access VRChat standard parameters.
                         // Accessing these parameters will create the corresponding parameter in the animator.
                         .When(layer.Av3().GestureLeft.IsEqualTo(left))
                         .And(layer.Av3().GestureRight.IsEqualTo(right));
-                    state.TransitionsTo(reevaluating)
+                    state
+                        .TransitionsTo(reevaluating)
                         .When(layer.Av3().GestureLeft.IsNotEqualTo(left))
                         .Or()
                         .When(layer.Av3().GestureRight.IsNotEqualTo(right));
@@ -123,20 +144,22 @@ namespace AnimatorAsCodeFramework.Examples
 
         private AacFlClip IconAppears()
         {
-            return aac.NewClip().Animating(clip =>
-            {
-                clip.Animates(my.iconMesh, "blendShape.Wedge")
-                    .WithFrameCountUnit(keyframes => keyframes.Easing(0, 0f).Easing(10, 100f));
-            });
+            return aac.NewClip()
+                .Animating(clip =>
+                {
+                    clip.Animates(my.iconMesh, "blendShape.Wedge")
+                        .WithFrameCountUnit(keyframes => keyframes.Easing(0, 0f).Easing(10, 100f));
+                });
         }
 
         private AacFlClip IconDisappears()
         {
-            return aac.NewClip().Animating(clip =>
-            {
-                clip.Animates(my.iconMesh, "blendShape.Wedge")
-                    .WithFrameCountUnit(keyframes => keyframes.Easing(0f, 100f).Easing(10, 0f));
-            });
+            return aac.NewClip()
+                .Animating(clip =>
+                {
+                    clip.Animates(my.iconMesh, "blendShape.Wedge")
+                        .WithFrameCountUnit(keyframes => keyframes.Easing(0f, 100f).Easing(10, 0f));
+                });
         }
     }
 }

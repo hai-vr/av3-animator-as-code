@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode.V0
+namespace AnimatorAsCode
 {
     public readonly struct AacFlClip
     {
@@ -47,14 +47,14 @@ namespace AnimatorAsCode.V0
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
             {
-                var binding = AacV0.Binding(
+                var binding = Aac.Binding(
                     _component,
                     typeof(GameObject),
                     component.transform,
                     "m_IsActive"
                 );
 
-                AnimationUtility.SetEditorCurve(Clip, binding, AacV0.OneFrame(value ? 1f : 0f));
+                AnimationUtility.SetEditorCurve(Clip, binding, Aac.OneFrame(value ? 1f : 0f));
             }
 
             return this;
@@ -66,14 +66,14 @@ namespace AnimatorAsCode.V0
             float value
         )
         {
-            var binding = AacV0.Binding(
+            var binding = Aac.Binding(
                 _component,
                 typeof(SkinnedMeshRenderer),
                 renderer.transform,
                 $"blendShape.{blendShapeName}"
             );
 
-            AnimationUtility.SetEditorCurve(Clip, binding, AacV0.OneFrame(value));
+            AnimationUtility.SetEditorCurve(Clip, binding, Aac.OneFrame(value));
 
             return this;
         }
@@ -87,14 +87,14 @@ namespace AnimatorAsCode.V0
             var defensiveObjects = rendererWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
             {
-                var binding = AacV0.Binding(
+                var binding = Aac.Binding(
                     _component,
                     typeof(SkinnedMeshRenderer),
                     component.transform,
                     $"blendShape.{blendShapeName}"
                 );
 
-                AnimationUtility.SetEditorCurve(Clip, binding, AacV0.OneFrame(value));
+                AnimationUtility.SetEditorCurve(Clip, binding, Aac.OneFrame(value));
             }
 
             return this;
@@ -107,33 +107,33 @@ namespace AnimatorAsCode.V0
             {
                 AnimationUtility.SetEditorCurve(
                     Clip,
-                    AacV0.Binding(
+                    Aac.Binding(
                         _component,
                         typeof(Transform),
                         component.transform,
                         "m_LocalScale.x"
                     ),
-                    AacV0.OneFrame(scale.x)
+                    Aac.OneFrame(scale.x)
                 );
                 AnimationUtility.SetEditorCurve(
                     Clip,
-                    AacV0.Binding(
+                    Aac.Binding(
                         _component,
                         typeof(Transform),
                         component.transform,
                         "m_LocalScale.y"
                     ),
-                    AacV0.OneFrame(scale.y)
+                    Aac.OneFrame(scale.y)
                 );
                 AnimationUtility.SetEditorCurve(
                     Clip,
-                    AacV0.Binding(
+                    Aac.Binding(
                         _component,
                         typeof(Transform),
                         component.transform,
                         "m_LocalScale.z"
                     ),
-                    AacV0.OneFrame(scale.z)
+                    Aac.OneFrame(scale.z)
                 );
             }
 
@@ -142,14 +142,14 @@ namespace AnimatorAsCode.V0
 
         public AacFlClip Toggling(GameObject gameObject, bool value)
         {
-            var binding = AacV0.Binding(
+            var binding = Aac.Binding(
                 _component,
                 typeof(GameObject),
                 gameObject.transform,
                 "m_IsActive"
             );
 
-            AnimationUtility.SetEditorCurve(Clip, binding, AacV0.OneFrame(value ? 1f : 0f));
+            AnimationUtility.SetEditorCurve(Clip, binding, Aac.OneFrame(value ? 1f : 0f));
 
             return this;
         }
@@ -159,14 +159,14 @@ namespace AnimatorAsCode.V0
             var defensiveComponents = componentsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveComponents)
             {
-                var binding = AacV0.Binding(
+                var binding = Aac.Binding(
                     _component,
                     component.GetType(),
                     component.transform,
                     "m_Enabled"
                 );
 
-                AnimationUtility.SetEditorCurve(Clip, binding, AacV0.OneFrame(value ? 1f : 0f));
+                AnimationUtility.SetEditorCurve(Clip, binding, Aac.OneFrame(value ? 1f : 0f));
             }
 
             return this;
@@ -174,21 +174,21 @@ namespace AnimatorAsCode.V0
 
         public AacFlClip TogglingComponent(Component component, bool value)
         {
-            var binding = AacV0.Binding(
+            var binding = Aac.Binding(
                 _component,
                 component.GetType(),
                 component.transform,
                 "m_Enabled"
             );
 
-            AnimationUtility.SetEditorCurve(Clip, binding, AacV0.OneFrame(value ? 1f : 0f));
+            AnimationUtility.SetEditorCurve(Clip, binding, Aac.OneFrame(value ? 1f : 0f));
 
             return this;
         }
 
         public AacFlClip SwappingMaterial(Renderer renderer, int slot, Material material)
         {
-            var binding = AacV0.Binding(
+            var binding = Aac.Binding(
                 _component,
                 renderer.GetType(),
                 renderer.transform,
@@ -214,7 +214,7 @@ namespace AnimatorAsCode.V0
             Material material
         )
         {
-            var binding = AacV0.Binding(
+            var binding = Aac.Binding(
                 _component,
                 typeof(ParticleSystemRenderer),
                 particleSystem.transform,
@@ -259,14 +259,14 @@ namespace AnimatorAsCode.V0
 
         public AacFlSettingCurve Animates(Transform transform, Type type, string propertyName)
         {
-            var binding = AacV0.Binding(_component, type, transform, propertyName);
+            var binding = Aac.Binding(_component, type, transform, propertyName);
 
             return new AacFlSettingCurve(Clip, new[] { binding });
         }
 
         public AacFlSettingCurve Animates(GameObject gameObject)
         {
-            var binding = AacV0.Binding(
+            var binding = Aac.Binding(
                 _component,
                 typeof(GameObject),
                 gameObject.transform,
@@ -330,7 +330,7 @@ namespace AnimatorAsCode.V0
             string propertyName
         )
         {
-            return AacV0.Binding(
+            return Aac.Binding(
                 _component,
                 anyComponent.GetType(),
                 anyComponent.transform,
@@ -354,7 +354,7 @@ namespace AnimatorAsCode.V0
         {
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, binding, AacV0.OneFrame(desiredValue));
+                AnimationUtility.SetEditorCurve(_clip, binding, Aac.OneFrame(desiredValue));
             }
         }
 
@@ -365,7 +365,7 @@ namespace AnimatorAsCode.V0
                 AnimationUtility.SetEditorCurve(
                     _clip,
                     binding,
-                    AacV0.ConstantSeconds(seconds, desiredValue)
+                    Aac.ConstantSeconds(seconds, desiredValue)
                 );
             }
         }
@@ -419,23 +419,23 @@ namespace AnimatorAsCode.V0
             {
                 AnimationUtility.SetEditorCurve(
                     _clip,
-                    AacV0.ToSubBinding(binding, "r"),
-                    AacV0.OneFrame(desiredValue.r)
+                    Aac.ToSubBinding(binding, "r"),
+                    Aac.OneFrame(desiredValue.r)
                 );
                 AnimationUtility.SetEditorCurve(
                     _clip,
-                    AacV0.ToSubBinding(binding, "g"),
-                    AacV0.OneFrame(desiredValue.g)
+                    Aac.ToSubBinding(binding, "g"),
+                    Aac.OneFrame(desiredValue.g)
                 );
                 AnimationUtility.SetEditorCurve(
                     _clip,
-                    AacV0.ToSubBinding(binding, "b"),
-                    AacV0.OneFrame(desiredValue.b)
+                    Aac.ToSubBinding(binding, "b"),
+                    Aac.OneFrame(desiredValue.b)
                 );
                 AnimationUtility.SetEditorCurve(
                     _clip,
-                    AacV0.ToSubBinding(binding, "a"),
-                    AacV0.OneFrame(desiredValue.a)
+                    Aac.ToSubBinding(binding, "a"),
+                    Aac.OneFrame(desiredValue.a)
                 );
             }
         }
@@ -459,22 +459,22 @@ namespace AnimatorAsCode.V0
             {
                 AnimationUtility.SetEditorCurve(
                     _clip,
-                    AacV0.ToSubBinding(binding, "r"),
+                    Aac.ToSubBinding(binding, "r"),
                     new AnimationCurve(mutatedKeyframesR.ToArray())
                 );
                 AnimationUtility.SetEditorCurve(
                     _clip,
-                    AacV0.ToSubBinding(binding, "g"),
+                    Aac.ToSubBinding(binding, "g"),
                     new AnimationCurve(mutatedKeyframesG.ToArray())
                 );
                 AnimationUtility.SetEditorCurve(
                     _clip,
-                    AacV0.ToSubBinding(binding, "b"),
+                    Aac.ToSubBinding(binding, "b"),
                     new AnimationCurve(mutatedKeyframesB.ToArray())
                 );
                 AnimationUtility.SetEditorCurve(
                     _clip,
-                    AacV0.ToSubBinding(binding, "a"),
+                    Aac.ToSubBinding(binding, "a"),
                     new AnimationCurve(mutatedKeyframesA.ToArray())
                 );
             }
