@@ -1,4 +1,4 @@
-name: Update Website
+name: Update Website (local)
 
 env:
   listPublishDirectory: Website
