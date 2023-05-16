@@ -653,6 +653,122 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlState DrivingRemaps(
+            AacFlBoolParameter source,
+            float sourceMin,
+            float sourceMax,
+            AacFlBoolParameter destination,
+            float destinationMin,
+            float destinationMax
+        )
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = true,
+                    sourceMin = sourceMin,
+                    sourceMax = sourceMax,
+                    destMin = destinationMin,
+                    destMax = destinationMax
+                }
+            );
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlFloatParameter source, AacFlIntParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlIntParameter source, AacFlFloatParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlBoolParameter source, AacFlFloatParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlFloatParameter source, AacFlBoolParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlBoolParameter source, AacFlIntParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlIntParameter source, AacFlBoolParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                    source = source.Name,
+                    name = destination.Name,
+                    convertRange = false
+                }
+            );
+            return this;
+        }
+
         public AacFlState DrivingCasts(
             AacFlBoolParameter source,
             float sourceMin,
