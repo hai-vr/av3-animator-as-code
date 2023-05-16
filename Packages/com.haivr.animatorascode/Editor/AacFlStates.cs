@@ -5,6 +5,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
+using System.Reflection;
 
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V0
@@ -112,6 +113,8 @@ namespace AnimatorAsCode.V0
 
     internal class AacStateMachine
     {
+        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorStateMachine).GetProperty("pushUndo",
+                BindingFlags.NonPublic | BindingFlags.Instance);
         private readonly AnimatorStateMachine _machine;
         private readonly AnimationClip _emptyClip;
         private readonly AacBackingAnimator _backingAnimator;
@@ -121,6 +124,7 @@ namespace AnimatorAsCode.V0
 
         public AacStateMachine(AnimatorStateMachine machine, AnimationClip emptyClip, AacBackingAnimator backingAnimator, IAacDefaultsProvider defaultsProvider)
         {
+            PropPushUndo.SetValue(machine, false);
             _machine = machine;
             _emptyClip = emptyClip;
             _backingAnimator = backingAnimator;
@@ -201,6 +205,8 @@ namespace AnimatorAsCode.V0
 
     public class AacFlState
     {
+        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorState).GetProperty("pushUndo",
+            BindingFlags.NonPublic | BindingFlags.Instance);
         public readonly AnimatorState State;
         private readonly AnimatorStateMachine _machine;
         private readonly IAacDefaultsProvider _defaultsProvider;
@@ -211,6 +217,7 @@ namespace AnimatorAsCode.V0
 
         public AacFlState(AnimatorState state, AnimatorStateMachine machine, IAacDefaultsProvider defaultsProvider)
         {
+            PropPushUndo.SetValue(state, false);
             State = state;
             _machine = machine;
             _defaultsProvider = defaultsProvider;
@@ -375,6 +382,17 @@ namespace AnimatorAsCode.V0
             return this;
         }
 
+        public AacFlState DrivingRandomizes(AacFlIntParameter parameter, int min, int max)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Random,
+                name = parameter.Name, valueMin = min, valueMax = max
+            });
+            return this;
+        }
+
         public AacFlState DrivingRandomizesLocally(AacFlFloatParameter parameter, float min, float max)
         {
             CreateDriverBehaviorIfNotExists();
@@ -438,6 +456,147 @@ namespace AnimatorAsCode.V0
         {
             CreateDriverBehaviorIfNotExists();
             _driver.localOnly = true;
+            return this;
+        }
+
+        public AacFlState DrivingCopies(AacFlIntParameter source, AacFlIntParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = false
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCopies(AacFlBoolParameter source, AacFlBoolParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = false
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCopies(AacFlFloatParameter source, AacFlFloatParameter destination)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = false
+            });
+            return this;
+        }
+
+        public AacFlState DrivingRemaps(AacFlIntParameter source, int sourceMin, int sourceMax, AacFlIntParameter destination, int destinationMin, int destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlBoolParameter source, float sourceMin, float sourceMax, AacFlFloatParameter destination, float destinationMin, float destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlFloatParameter source, float sourceMin, float sourceMax, AacFlBoolParameter destination, float destinationMin, float destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlBoolParameter source, float sourceMin, float sourceMax, AacFlIntParameter destination, int destinationMin, int destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlIntParameter source, int sourceMin, int sourceMax, AacFlBoolParameter destination, float destinationMin, float destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
+            return this;
+        }
+
+        public AacFlState DrivingCasts(AacFlIntParameter source, int sourceMin, int sourceMax, AacFlFloatParameter destination, float destinationMin, float destinationMax)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(new VRC_AvatarParameterDriver.Parameter
+            {
+                type = VRC_AvatarParameterDriver.ChangeType.Copy,
+                source = source.Name,
+                name = destination.Name,
+                convertRange = true,
+                sourceMin = sourceMin,
+                sourceMax = sourceMax,
+                destMin = destinationMin,
+                destMax = destinationMax
+            });
             return this;
         }
 
@@ -587,11 +746,14 @@ namespace AnimatorAsCode.V0
 
     public class AacFlTransition : AacFlNewTransitionContinuation
     {
+        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorTransitionBase).GetProperty("pushUndo",
+            BindingFlags.Instance | BindingFlags.NonPublic);
         private readonly AnimatorStateTransition _transition;
 
         public AacFlTransition(AnimatorStateTransition transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AnimatorState destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
             _transition = transition;
+            PropPushUndo.SetValue(_transition, false);
         }
 
         public AacFlTransition WithSourceInterruption()
@@ -674,11 +836,14 @@ namespace AnimatorAsCode.V0
 
     public class AacFlCondition
     {
+        private static readonly PropertyInfo PropPushUndo = typeof(AnimatorTransitionBase).GetProperty("pushUndo",
+            BindingFlags.Instance | BindingFlags.NonPublic);
         private readonly AnimatorTransitionBase _transition;
 
         public AacFlCondition(AnimatorTransitionBase transition)
         {
             _transition = transition;
+            PropPushUndo.SetValue(_transition, false);
         }
 
         public AacFlCondition Add(string parameter, AnimatorConditionMode mode, float threshold)
