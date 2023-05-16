@@ -1,12 +1,12 @@
 {
   "name": "com.haivr.animatorascode",
-  "displayName": "com.haivr.animatorascode",
+  "displayName": "Animator As Code",
   "version": "0.0.1",
-  "description": "Describe this Package",
+  "description": "Write concise code to generate Avatars 3.0 Animators. ",
+  "license": "MIT",
   "dependencies": {},
   "gitDependencies": {},
   "vpmDependencies": {},
   "legacyFolders": {},
-  "legacyFiles": {},
-  "localPath": "C:\\Users\\mherber\\Documents\\Animator As Code\\Packages\\com.haivr.animatorascode"
+  "legacyFiles": {}
 }
