@@ -1,0 +1,12 @@
+{
+    "name":"Animator As Code",
+    "id":"com.haivr.animatorascode.repo",
+    "url":"https://hai-vr.github.io/av3-animator-as-code/index.json",
+    "author": {
+        "name": "Hai-VR"
+    },
+    "description":"The main level repository for Animator As Code",
+    "githubRepos": [
+        "hai-vr/av3-animator-as-code"
+    ]
+}
