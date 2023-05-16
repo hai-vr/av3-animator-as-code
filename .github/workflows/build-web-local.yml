@@ -3,7 +3,7 @@ name: Update Website (local)
 env:
   listPublishDirectory: Website
   pathToCi: ci
-  indexLocation: "https://www.matthewherber.com/Happys-VRC-tools/index.json"
+  indexLocation: "https://www.matthewherber.com/av3-animator-as-code/index.json"
   
 on: 
   workflow_dispatch:
