@@ -62,6 +62,15 @@ jobs:
         run: ${{env.pathToCi}}/build.cmd BuildMultiPackageListing --root ${{env.pathToCi}} --list-publish-directory $GITHUB_WORKSPACE/${{env.listPublishDirectory}} --current-listing-url ${{env.indexLocation}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      #Copy docs into the website
+      - name: Copy Docs
+        uses: canastro/copy-action@master
+        with:
+          source: "./docs/."
+          target: "./${{env.listPublishDirectory}}/docs/"
+          flags: '-rp' #recursive and preserve timestamps
+
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
