@@ -1,1 +1,0 @@
-# com.haivr.animatorascode by mherber
