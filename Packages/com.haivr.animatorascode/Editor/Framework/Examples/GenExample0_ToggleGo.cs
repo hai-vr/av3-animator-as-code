@@ -4,7 +4,7 @@ using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 
-namespace AnimatorAsCodeFramework.Examples
+namespace AnimatorAsCode.Framework.Examples
 {
     public class GenExample0_ToggleGo : MonoBehaviour
     {
@@ -26,12 +26,18 @@ namespace AnimatorAsCodeFramework.Examples
 
         private void Create()
         {
-            var my = (GenExample0_ToggleGo) target;
+            var my = (GenExample0_ToggleGo)target;
             // The avatar is used here:
             // - to find the FX playable layer animator, where a new layer will be created.
             // - to resolve the relative animation path to the item.
             // The generated animation files are stored in the asset container.
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey, AacExample.Options().WriteDefaultsOff());
+            var aac = AacExample.AnimatorAsCode(
+                SystemName,
+                my.avatar,
+                my.assetContainer,
+                my.assetKey,
+                AacExample.Options().WriteDefaultsOff()
+            );
 
             // Create a layer in the FX animator.
             // Additional layers can be created in the FX animator (see later in the manual).
@@ -43,8 +49,7 @@ namespace AnimatorAsCodeFramework.Examples
                 // Animation assets are generated as sub-assets of the asset container.
                 // The animation path to my.skinnedMesh is relative to my.avatar
                 .WithAnimation(aac.NewClip().Toggling(my.item, false));
-            var shown = fx.NewState("Shown")
-                .WithAnimation(aac.NewClip().Toggling(my.item, true));
+            var shown = fx.NewState("Shown").WithAnimation(aac.NewClip().Toggling(my.item, true));
 
             // Creates a Bool parameter in the FX layer.
             // Parameters are added to the Animator if a parameter with the same name
@@ -59,8 +64,13 @@ namespace AnimatorAsCodeFramework.Examples
 
         private void Remove()
         {
-            var my = (GenExample0_ToggleGo) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
+            var my = (GenExample0_ToggleGo)target;
+            var aac = AacExample.AnimatorAsCode(
+                SystemName,
+                my.avatar,
+                my.assetContainer,
+                my.assetKey
+            );
 
             aac.RemoveAllMainLayers();
         }

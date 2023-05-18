@@ -4,7 +4,7 @@ using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 
-namespace AnimatorAsCodeFramework.Examples
+namespace AnimatorAsCode.Framework.Examples
 {
     public class GenExample1_ToggleSmr : MonoBehaviour
     {
@@ -26,8 +26,13 @@ namespace AnimatorAsCodeFramework.Examples
 
         private void Create()
         {
-            var my = (GenExample1_ToggleSmr) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
+            var my = (GenExample1_ToggleSmr)target;
+            var aac = AacExample.AnimatorAsCode(
+                SystemName,
+                my.avatar,
+                my.assetContainer,
+                my.assetKey
+            );
 
             var fx = aac.CreateMainFxLayer();
             var hidden = fx.NewState("Hidden")
@@ -56,19 +61,30 @@ namespace AnimatorAsCodeFramework.Examples
                 var enableAccessoriesParam = fx.BoolParameter("EnableAccessories");
                 var thingParam = fx.BoolParameter("ThingParam");
 
-                hidden.TransitionsTo(shown).When(enableAccessoriesParam.IsTrue()).And(thingParam.IsTrue());
+                hidden
+                    .TransitionsTo(shown)
+                    .When(enableAccessoriesParam.IsTrue())
+                    .And(thingParam.IsTrue());
 
                 // - The first transition:
-                shown.TransitionsTo(hidden).When(enableAccessoriesParam.IsFalse())
+                shown
+                    .TransitionsTo(hidden)
+                    .When(enableAccessoriesParam.IsFalse())
                     // - The second transition:
-                    .Or().When(thingParam.IsFalse());
+                    .Or()
+                    .When(thingParam.IsFalse());
             }
         }
 
         private void Remove()
         {
-            var my = (GenExample1_ToggleSmr) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
+            var my = (GenExample1_ToggleSmr)target;
+            var aac = AacExample.AnimatorAsCode(
+                SystemName,
+                my.avatar,
+                my.assetContainer,
+                my.assetKey
+            );
 
             aac.RemoveAllMainLayers();
         }

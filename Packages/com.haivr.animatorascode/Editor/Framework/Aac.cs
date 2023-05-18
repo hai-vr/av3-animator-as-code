@@ -3,19 +3,22 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+#if VRC_SDK_VRCSDK3_AVATARS
 using VRC.SDK3.Avatars.Components;
+#endif
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode
+namespace AnimatorAsCode.Framework
 {
-    public static class Aac
+    public class Aac
     {
         public static AacFlBase Create(AacConfiguration configuration)
         {
             return new AacFlBase(configuration);
         }
 
+#if VRC_SDK_VRCSDK3_AVATARS
         internal static AnimatorController AnimatorOf(
             VRCAvatarDescriptor ad,
             VRCAvatarDescriptor.AnimLayerType animLayerType
@@ -24,6 +27,7 @@ namespace AnimatorAsCode
             return (AnimatorController)
                 ad.baseAnimationLayers.First(it => it.type == animLayerType).animatorController;
         }
+#endif
 
         internal static AnimationClip NewClip(AacConfiguration component, string suffix)
         {
@@ -107,7 +111,10 @@ namespace AnimatorAsCode
     public struct AacConfiguration
     {
         public string SystemName;
+
+#if VRC_SDK_VRCSDK3_AVATARS
         public VRCAvatarDescriptor AvatarDescriptor;
+#endif
         public Transform AnimatorRoot;
         public Transform DefaultValueRoot;
         public AnimatorController AssetContainer;
@@ -355,6 +362,7 @@ namespace AnimatorAsCode
             );
         }
 
+#if VRC_SDK_VRCSDK3_AVATARS
         public void RemoveAllMainLayers()
         {
             var layerName = _configuration.SystemName;
@@ -423,6 +431,7 @@ namespace AnimatorAsCode
             VRCAvatarDescriptor.AnimLayerType animLayerType,
             string suffix
         ) => DoCreateSupportingLayerOnController(animLayerType, suffix);
+#endif
 
         public AacFlLayer CreateMainArbitraryControllerLayer(AnimatorController controller) =>
             DoCreateLayer(
@@ -445,6 +454,7 @@ namespace AnimatorAsCode
         public AacFlLayer CreateFirstArbitraryControllerLayer(AnimatorController controller) =>
             DoCreateLayer(controller, controller.layers[0].name);
 
+#if VRC_SDK_VRCSDK3_AVATARS
         private AacFlLayer DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType animType)
         {
             var animator = Aac.AnimatorOf(_configuration.AvatarDescriptor, animType);
@@ -468,6 +478,7 @@ namespace AnimatorAsCode
 
             return DoCreateLayer(animator, layerName);
         }
+#endif
 
         private AacFlLayer DoCreateLayer(AnimatorController animator, string layerName)
         {

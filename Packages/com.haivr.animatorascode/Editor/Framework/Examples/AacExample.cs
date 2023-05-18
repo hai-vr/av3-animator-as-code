@@ -1,12 +1,12 @@
 ﻿#if UNITY_EDITOR
 using System;
-using AnimatorAsCode;
+using AnimatorAsCode.Framework;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 
-namespace AnimatorAsCodeFramework.Examples
+namespace AnimatorAsCode.Framework.Examples
 {
     public static class AacExample
     {

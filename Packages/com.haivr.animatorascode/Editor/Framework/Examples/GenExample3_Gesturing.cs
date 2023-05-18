@@ -1,12 +1,12 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
-using AnimatorAsCode;
+using AnimatorAsCode.Framework;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 
-namespace AnimatorAsCodeFramework.Examples
+namespace AnimatorAsCode.Framework.Examples
 {
     public class GenExample3_Gesturing : MonoBehaviour
     {

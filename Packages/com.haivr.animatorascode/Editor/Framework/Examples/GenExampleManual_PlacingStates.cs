@@ -4,7 +4,7 @@ using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 
-namespace AnimatorAsCodeFramework.Examples
+namespace AnimatorAsCode.Framework.Examples
 {
     public class GenExampleManual_PlacingStates : MonoBehaviour
     {
@@ -25,8 +25,13 @@ namespace AnimatorAsCodeFramework.Examples
 
         private void Create()
         {
-            var my = (GenExampleManual_PlacingStates) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
+            var my = (GenExampleManual_PlacingStates)target;
+            var aac = AacExample.AnimatorAsCode(
+                SystemName,
+                my.avatar,
+                my.assetContainer,
+                my.assetKey
+            );
 
             var fx = aac.CreateMainFxLayer();
 
@@ -44,8 +49,13 @@ namespace AnimatorAsCodeFramework.Examples
 
         private void Remove()
         {
-            var my = (GenExampleManual_PlacingStates) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
+            var my = (GenExampleManual_PlacingStates)target;
+            var aac = AacExample.AnimatorAsCode(
+                SystemName,
+                my.avatar,
+                my.assetContainer,
+                my.assetKey
+            );
 
             aac.RemoveAllMainLayers();
         }

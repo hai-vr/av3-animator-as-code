@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Animations;
 using UnityEngine;
+#if VRC_SDK_VRCSDK3_AVATARS
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
+#endif
+
 using System.Reflection;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode
+namespace AnimatorAsCode.Framework
 {
     internal class AacBackingAnimator
     {
@@ -246,9 +249,12 @@ namespace AnimatorAsCode
         private readonly AnimatorStateMachine _machine;
         private readonly IAacDefaultsProvider _defaultsProvider;
         private readonly AacBackingAnimator _backingAnimator;
+
+#if VRC_SDK_VRCSDK3_AVATARS
         private VRCAvatarParameterDriver _driver;
         private VRCAnimatorTrackingControl _tracking;
         private VRCAnimatorLocomotionControl _locomotionControl;
+#endif
 
         public AacFlState(
             AnimatorState state,
@@ -390,6 +396,7 @@ namespace AnimatorAsCode
             return transition;
         }
 
+#if VRC_SDK_VRCSDK3_AVATARS
         public AacFlState Drives(AacFlIntParameter parameter, int value)
         {
             CreateDriverBehaviorIfNotExists();
@@ -906,6 +913,7 @@ namespace AnimatorAsCode
             _driver = State.AddStateMachineBehaviour<VRCAvatarParameterDriver>();
             _driver.parameters = new List<VRC_AvatarParameterDriver.Parameter>();
         }
+#endif
 
         public AacFlState WithWriteDefaultsSetTo(bool shouldWriteDefaults)
         {
@@ -913,6 +921,7 @@ namespace AnimatorAsCode
             return this;
         }
 
+#if VRC_SDK_VRCSDK3_AVATARS
         public AacFlState PrintsToLogUsingTrackingBehaviour(string value)
         {
             CreateTrackingBehaviorIfNotExists();
@@ -960,14 +969,6 @@ namespace AnimatorAsCode
         {
             CreateLocomotionBehaviorIfNotExists();
             _locomotionControl.disableLocomotion = true;
-
-            return this;
-        }
-
-        public AacFlState MotionTime(AacFlFloatParameter floatParam)
-        {
-            State.timeParameterActive = true;
-            State.timeParameter = floatParam.Name;
 
             return this;
         }
@@ -1040,6 +1041,15 @@ namespace AnimatorAsCode
             RightFingers,
             Eyes,
             Mouth
+        }
+#endif
+
+        public AacFlState MotionTime(AacFlFloatParameter floatParam)
+        {
+            State.timeParameterActive = true;
+            State.timeParameter = floatParam.Name;
+
+            return this;
         }
 
         public AacFlState WithSpeed(AacFlFloatParameter parameter)

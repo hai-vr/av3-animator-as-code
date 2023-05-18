@@ -1,15 +1,15 @@
 {
-    "name": "com.haivr.animatorascode.Editor",
+    "name": "NewAssembly",
     "references": [],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "Disable"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

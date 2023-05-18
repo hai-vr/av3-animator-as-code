@@ -2,7 +2,7 @@
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode
+namespace AnimatorAsCode.Framework
 {
     public interface IAacDefaultsProvider
     {

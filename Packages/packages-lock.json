@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.haivr.animatorascode": {
+    "com.happyrobot33.animatorascode": {
       "version": "file:com.haivr.animatorascode",
       "depth": 0,
       "source": "embedded",
