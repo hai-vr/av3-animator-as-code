@@ -21,7 +21,21 @@
     :root {
       /* --theme-hue: 325; */
     }
-
+    .defaultState > rect {
+      fill:#CA741E !important;
+    }
+    .entryState > rect {
+      fill:#0E682C !important;
+    }
+    .exitState > rect {
+      fill:#AC1112 !important;
+    }
+    .anyState > rect {
+      fill:#5B9283 !important;
+    }
+    .LS-Entry {
+      stroke:#CA741E !important;
+    }
   </style>
 </head>
 
@@ -50,7 +64,15 @@
       plugins: [
         titlePlugin({
           prefix: 'AAC Docs: '
-        })
+        }),
+        function(hook) {
+          hook.doneEach(function () {
+            let mermaidConfig = {
+              querySelector: ".mermaid",
+            };
+            mermaid.run(mermaidConfig);
+          });
+        }
       ]
     };
 
@@ -70,12 +92,33 @@
   <!-- Recommended -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/zoom-image.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-csharp.min.js"></script>
 
   <!-- Plugins -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-example-panels"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-updated/src/time-updater.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      'themeVariables': {
+        'primaryColor': '#4B4D51',
+        'primaryTextColor': '#fff',
+        'primaryBorderColor': 'transparent',
+        'lineColor': '#fff',
+        'clusterBkg': 'transparent',
+        'clusterBorder': 'grey',
+      },
+      "flowchart": {
+          'curve': ""
+      }
+    });
+    window.mermaid = mermaid;
+  </script>
+  <script src="//unpkg.com/docsify-mermaid@2.0.0/dist/docsify-mermaid.js"></script>
 </body>
 
 </html>
