@@ -1,8 +1,9 @@
-name: Update Website
+name: Update Website (local)
 
 env:
   listPublishDirectory: Website
   pathToCi: ci
+  indexLocation: "https://www.matthewherber.com/av3-animator-as-code/index.json"
   
 on: 
   workflow_dispatch:
@@ -58,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
           
       - name: Build Package Version Listing
-        run: ${{env.pathToCi}}/build.cmd BuildMultiPackageListing --root ${{env.pathToCi}} --list-publish-directory $GITHUB_WORKSPACE/${{env.listPublishDirectory}}
+        run: ${{env.pathToCi}}/build.cmd BuildMultiPackageListing --root ${{env.pathToCi}} --list-publish-directory $GITHUB_WORKSPACE/${{env.listPublishDirectory}} --current-listing-url ${{env.indexLocation}} --package-listing-source-filename sourcelocal.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

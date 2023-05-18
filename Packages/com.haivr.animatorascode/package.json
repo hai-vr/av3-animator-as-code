@@ -1,8 +1,8 @@
 {
-  "name": "com.haivr.animatorascode",
+  "name": "com.happyrobot33.animatorascode",
   "displayName": "Animator As Code",
-  "version": "1.0.0-beta.1",
-  "description": "Write concise code to generate Avatars 3.0 Animators. ",
+  "version": "1.0.0",
+  "description": "Write concise code to generate Avatars 3.0 Animators.",
   "license": "MIT",
   "dependencies": {},
   "gitDependencies": {},
