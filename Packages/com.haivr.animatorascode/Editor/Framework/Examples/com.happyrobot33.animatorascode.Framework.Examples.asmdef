@@ -1,16 +1,16 @@
 {
-    "name": "com.happyrobot33.animatorascode",
-    "references": [],
-    "includePlatforms": [
-        "Editor"
+    "name": "com.happyrobot33.animatorascode.Framework.Examples",
+    "references": [
+        "GUID:bf0ba3819ee10bf43ad38d1834ba2bbe"
     ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "VRC_SDK_VRCSDK3"
+        "VRC_SDK_VRCSDK3_AVATARS"
     ],
     "versionDefines": [
         {
