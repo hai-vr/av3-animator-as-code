@@ -557,6 +557,9 @@ namespace AnimatorAsCode.Framework
         }
     }
 
+    /// <summary>
+    /// AacAv3 is a class that provides access to specifics of the VRChat SDK3 avatar system.
+    /// </summary>
     public class AacAv3
     {
         private readonly AacBackingAnimator _backingAnimator;
