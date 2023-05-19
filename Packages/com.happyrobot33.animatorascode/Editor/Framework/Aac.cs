@@ -11,8 +11,16 @@ using Random = UnityEngine.Random;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.Framework
 {
+    /// <summary>
+    /// Animator as Code Framework
+    /// </summary>
     public class Aac
     {
+        /// <summary>
+        /// Create a new Animator as Code based on the configuration
+        /// </summary>
+        /// <param name="configuration">Configuration</param>
+        /// <returns>AacFlBase</returns>
         public static AacFlBase Create(AacConfiguration configuration)
         {
             return new AacFlBase(configuration);
@@ -142,6 +150,11 @@ namespace AnimatorAsCode.Framework
             _stateMachine = stateMachine;
         }
 
+        /// <summary>
+        /// Create a new state
+        /// </summary>
+        /// <param name="name">Name of the state</param>
+        /// <returns>AacFlState</returns>
         public AacFlState NewState(string name)
         {
             var lastState = _stateMachine.LastStatePosition();
@@ -149,16 +162,33 @@ namespace AnimatorAsCode.Framework
             return state;
         }
 
+        /// <summary>
+        /// Create a new state with a position
+        /// </summary>
+        /// <param name="name">Name of the state</param>
+        /// <param name="x">X position of the state</param>
+        /// <param name="y">Y position of the state</param>
+        /// <returns>AacFlState</returns>
         public AacFlState NewState(string name, int x, int y)
         {
             return _stateMachine.NewState(name, x, y);
         }
 
+        /// <summary>
+        /// Create transition from the layers any state to the given state
+        /// </summary>
+        /// <param name="destination">Destination state</param>
+        /// <returns>AacFlAnyStateTransition</returns>
         public AacFlTransition AnyTransitionsTo(AacFlState destination)
         {
             return _stateMachine.AnyTransitionsTo(destination);
         }
 
+        /// <summary>
+        /// Create transition from the layers entry state to the given state
+        /// </summary>
+        /// <param name="destination">Destination state</param>
+        /// <returns>AacFlEntryTransition</returns>
         public AacFlEntryTransition EntryTransitionsTo(AacFlState destination)
         {
             return _stateMachine.EntryTransitionsTo(destination);
