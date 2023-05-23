@@ -11,14 +11,10 @@ using Random = UnityEngine.Random;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.Framework
 {
-    /// <summary>
-    /// Animator as Code Framework
-    /// </summary>
+    /// <summary> Animator as Code Framework </summary>
     public class Aac
     {
-        /// <summary>
-        /// Create a new Animator as Code based on the configuration
-        /// </summary>
+        /// <summary> Create a new Animator as Code based on the configuration </summary>
         /// <param name="configuration">Configuration</param>
         /// <returns>AacFlBase</returns>
         public static AacFlBase Create(AacConfiguration configuration)

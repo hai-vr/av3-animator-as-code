@@ -17,11 +17,17 @@ namespace AnimatorAsCode.Framework
     {
         private readonly AacAnimatorGenerator _generator;
 
+        /// <summary> Creates a new backing animator. </summary>
+        /// <param name="animatorGenerator"> The generator that will be used to generate the animator. </param>
         public AacBackingAnimator(AacAnimatorGenerator animatorGenerator)
         {
             _generator = animatorGenerator;
         }
 
+        /// <summary> Creates a new boolean parameter in the animator. </summary>
+        /// <remarks> If the parameter already exists, it will effectively be returned. </remarks>
+        /// <param name="parameterName"> The name of the parameter. </param>
+        /// <returns> The created AAC parameter. </returns>
         public AacFlBoolParameter BoolParameter(string parameterName)
         {
             var result = AacFlBoolParameter.Internally(parameterName);
@@ -29,6 +35,10 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <summary> Creates a new trigger parameter in the animator. </summary>
+        /// <remarks> If the parameter already exists, it will effectively be returned. </remarks>
+        /// <param name="parameterName"> The name of the parameter. </param>
+        /// <returns> The created AAC parameter. </returns>
         public AacFlBoolParameter TriggerParameter(string parameterName)
         {
             var result = AacFlBoolParameter.Internally(parameterName);
@@ -36,6 +46,10 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <summary> Creates a new float parameter in the animator. </summary>
+        /// <remarks> If the parameter already exists, it will effectively be returned. </remarks>
+        /// <param name="parameterName"> The name of the parameter. </param>
+        /// <returns> The created AAC parameter. </returns>
         public AacFlFloatParameter FloatParameter(string parameterName)
         {
             var result = AacFlFloatParameter.Internally(parameterName);
@@ -43,6 +57,10 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <summary> Creates a new integer parameter in the animator. </summary>
+        /// <remarks> If the parameter already exists, it will effectively be returned. </remarks>
+        /// <param name="parameterName"> The name of the parameter. </param>
+        /// <returns> The created AAC parameter. </returns>
         public AacFlIntParameter IntParameter(string parameterName)
         {
             var result = AacFlIntParameter.Internally(parameterName);
@@ -50,6 +68,11 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <summary> Creates a new enum parameter in the animator. </summary>
+        /// <remarks> If the parameter already exists, it will effectively be returned. </remarks>
+        /// <param name="parameterName"> The name of the parameter. </param>
+        /// <typeparam name="TEnum"> The enum type. </typeparam>
+        /// <returns> The created AAC parameter. </returns>
         public AacFlEnumIntParameter<TEnum> EnumParameter<TEnum>(string parameterName)
             where TEnum : Enum
         {
@@ -58,6 +81,10 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <summary> Creates a new boolean parameter group in the animator. </summary>
+        /// <remarks> If the parameter(s) already exist(s), it will effectively be returned. </remarks>
+        /// <param name="parameterNames"> The names of the parameters. </param>
+        /// <returns> The created AAC parameter group. </returns>
         public AacFlBoolParameterGroup BoolParameters(params string[] parameterNames)
         {
             var result = AacFlBoolParameterGroup.Internally(parameterNames);
@@ -65,6 +92,10 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <summary> Creates a new trigger parameter group in the animator. </summary>
+        /// <remarks> If the parameter(s) already exist(s), it will effectively be returned. </remarks>
+        /// <param name="parameterNames"> The names of the parameters. </param>
+        /// <returns> The created AAC parameter group. </returns>
         public AacFlBoolParameterGroup TriggerParameters(params string[] parameterNames)
         {
             var result = AacFlBoolParameterGroup.Internally(parameterNames);
@@ -72,6 +103,10 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <summary> Creates a new float parameter group in the animator. </summary>
+        /// <remarks> If the parameter(s) already exist(s), it will effectively be returned. </remarks>
+        /// <param name="parameterNames"> The names of the parameters. </param>
+        /// <returns> The created AAC parameter group. </returns>
         public AacFlFloatParameterGroup FloatParameters(params string[] parameterNames)
         {
             var result = AacFlFloatParameterGroup.Internally(parameterNames);
@@ -79,6 +114,10 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <summary> Creates a new integer parameter group in the animator. </summary>
+        /// <remarks> If the parameter(s) already exist(s), it will effectively be returned. </remarks>
+        /// <param name="parameterNames"> The names of the parameters. </param>
+        /// <returns> The created AAC parameter group. </returns>
         public AacFlIntParameterGroup IntParameters(params string[] parameterNames)
         {
             var result = AacFlIntParameterGroup.Internally(parameterNames);
@@ -86,6 +125,8 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <inheritdoc cref="BoolParameters(string[])"/>
+        /// <param name="parameters"> The list of <see cref="AacFlBoolParameter"/> to use in the list. </param>
         public AacFlBoolParameterGroup BoolParameters(params AacFlBoolParameter[] parameters)
         {
             var result = AacFlBoolParameterGroup.Internally(
@@ -95,6 +136,8 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <inheritdoc cref="TriggerParameters(string[])"/>
+        /// <param name="parameters"> The list of <see cref="AacFlBoolParameter"/> to use in the list. </param>
         public AacFlBoolParameterGroup TriggerParameters(params AacFlBoolParameter[] parameters)
         {
             var result = AacFlBoolParameterGroup.Internally(
@@ -104,6 +147,8 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <inheritdoc cref="FloatParameters(string[])"/>
+        /// <param name="parameters"> The list of <see cref="AacFlFloatParameter"/> to use in the list. </param>
         public AacFlFloatParameterGroup FloatParameters(params AacFlFloatParameter[] parameters)
         {
             var result = AacFlFloatParameterGroup.Internally(
@@ -113,6 +158,8 @@ namespace AnimatorAsCode.Framework
             return result;
         }
 
+        /// <inheritdoc cref="IntParameters(string[])"/>
+        /// <param name="parameters"> The list of <see cref="AacFlIntParameter"/> to use in the list. </param>
         public AacFlIntParameterGroup IntParameters(params AacFlIntParameter[] parameters)
         {
             var result = AacFlIntParameterGroup.Internally(
@@ -160,24 +207,45 @@ namespace AnimatorAsCode.Framework
             return _backingAnimator;
         }
 
+        /// <summary> Sets the entry state position. </summary>
+        /// <inheritdoc cref="GridPosition(int,int)" path="/remarks"/>
+        /// <param name="x"> The x position. </param>
+        /// <param name="y"> The y position. </param>
+        /// <returns> This instance. </returns>
         public AacStateMachine WithEntryPosition(int x, int y)
         {
             _machine.entryPosition = GridPosition(x, y);
             return this;
         }
 
+        /// <summary> Sets the exit state position. </summary>
+        /// <inheritdoc cref="GridPosition(int,int)" path="/remarks"/>
+        /// <param name="x"> The x position. </param>
+        /// <param name="y"> The y position. </param>
+        /// <returns> This instance. </returns>
         public AacStateMachine WithExitPosition(int x, int y)
         {
             _machine.exitPosition = GridPosition(x, y);
             return this;
         }
 
+        /// <summary> Sets the any state position. </summary>
+        /// <inheritdoc cref="GridPosition(int,int)" path="/remarks"/>
+        /// <param name="x"> The x position. </param>
+        /// <param name="y"> The y position. </param>
+        /// <returns> This instance. </returns>
         public AacStateMachine WithAnyStatePosition(int x, int y)
         {
             _machine.anyStatePosition = GridPosition(x, y);
             return this;
         }
 
+        /// <summary> Creates a new state in this state machine. </summary>
+        /// <inheritdoc cref="GridPosition(int,int)" path="/remarks"/>
+        /// <param name="name"> The name of the state.</param>
+        /// <param name="x"> The x position. </param>
+        /// <param name="y"> The y position. </param>
+        /// <returns> The created state. </returns>
         public AacFlState NewState(string name, int x, int y)
         {
             var state = _machine.AddState(name, GridPosition(x, y));
@@ -186,11 +254,17 @@ namespace AnimatorAsCode.Framework
             return new AacFlState(state, _machine, _defaultsProvider);
         }
 
+        /// <summary> Creates a transition from the any state to the given state. </summary>
+        /// <param name="destination"> The destination state. </param>
+        /// <returns> The created transition. </returns>
         public AacFlTransition AnyTransitionsTo(AacFlState destination)
         {
             return AnyTransition(destination, _machine);
         }
 
+        /// <summary> Creates a transition from the entry state to the given state. </summary>
+        /// <param name="destination"> The destination state. </param>
+        /// <returns> The created transition. </returns>
         public AacFlEntryTransition EntryTransitionsTo(AacFlState destination)
         {
             return EntryTransition(destination, _machine);
@@ -228,23 +302,34 @@ namespace AnimatorAsCode.Framework
             );
         }
 
-        internal Vector3 LastStatePosition()
+        internal Vector2 LastStatePosition()
         {
-            return _machine.states.Length > 0 ? _machine.states.Last().position : Vector3.zero;
+            return _machine.states.Length > 0
+                ? (Vector2)_machine.states.Last().position
+                : Vector2.zero;
         }
 
+        /// <summary> Returns the grid position for the given x and y. The grid position is calculated by multiplying the x and y with the grid shift. </summary>
+        /// <remarks> Grid states are 200x10. </remarks>
+        /// <param name="x"> The x position. </param>
+        /// <param name="y"> The y position. </param>
+        /// <returns> The grid position. </returns>
         private Vector3 GridPosition(int x, int y)
         {
             return new Vector3(x * _gridShiftX, y * _gridShiftY, 0);
         }
     }
 
+    /// <summary> A state in a state machine. </summary>
+    /// <inheritdoc cref="AacStateMachine.GridPosition(int,int)" path="/remarks"/>
     public class AacFlState
     {
         private static readonly PropertyInfo PropPushUndo = typeof(AnimatorState).GetProperty(
             "pushUndo",
             BindingFlags.NonPublic | BindingFlags.Instance
         );
+
+        /// <summary> The underlying state. </summary>
         public readonly AnimatorState State;
         private readonly AnimatorStateMachine _machine;
         private readonly IAacDefaultsProvider _defaultsProvider;
@@ -256,6 +341,10 @@ namespace AnimatorAsCode.Framework
         private VRCAnimatorLocomotionControl _locomotionControl;
 #endif
 
+        /// <summary> Creates a new state. </summary>
+        /// <param name="state"> The underlying state. </param>
+        /// <param name="machine"> The state machine this state belongs to. </param>
+        /// <param name="defaultsProvider"> The defaults provider. </param>
         public AacFlState(
             AnimatorState state,
             AnimatorStateMachine machine,
@@ -268,22 +357,45 @@ namespace AnimatorAsCode.Framework
             _defaultsProvider = defaultsProvider;
         }
 
+        /// <summary> Sets the position of this state to the left of another state. </summary>
+        /// <param name="otherState"> The other state. </param>
+        /// <returns> This instance. </returns>
         public AacFlState LeftOf(AacFlState otherState) => MoveNextTo(otherState, -1, 0);
 
+        /// <summary> Sets the position of this state to the right of another state. </summary>
+        /// <inheritdoc cref="LeftOf(AacFlState)"/>
         public AacFlState RightOf(AacFlState otherState) => MoveNextTo(otherState, 1, 0);
 
+        /// <summary> Sets the position of this state to above another state. </summary>
+        /// <inheritdoc cref="LeftOf(AacFlState)"/>
         public AacFlState Over(AacFlState otherState) => MoveNextTo(otherState, 0, -1);
 
+        /// <summary> Sets the position of this state to below another state. </summary>
+        /// <inheritdoc cref="LeftOf(AacFlState)"/>
         public AacFlState Under(AacFlState otherState) => MoveNextTo(otherState, 0, 1);
 
+        /// <summary> Sets the position of this state to the left of the second to last state. </summary>
+        /// <returns> This instance. </returns>
         public AacFlState LeftOf() => MoveNextTo(null, -1, 0);
 
+        /// <summary> Sets the position of this state to the right of the second to last state. </summary>
+        /// <inheritdoc cref="LeftOf()"/>
         public AacFlState RightOf() => MoveNextTo(null, 1, 0);
 
+        /// <summary> Sets the position of this state to above the second to last state. </summary>
+        /// <inheritdoc cref="LeftOf()"/>
         public AacFlState Over() => MoveNextTo(null, 0, -1);
 
+        /// <summary> Sets the position of this state to below the second to last state. </summary>
+        /// <inheritdoc cref="LeftOf()"/>
         public AacFlState Under() => MoveNextTo(null, 0, 1);
 
+        /// <summary> Sets the position of this state relative to another state. </summary>
+        /// <inheritdoc cref="AacStateMachine.GridPosition(int,int)" path="/remarks"/>
+        /// <param name="otherState"> The other state. </param>
+        /// <param name="shiftX"> The x shift. </param>
+        /// <param name="shiftY"> The y shift. </param>
+        /// <returns> This instance. </returns>
         public AacFlState Shift(AacFlState otherState, int shiftX, int shiftY) =>
             MoveNextTo(otherState, shiftX, shiftY);
 
@@ -292,7 +404,7 @@ namespace AnimatorAsCode.Framework
             if (otherStateOrSecondToLastWhenNull == null)
             {
                 var other = _machine.states[_machine.states.Length - 2];
-                Shift(other.position, x, y);
+                Shift((Vector2)other.position, x, y);
 
                 return this;
             }
@@ -301,14 +413,33 @@ namespace AnimatorAsCode.Framework
                 var other = _machine.states.First(
                     animatorState => animatorState.state == otherStateOrSecondToLastWhenNull.State
                 );
-                Shift(other.position, x, y);
+                Shift((Vector2)other.position, x, y);
 
                 return this;
             }
         }
 
+        /// <summary> Sets the position of this state relative to a position on the grid. </summary>
+        /// <inheritdoc cref="AacStateMachine.GridPosition(int,int)" path="/remarks"/>
+        /// <param name="otherPosition"> The other position. </param>
+        /// <param name="shiftX"> The x shift. </param>
+        /// <param name="shiftY"> The y shift. </param>
+        /// <returns> This instance. </returns>
+        [Obsolete("Use Shift(Vector2, int, int) instead.")]
         public AacFlState Shift(Vector3 otherPosition, int shiftX, int shiftY)
         {
+            return Shift((Vector2)otherPosition, shiftX, shiftY);
+        }
+
+        /// <summary> Sets the position of this state relative to a position on the grid. </summary>
+        /// <inheritdoc cref="AacStateMachine.GridPosition(int,int)" path="/remarks"/>
+        /// <param name="otherPosition"> The other position. </param>
+        /// <param name="shiftX"> The x shift. </param>
+        /// <param name="shiftY"> The y shift. </param>
+        /// <returns> This instance. </returns>
+        public AacFlState Shift(Vector2 otherPosition, int shiftX, int shiftY)
+        {
+            Vector3 otherPositionV3 = new Vector3(otherPosition.x, otherPosition.y, 0);
             var states = _machine.states;
             for (var index = 0; index < states.Length; index++)
             {
@@ -317,7 +448,7 @@ namespace AnimatorAsCode.Framework
                 {
                     var cms = childAnimatorState;
                     cms.position =
-                        otherPosition
+                        otherPositionV3
                         + new Vector3(
                             shiftX * _defaultsProvider.Grid().x,
                             shiftY * _defaultsProvider.Grid().y,
@@ -331,18 +462,25 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Sets the animation clip of this state. </summary>
+        /// <param name="clip"> The clip. </param>
+        /// <returns> This instance. </returns>
         public AacFlState WithAnimation(Motion clip)
         {
             State.motion = clip;
             return this;
         }
 
+        /// <inheritdoc cref="WithAnimation(Motion)"/>
         public AacFlState WithAnimation(AacFlClip clip)
         {
             State.motion = clip.Clip;
             return this;
         }
 
+        /// <summary> Create a transition from this state to another state. </summary>
+        /// <param name="destination"> The destination state. </param>
+        /// <returns> The transition. </returns>
         public AacFlTransition TransitionsTo(AacFlState destination)
         {
             return new AacFlTransition(
@@ -353,6 +491,8 @@ namespace AnimatorAsCode.Framework
             );
         }
 
+        /// <summary> Create a transition from the any state to this state. </summary>
+        /// <returns> The transition. </returns>
         public AacFlTransition TransitionsFromAny()
         {
             return new AacFlTransition(
@@ -363,6 +503,8 @@ namespace AnimatorAsCode.Framework
             );
         }
 
+        /// <summary> Create a transition from the entry state to this state. </summary>
+        /// <returns> The transition. </returns>
         public AacFlEntryTransition TransitionsFromEntry()
         {
             return new AacFlEntryTransition(
@@ -373,6 +515,9 @@ namespace AnimatorAsCode.Framework
             );
         }
 
+        /// <summary> Create a transition with no exit time to the destination state. </summary>
+        /// <param name="destination"> The destination state. </param>
+        /// <returns> This instance. </returns>
         public AacFlState AutomaticallyMovesTo(AacFlState destination)
         {
             var transition = ConfigureTransition(State.AddTransition(destination.State));
@@ -380,6 +525,8 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Create a transition with to the exit state. </summary>
+        /// <returns> This instance. </returns>
         public AacFlTransition Exits()
         {
             return new AacFlTransition(
@@ -397,6 +544,10 @@ namespace AnimatorAsCode.Framework
         }
 
 #if VRC_SDK_VRCSDK3_AVATARS
+        /// <summary> Drives the parameter provided to the value provided. </summary>
+        /// <param name="parameter"> The parameter. </param>
+        /// <param name="value"> The value. </param>
+        /// <returns> This instance. </returns>
         public AacFlState Drives(AacFlIntParameter parameter, int value)
         {
             CreateDriverBehaviorIfNotExists();
@@ -411,6 +562,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="Drives(AacFlIntParameter,int)"/>
         public AacFlState Drives(AacFlFloatParameter parameter, float value)
         {
             CreateDriverBehaviorIfNotExists();
@@ -425,6 +577,10 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Adds the value provided to the parameter provided. </summary>
+        /// <param name="parameter"> The parameter. </param>
+        /// <param name="additiveValue"> The additive value. </param>
+        /// <returns> This instance. </returns>
         public AacFlState DrivingIncreases(AacFlFloatParameter parameter, float additiveValue)
         {
             CreateDriverBehaviorIfNotExists();
@@ -439,6 +595,10 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Subtracts the value provided from the parameter provided. </summary>
+        /// <param name="parameter"> The parameter. </param>
+        /// <param name="positiveValueToDecreaseBy"> The positive value to decrease by. </param>
+        /// <returns> This instance. </returns>
         public AacFlState DrivingDecreases(
             AacFlFloatParameter parameter,
             float positiveValueToDecreaseBy
@@ -456,6 +616,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingIncreases(AacFlFloatParameter,float)"/>
         public AacFlState DrivingIncreases(AacFlIntParameter parameter, int additiveValue)
         {
             CreateDriverBehaviorIfNotExists();
@@ -470,6 +631,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingDecreases(AacFlFloatParameter,float)"/>
         public AacFlState DrivingDecreases(
             AacFlIntParameter parameter,
             int positiveValueToDecreaseBy
@@ -487,6 +649,11 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Randomizes the parameter provided between the values provided. </summary>
+        /// <param name="parameter"> The parameter. </param>
+        /// <param name="min"> The minimum value. </param>
+        /// <param name="max"> The maximum value. </param>
+        /// <returns> This instance. </returns>
         public AacFlState DrivingRandomizes(AacFlIntParameter parameter, int min, int max)
         {
             CreateDriverBehaviorIfNotExists();
@@ -502,6 +669,8 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingRandomizes(AacFlIntParameter,int,int)"/>
+        /// <remarks> This version only applys to the local client </remarks>
         public AacFlState DrivingRandomizesLocally(
             AacFlFloatParameter parameter,
             float min,
@@ -522,6 +691,11 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Randomizes the parameter to true based on the chance provided. </summary>
+        /// <inheritdoc cref="DrivingRandomizesLocally(AacFlFloatParameter,float,float)" path="/remarks"/>
+        /// <param name="parameter"> The parameter. </param>
+        /// <param name="chance"> The chance. </param>
+        /// <returns> This instance. </returns>
         public AacFlState DrivingRandomizesLocally(AacFlBoolParameter parameter, float chance)
         {
             CreateDriverBehaviorIfNotExists();
@@ -537,6 +711,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingRandomizesLocally(AacFlFloatParameter, float, float)"/>
         public AacFlState DrivingRandomizesLocally(AacFlIntParameter parameter, int min, int max)
         {
             CreateDriverBehaviorIfNotExists();
@@ -553,6 +728,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="Drives(AacFlFloatParameter,float)"/>
         public AacFlState Drives(AacFlBoolParameter parameter, bool value)
         {
             CreateDriverBehaviorIfNotExists();
@@ -566,6 +742,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="Drives(AacFlFloatParameter,float)"/>
         public AacFlState Drives(AacFlBoolParameterGroup parameters, bool value)
         {
             CreateDriverBehaviorIfNotExists();
@@ -582,6 +759,8 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Sets the parameter driver to local only. </summary>
+        /// <returns> This instance. </returns>
         public AacFlState DrivingLocally()
         {
             CreateDriverBehaviorIfNotExists();
@@ -589,6 +768,10 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Drive the destination parameter to the source parameter. </summary>
+        /// <param name="source"> The source parameter. </param>
+        /// <param name="destination"> The destination parameter. </param>
+        /// <returns> This instance. </returns>
         public AacFlState DrivingCopies(AacFlIntParameter source, AacFlIntParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -604,6 +787,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingCopies(AacFlIntParameter,AacFlIntParameter)"/>
         public AacFlState DrivingCopies(AacFlBoolParameter source, AacFlBoolParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -619,6 +803,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingCopies(AacFlIntParameter,AacFlIntParameter)"/>
         public AacFlState DrivingCopies(AacFlFloatParameter source, AacFlFloatParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -634,6 +819,15 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Drive the destination parameter to the source parameter. </summary>
+        /// <remarks> Remaps the two parameters. </remarks>
+        /// <param name="source"> The source parameter. </param>
+        /// <param name="sourceMin"> The source minimum. </param>
+        /// <param name="sourceMax"> The source maximum. </param>
+        /// <param name="destination"> The destination parameter. </param>
+        /// <param name="destinationMin"> The destination minimum. </param>
+        /// <param name="destinationMax"> The destination maximum. </param>
+        /// <returns> This instance. </returns>
         public AacFlState DrivingRemaps(
             AacFlIntParameter source,
             int sourceMin,
@@ -660,6 +854,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingRemaps(AacFlIntParameter,int,int,AacFlIntParameter,int,int)"/>
         public AacFlState DrivingRemaps(
             AacFlBoolParameter source,
             float sourceMin,
@@ -686,6 +881,10 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Converts the source parameter to the destination parameter type. </summary>
+        /// <param name="source"> The source parameter. </param>
+        /// <param name="destination"> The destination parameter. </param>
+        /// <returns> This instance. </returns>
         public AacFlState DrivingCasts(AacFlFloatParameter source, AacFlIntParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -701,6 +900,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingCasts(AacFlFloatParameter,AacFlIntParameter)"/>
         public AacFlState DrivingCasts(AacFlIntParameter source, AacFlFloatParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -716,6 +916,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingCasts(AacFlFloatParameter,AacFlIntParameter)"/>
         public AacFlState DrivingCasts(AacFlBoolParameter source, AacFlFloatParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -731,6 +932,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingCasts(AacFlFloatParameter,AacFlIntParameter)"/>
         public AacFlState DrivingCasts(AacFlFloatParameter source, AacFlBoolParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -746,6 +948,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingCasts(AacFlFloatParameter,AacFlIntParameter)"/>
         public AacFlState DrivingCasts(AacFlBoolParameter source, AacFlIntParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -761,6 +964,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingCasts(AacFlFloatParameter,AacFlIntParameter)"/>
         public AacFlState DrivingCasts(AacFlIntParameter source, AacFlBoolParameter destination)
         {
             CreateDriverBehaviorIfNotExists();
@@ -776,6 +980,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingRemaps(AacFlIntParameter,int,int,AacFlIntParameter,int,int)"/>
         public AacFlState DrivingCasts(
             AacFlBoolParameter source,
             float sourceMin,
@@ -802,6 +1007,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingRemaps(AacFlIntParameter,int,int,AacFlIntParameter,int,int)"/>
         public AacFlState DrivingCasts(
             AacFlFloatParameter source,
             float sourceMin,
@@ -828,6 +1034,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingRemaps(AacFlIntParameter,int,int,AacFlIntParameter,int,int)"/>
         public AacFlState DrivingCasts(
             AacFlBoolParameter source,
             float sourceMin,
@@ -854,6 +1061,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingRemaps(AacFlIntParameter,int,int,AacFlIntParameter,int,int)"/>
         public AacFlState DrivingCasts(
             AacFlIntParameter source,
             int sourceMin,
@@ -880,6 +1088,7 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <inheritdoc cref="DrivingRemaps(AacFlIntParameter,int,int,AacFlIntParameter,int,int)"/>
         public AacFlState DrivingCasts(
             AacFlIntParameter source,
             int sourceMin,
@@ -915,6 +1124,9 @@ namespace AnimatorAsCode.Framework
         }
 #endif
 
+        /// <summary> Sets the state's write defaults toggle to the given value. </summary>
+        /// <param name="shouldWriteDefaults"> Should Write Defaults be on. </param>
+        /// <returns> The current state. </returns>
         public AacFlState WithWriteDefaultsSetTo(bool shouldWriteDefaults)
         {
             State.writeDefaultValues = shouldWriteDefaults;
@@ -922,6 +1134,9 @@ namespace AnimatorAsCode.Framework
         }
 
 #if VRC_SDK_VRCSDK3_AVATARS
+        /// <summary> Use an Animator Tracking Control to print logs to the avatar wearer. </summary>
+        /// <param name="value"> The value to print. </param>
+        /// <returns> The current state. </returns>
         public AacFlState PrintsToLogUsingTrackingBehaviour(string value)
         {
             CreateTrackingBehaviorIfNotExists();
@@ -930,6 +1145,9 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Set an element to be tracking. </summary>
+        /// <param name="element"> The element to track. </param>
+        /// <returns> The current state. </returns>
         public AacFlState TrackingTracks(TrackingElement element)
         {
             CreateTrackingBehaviorIfNotExists();
@@ -938,6 +1156,9 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Set an element to be animated. </summary>
+        /// <param name="element"> The element to animate. </param>
+        /// <returns> The current state. </returns>
         public AacFlState TrackingAnimates(TrackingElement element)
         {
             CreateTrackingBehaviorIfNotExists();
@@ -957,6 +1178,8 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Enable locomotion. </summary>
+        /// <returns> The current state. </returns>
         public AacFlState LocomotionEnabled()
         {
             CreateLocomotionBehaviorIfNotExists();
@@ -965,6 +1188,8 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Disable locomotion. </summary>
+        /// <returns> The current state. </returns>
         public AacFlState LocomotionDisabled()
         {
             CreateLocomotionBehaviorIfNotExists();
@@ -1044,6 +1269,9 @@ namespace AnimatorAsCode.Framework
         }
 #endif
 
+        /// <summary> Set the Motion Time, formerly known as Normalized Time. </summary>
+        /// <param name="floatParam"> The float parameter to use. </param>
+        /// <returns> The current state. </returns>
         public AacFlState MotionTime(AacFlFloatParameter floatParam)
         {
             State.timeParameterActive = true;
@@ -1052,6 +1280,9 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Set the speed of the animation. </summary>
+        /// <param name="parameter"> The float parameter to use. </param>
+        /// <returns> The current state. </returns>
         public AacFlState WithSpeed(AacFlFloatParameter parameter)
         {
             State.speedParameter = parameter.Name;

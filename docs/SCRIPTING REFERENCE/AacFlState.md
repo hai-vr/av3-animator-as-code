@@ -19,7 +19,8 @@
 | `Over()` | `AacFlState ` | Move the state to be over the last created state of the state machine this belongs to in the graph. |
 | `Under()` | `AacFlState ` | Move the state to be under the last created state of the state machine this belongs to in the graph. |
 | `Shift(AacFlState otherState, int shiftX, int shiftY)` | `AacFlState ` | Move the state to be shifted next to the other state in the graph, in grid units. `shiftX` positive goes right, `shiftY` positive goes down. |
-| `Shift(Vector3 otherPosition, int shiftX, int shiftY)` | `AacFlState ` | Move the state to be shifted next to another position in the graph, in grid units. `shiftX` positive goes right, `shiftY` positive goes down. FIXME: Vector3 is really odd as a type. |
+| `Shift(Vector3 otherPosition, int shiftX, int shiftY)` | `AacFlState ` | Move the state to be shifted next to another position in the graph, in grid units. `shiftX` positive goes right, `shiftY` positive goes down. Deprecated for `Shift(Vector2 otherPosition, int shiftX, int shiftY)`|
+| `Shift(Vector2 otherPosition, int shiftX, int shiftY)` | `AacFlState ` | Move the state to be shifted next to another position in the graph, in grid units. `shiftX` positive goes right, `shiftY` positive goes down. |
 
 ### Attributes
 | Method | Return Type | Description |
