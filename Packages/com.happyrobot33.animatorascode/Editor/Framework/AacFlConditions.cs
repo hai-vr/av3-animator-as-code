@@ -8,7 +8,7 @@ using static UnityEditor.Animations.AnimatorConditionMode;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.Framework
 {
-    class AacFlConditionSimple : IAacFlCondition
+    partial class AacFlConditionSimple : IAacFlCondition
     {
         private readonly Action<AacFlCondition> _action;
 
@@ -43,7 +43,7 @@ namespace AnimatorAsCode.Framework
     }
 
     /// <summary> Base idea of a parameter </summary>
-    public abstract class AacFlParameter
+    public abstract partial class AacFlParameter
     {
         public string Name { get; }
 
@@ -54,7 +54,7 @@ namespace AnimatorAsCode.Framework
     }
 
     /// <summary> Float parameter </summary>
-    public class AacFlFloatParameter : AacFlParameter
+    public partial class AacFlFloatParameter : AacFlParameter
     {
         internal static AacFlFloatParameter Internally(string name) =>
             new AacFlFloatParameter(name);
@@ -76,7 +76,7 @@ namespace AnimatorAsCode.Framework
     }
 
     /// <summary> Integer parameter </summary>
-    public class AacFlIntParameter : AacFlParameter
+    public partial class AacFlIntParameter : AacFlParameter
     {
         internal static AacFlIntParameter Internally(string name) => new AacFlIntParameter(name);
 
@@ -109,7 +109,7 @@ namespace AnimatorAsCode.Framework
     }
 
     /// <summary> Enum parameter </summary>
-    public class AacFlEnumIntParameter<TEnum> : AacFlIntParameter
+    public partial class AacFlEnumIntParameter<TEnum> : AacFlIntParameter
         where TEnum : Enum
     {
         internal static AacFlEnumIntParameter<TInEnum> Internally<TInEnum>(string name)
@@ -130,7 +130,7 @@ namespace AnimatorAsCode.Framework
     }
 
     /// <summary> Bool parameter </summary>
-    public class AacFlBoolParameter : AacFlParameter
+    public partial class AacFlBoolParameter : AacFlParameter
     {
         internal static AacFlBoolParameter Internally(string name) => new AacFlBoolParameter(name);
 
@@ -159,7 +159,7 @@ namespace AnimatorAsCode.Framework
     }
 
     /// <summary> Parameter group of floats </summary>
-    public class AacFlFloatParameterGroup
+    public partial class AacFlFloatParameterGroup
     {
         internal static AacFlFloatParameterGroup Internally(params string[] names) =>
             new AacFlFloatParameterGroup(names);
@@ -190,7 +190,7 @@ namespace AnimatorAsCode.Framework
     }
 
     /// <summary> Parameter group of ints </summary>
-    public class AacFlIntParameterGroup
+    public partial class AacFlIntParameterGroup
     {
         internal static AacFlIntParameterGroup Internally(params string[] names) =>
             new AacFlIntParameterGroup(names);
@@ -236,7 +236,7 @@ namespace AnimatorAsCode.Framework
     }
 
     /// <summary> Parameter group of bools </summary>
-    public class AacFlBoolParameterGroup
+    public partial class AacFlBoolParameterGroup
     {
         internal static AacFlBoolParameterGroup Internally(params string[] names) =>
             new AacFlBoolParameterGroup(names);
