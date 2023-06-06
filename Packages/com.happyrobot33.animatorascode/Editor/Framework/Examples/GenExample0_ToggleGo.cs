@@ -58,7 +58,7 @@ namespace AnimatorAsCode.Framework.Examples
 
             // Transitions are created with a set of default values
             // That can be changed in the Generator settings (see later in the manual).
-            hidden.TransitionsTo(shown).When(itemParam.IsTrue());
+            hidden.TransitionsTo(shown).When(itemParam.IsTrue()).WithName("test");
             shown.TransitionsTo(hidden).When(itemParam.IsFalse());
         }
 

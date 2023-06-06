@@ -1538,6 +1538,16 @@ namespace AnimatorAsCode.Framework
         )
             : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits) { }
 
+        /// <summary> Set the Transitions name. </summary>
+        /// <remarks> This is sometimes reffered to as a tag aswell. </remarks>
+        /// <param name="name"> The name to use. </param>
+        /// <returns> The current transition. </returns>
+        public AacFlTransitionContinuation WithName(string name)
+        {
+            Transition.name = name;
+            return this;
+        }
+
         /// Adds an additional condition to the transition that requires all preceding conditions to be true.
         /// <example>
         /// <code>
