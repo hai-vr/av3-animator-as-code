@@ -3,16 +3,13 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-#if VRC_SDK_VRCSDK3_AVATARS
-using VRC.SDK3.Avatars.Components;
-#endif
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.Framework
 {
     /// <summary> Animator as Code Framework </summary>
-    public class Aac
+    public partial class Aac
     {
         /// <summary> Create a new Animator as Code based on the configuration </summary>
         /// <param name="configuration">Configuration</param>
@@ -21,17 +18,6 @@ namespace AnimatorAsCode.Framework
         {
             return new AacFlBase(configuration);
         }
-
-#if VRC_SDK_VRCSDK3_AVATARS
-        internal static AnimatorController AnimatorOf(
-            VRCAvatarDescriptor ad,
-            VRCAvatarDescriptor.AnimLayerType animLayerType
-        )
-        {
-            return (AnimatorController)
-                ad.baseAnimationLayers.First(it => it.type == animLayerType).animatorController;
-        }
-#endif
 
         internal static AnimationClip NewClip(AacConfiguration component, string suffix)
         {
@@ -112,13 +98,9 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public struct AacConfiguration
+    public partial struct AacConfiguration
     {
         public string SystemName;
-
-#if VRC_SDK_VRCSDK3_AVATARS
-        public VRCAvatarDescriptor AvatarDescriptor;
-#endif
         public Transform AnimatorRoot;
         public Transform DefaultValueRoot;
         public AnimatorController AssetContainer;
@@ -126,7 +108,7 @@ namespace AnimatorAsCode.Framework
         public IAacDefaultsProvider DefaultsProvider;
     }
 
-    public struct AacFlLayer
+    public partial struct AacFlLayer
     {
         private readonly AnimatorController _animatorController;
         private readonly AacConfiguration _configuration;
@@ -144,6 +126,33 @@ namespace AnimatorAsCode.Framework
             _configuration = configuration;
             _fullLayerName = fullLayerName;
             _stateMachine = stateMachine;
+        }
+
+        /// <summary> Create a new state machine inside of the layer </summary>
+        /// <param name="name">Name of the state machine</param>
+        /// <param name="x">X position of the state machine</param>
+        /// <param name="y">Y position of the state machine</param>
+        /// <returns>AacFlLayer</returns>
+        public AacFlLayer NewStateGroup(string name, float x, float y)
+        {
+            AacStateMachine stateMachine = _stateMachine.AddSubStateMachine(
+                name,
+                new Vector2(x, y)
+            );
+            return new AacFlLayer(_animatorController, _configuration, stateMachine, name);
+        }
+
+        /// <summary> Create a new state machine inside of the layer </summary>
+        /// <param name="name">Name of the state machine</param>
+        /// <returns>AacFlLayer</returns>
+        public AacFlLayer NewStateGroup(string name)
+        {
+            Vector2 lastState = _stateMachine.LastStatePosition();
+            return NewStateGroup(
+                name,
+                lastState.x,
+                lastState.y + _configuration.DefaultsProvider.Grid().y
+            );
         }
 
         /// <summary>
@@ -337,7 +346,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public class AacFlBase
+    public partial class AacFlBase
     {
         private readonly AacConfiguration _configuration;
 
@@ -388,77 +397,6 @@ namespace AnimatorAsCode.Framework
             );
         }
 
-#if VRC_SDK_VRCSDK3_AVATARS
-        public void RemoveAllMainLayers()
-        {
-            var layerName = _configuration.SystemName;
-            RemoveLayerOnAllControllers(
-                _configuration.DefaultsProvider.ConvertLayerName(layerName)
-            );
-        }
-
-        public void RemoveAllSupportingLayers(string suffix)
-        {
-            var layerName = _configuration.SystemName;
-            RemoveLayerOnAllControllers(
-                _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(layerName, suffix)
-            );
-        }
-
-        private void RemoveLayerOnAllControllers(string layerName)
-        {
-            var layers = _configuration.AvatarDescriptor.baseAnimationLayers
-                .Select(layer => layer.animatorController)
-                .Where(layer => layer != null)
-                .Distinct()
-                .ToList();
-            foreach (var customAnimLayer in layers)
-            {
-                new AacAnimatorRemoval((AnimatorController)customAnimLayer).RemoveLayer(
-                    _configuration.DefaultsProvider.ConvertLayerName(layerName)
-                );
-            }
-        }
-
-        public AacFlLayer CreateMainFxLayer() =>
-            DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType.FX);
-
-        public AacFlLayer CreateMainGestureLayer() =>
-            DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType.Gesture);
-
-        public AacFlLayer CreateMainActionLayer() =>
-            DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType.Action);
-
-        public AacFlLayer CreateMainIdleLayer() =>
-            DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType.Additive);
-
-        public AacFlLayer CreateMainLocomotionLayer() =>
-            DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType.Base);
-
-        public AacFlLayer CreateMainAv3Layer(VRCAvatarDescriptor.AnimLayerType animLayerType) =>
-            DoCreateMainLayerOnController(animLayerType);
-
-        public AacFlLayer CreateSupportingFxLayer(string suffix) =>
-            DoCreateSupportingLayerOnController(VRCAvatarDescriptor.AnimLayerType.FX, suffix);
-
-        public AacFlLayer CreateSupportingGestureLayer(string suffix) =>
-            DoCreateSupportingLayerOnController(VRCAvatarDescriptor.AnimLayerType.Gesture, suffix);
-
-        public AacFlLayer CreateSupportingActionLayer(string suffix) =>
-            DoCreateSupportingLayerOnController(VRCAvatarDescriptor.AnimLayerType.Action, suffix);
-
-        public AacFlLayer CreateSupportingIdleLayer(string suffix) =>
-            DoCreateSupportingLayerOnController(VRCAvatarDescriptor.AnimLayerType.Additive, suffix);
-
-        public AacFlLayer CreateSupportingLocomotionLayer(string suffix) =>
-            DoCreateSupportingLayerOnController(VRCAvatarDescriptor.AnimLayerType.Base, suffix);
-
-        public AacFlLayer CreateSupportingAv3Layer(
-            VRCAvatarDescriptor.AnimLayerType animLayerType,
-            string suffix
-        ) => DoCreateSupportingLayerOnController(animLayerType, suffix);
-#endif
-
         public AacFlLayer CreateMainArbitraryControllerLayer(AnimatorController controller) =>
             DoCreateLayer(
                 controller,
@@ -479,32 +417,6 @@ namespace AnimatorAsCode.Framework
 
         public AacFlLayer CreateFirstArbitraryControllerLayer(AnimatorController controller) =>
             DoCreateLayer(controller, controller.layers[0].name);
-
-#if VRC_SDK_VRCSDK3_AVATARS
-        private AacFlLayer DoCreateMainLayerOnController(VRCAvatarDescriptor.AnimLayerType animType)
-        {
-            var animator = Aac.AnimatorOf(_configuration.AvatarDescriptor, animType);
-            var layerName = _configuration.DefaultsProvider.ConvertLayerName(
-                _configuration.SystemName
-            );
-
-            return DoCreateLayer(animator, layerName);
-        }
-
-        private AacFlLayer DoCreateSupportingLayerOnController(
-            VRCAvatarDescriptor.AnimLayerType animType,
-            string suffix
-        )
-        {
-            var animator = Aac.AnimatorOf(_configuration.AvatarDescriptor, animType);
-            var layerName = _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(
-                _configuration.SystemName,
-                suffix
-            );
-
-            return DoCreateLayer(animator, layerName);
-        }
-#endif
 
         private AacFlLayer DoCreateLayer(AnimatorController animator, string layerName)
         {
@@ -556,7 +468,7 @@ namespace AnimatorAsCode.Framework
     /// <summary>
     /// AacAv3 is a class that provides access to specifics of the VRChat SDK3 avatar system.
     /// </summary>
-    public class AacAv3
+    public partial class AacAv3
     {
         private readonly AacBackingAnimator _backingAnimator;
 
@@ -633,7 +545,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public class AacVrcAssetLibrary
+    public partial class AacVrcAssetLibrary
     {
         public AvatarMask LeftHandAvatarMask()
         {
@@ -683,7 +595,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public class AacAnimatorRemoval
+    public partial class AacAnimatorRemoval
     {
         private readonly AnimatorController _animatorController;
 
@@ -707,7 +619,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public class AacAnimatorGenerator
+    public partial class AacAnimatorGenerator
     {
         private readonly AnimatorController _animatorController;
         private readonly AnimationClip _emptyClip;

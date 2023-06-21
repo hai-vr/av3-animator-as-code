@@ -7,7 +7,7 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.Framework
 {
-    public readonly struct AacFlClip
+    public readonly partial struct AacFlClip
     {
         private readonly AacConfiguration _component;
         public AnimationClip Clip { get; }
@@ -235,7 +235,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public readonly struct AacFlEditClip
+    public readonly partial struct AacFlEditClip
     {
         private readonly AacConfiguration _component;
         public AnimationClip Clip { get; }
@@ -339,7 +339,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public class AacFlSettingCurve
+    public partial class AacFlSettingCurve
     {
         private readonly AnimationClip _clip;
         private readonly EditorCurveBinding[] _bindings;
@@ -402,7 +402,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public class AacFlSettingCurveColor
+    public partial class AacFlSettingCurveColor
     {
         private readonly AnimationClip _clip;
         private readonly EditorCurveBinding[] _bindings;
@@ -481,7 +481,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public class AacFlSettingKeyframes
+    public partial class AacFlSettingKeyframes
     {
         private readonly AacFlUnit _unit;
         private readonly List<Keyframe> _mutatedKeyframes;
@@ -560,7 +560,7 @@ namespace AnimatorAsCode.Framework
         }
     }
 
-    public class AacFlSettingKeyframesColor
+    public partial class AacFlSettingKeyframesColor
     {
         private AacFlSettingKeyframes _r;
         private AacFlSettingKeyframes _g;

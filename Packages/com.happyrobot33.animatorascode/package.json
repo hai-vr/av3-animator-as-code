@@ -1,7 +1,7 @@
 {
   "name": "com.happyrobot33.animatorascode",
   "displayName": "Animator As Code",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Write concise code to generate Avatars 3.0 Animators.",
   "license": "MIT",
   "dependencies": {},

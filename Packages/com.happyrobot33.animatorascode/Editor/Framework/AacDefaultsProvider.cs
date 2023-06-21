@@ -4,7 +4,7 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.Framework
 {
-    public interface IAacDefaultsProvider
+    public partial interface IAacDefaultsProvider
     {
         void ConfigureState(AnimatorState state, AnimationClip emptyClip);
         void ConfigureTransition(AnimatorStateTransition transition);
@@ -13,7 +13,7 @@ namespace AnimatorAsCode.Framework
         Vector2 Grid();
     }
 
-    public class AacDefaultsProvider : IAacDefaultsProvider
+    public partial class AacDefaultsProvider : IAacDefaultsProvider
     {
         private readonly bool _writeDefaults;
 
