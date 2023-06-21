@@ -4,8 +4,10 @@
 ## Methods
 | Method | Return Type | Description |
 |-|-|-|
-| `NewState(string name)` | `AacFlState ` | Create a new state, initially positioned below the last generated state of this layer. |
-| `NewState(string name, int x, int y)` | `AacFlState ` | Create a new state at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down. |
+| `NewStateGroup(string name)` | `AacFlLayer` | Creates a Sub State Machine inside the layer, positioned below the last generated state of this layer. |
+| `NewStateGroup(string name, float x, float y)` | `AacFlLayer` | Creates a Sub State Machine inside the layer, positioned at the provided `x` and `y` values |
+| `NewState(string name)` | `AacFlState` | Create a new state, initially positioned below the last generated state of this layer. |
+| `NewState(string name, int x, int y)` | `AacFlState` | Create a new state at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down. |
 | `AnyTransitionsTo(AacFlState destination)` | `AacFlTransition ` | Create a transition from Any to the `destination` state. |
 | `EntryTransitionsTo(AacFlState destination)` | `AacFlEntryTransition ` | Create a transition from the Entry to the `destination` state. |
 | `BoolParameter(string parameterName)` | `AacFlBoolParameter ` | Create a Bool parameter in the animator. |

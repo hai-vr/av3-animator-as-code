@@ -184,6 +184,7 @@ MonoBehaviour:
   unityVersion: 2019.4.31f1
   portraitCameraPositionOffset: {x: 0, y: 0, z: 0}
   portraitCameraRotationOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  networkIDs: []
   customExpressions: 1
   expressionsMenu: {fileID: 11400000, guid: cde459092e0783540b3837521d750413, type: 2}
   expressionParameters: {fileID: 11400000, guid: 599b4ef18dd7b2b41ae63050dc68cf49,
@@ -462,8 +463,8 @@ MonoBehaviour:
     name: Reset
   autoFootsteps: 1
   autoLocomotion: 1
-  collidersMirrored: 1
   collider_head:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -471,6 +472,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_torso:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -478,6 +480,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_footR:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -485,6 +488,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_footL:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -492,6 +496,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_handR:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -499,6 +504,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_handL:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -506,6 +512,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_fingerIndexL:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -513,6 +520,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_fingerMiddleL:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -520,6 +528,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_fingerRingL:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -527,6 +536,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_fingerLittleL:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -534,6 +544,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_fingerIndexR:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -541,6 +552,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_fingerMiddleR:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -548,6 +560,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_fingerRingR:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -555,6 +568,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
   collider_fingerLittleR:
+    isMirrored: 1
     state: 0
     transform: {fileID: 0}
     radius: 0
@@ -723,6 +737,7 @@ Transform:
   - {fileID: 318116014}
   - {fileID: 264349324}
   - {fileID: 1431350100}
+  - {fileID: 1728850575}
   - {fileID: 1919112887}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -1324,6 +1339,52 @@ MonoBehaviour:
   assetContainer: {fileID: 9100000, guid: bbcd8ae9108f27f44aacfe48a78785d4, type: 2}
   assetKey: e70c00f61088f674d82d80421febd5f9
   iconMesh: {fileID: 525614572}
+--- !u!1 &1728850574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1728850575}
+  - component: {fileID: 1728850576}
+  m_Layer: 0
+  m_Name: Example4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1728850575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728850574}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 500820575}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1728850576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728850574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60ef7ac6768caee45af38318cbc894cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatar: {fileID: 184941774}
+  assetContainer: {fileID: 9100000, guid: bbcd8ae9108f27f44aacfe48a78785d4, type: 2}
+  assetKey: e70c00f61088f674d82d80421febd5f9
 --- !u!1 &1919112886
 GameObject:
   m_ObjectHideFlags: 0
@@ -1353,7 +1414,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 500820575}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1919112888
 MonoBehaviour:

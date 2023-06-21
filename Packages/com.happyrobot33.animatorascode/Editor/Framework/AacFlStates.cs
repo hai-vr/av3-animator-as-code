@@ -172,7 +172,7 @@ namespace AnimatorAsCode.Framework
                 "pushUndo",
                 BindingFlags.NonPublic | BindingFlags.Instance
             );
-        private readonly AnimatorStateMachine _machine;
+        public readonly AnimatorStateMachine _machine;
         private readonly AnimationClip _emptyClip;
         private readonly AacBackingAnimator _backingAnimator;
         private readonly IAacDefaultsProvider _defaultsProvider;
@@ -195,6 +195,12 @@ namespace AnimatorAsCode.Framework
             var grid = defaultsProvider.Grid();
             _gridShiftX = grid.x;
             _gridShiftY = grid.y;
+        }
+
+        internal AacStateMachine AddSubStateMachine(string name, Vector2 position)
+        {
+            var machine = _machine.AddStateMachine(name, position);
+            return new AacStateMachine(machine, _emptyClip, _backingAnimator, _defaultsProvider);
         }
 
         internal AacBackingAnimator BackingAnimator()

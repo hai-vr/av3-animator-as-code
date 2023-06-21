@@ -128,6 +128,33 @@ namespace AnimatorAsCode.Framework
             _stateMachine = stateMachine;
         }
 
+        /// <summary> Create a new state machine inside of the layer </summary>
+        /// <param name="name">Name of the state machine</param>
+        /// <param name="x">X position of the state machine</param>
+        /// <param name="y">Y position of the state machine</param>
+        /// <returns>AacFlLayer</returns>
+        public AacFlLayer NewStateGroup(string name, float x, float y)
+        {
+            AacStateMachine stateMachine = _stateMachine.AddSubStateMachine(
+                name,
+                new Vector2(x, y)
+            );
+            return new AacFlLayer(_animatorController, _configuration, stateMachine, name);
+        }
+
+        /// <summary> Create a new state machine inside of the layer </summary>
+        /// <param name="name">Name of the state machine</param>
+        /// <returns>AacFlLayer</returns>
+        public AacFlLayer NewStateGroup(string name)
+        {
+            Vector2 lastState = _stateMachine.LastStatePosition();
+            return NewStateGroup(
+                name,
+                lastState.x,
+                lastState.y + _configuration.DefaultsProvider.Grid().y
+            );
+        }
+
         /// <summary>
         /// Create a new state
         /// </summary>
