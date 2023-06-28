@@ -142,6 +142,45 @@ namespace AnimatorAsCode.Framework
             return this;
         }
 
+        /// <summary> Randomizes the parameter to true based on the chance provided. </summary>
+        /// <inheritdoc cref="DrivingRandomizesLocally(AacFlFloatParameter,float,float)" path="/remarks"/>
+        /// <param name="parameter"> The parameter. </param>
+        /// <param name="chance"> The chance. </param>
+        /// <returns> This instance. </returns>
+        public AacFlState DrivingRandomizes(AacFlBoolParameter parameter, float chance)
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Random,
+                    name = parameter.Name,
+                    chance = chance
+                }
+            );
+            return this;
+        }
+
+        /// <inheritdoc cref="DrivingRandomizes(AacFlIntParameter,int,int)"/>
+        public AacFlState DrivingRandomizes(
+            AacFlFloatParameter parameter,
+            float min,
+            float max
+        )
+        {
+            CreateDriverBehaviorIfNotExists();
+            _driver.parameters.Add(
+                new VRC_AvatarParameterDriver.Parameter
+                {
+                    type = VRC_AvatarParameterDriver.ChangeType.Random,
+                    name = parameter.Name,
+                    valueMin = min,
+                    valueMax = max
+                }
+            );
+            return this;
+        }
+
         /// <inheritdoc cref="DrivingRandomizes(AacFlIntParameter,int,int)"/>
         /// <remarks> This version only applys to the local client </remarks>
         public AacFlState DrivingRandomizesLocally(
