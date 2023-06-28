@@ -22,13 +22,13 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
---- !u!74 &598967269864533797
+--- !u!74 &3288587510651453658
 AnimationClip:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AAC_D(1 Frames)_e70c00f61088f674d82d80421febd5f9_632125797
+  m_Name: AAC_D(1 Frames)_e70c00f61088f674d82d80421febd5f9_1228287264
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0

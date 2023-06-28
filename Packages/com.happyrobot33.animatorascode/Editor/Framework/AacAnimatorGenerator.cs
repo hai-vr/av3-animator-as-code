@@ -1,6 +1,10 @@
 using System.Linq;
+using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
+using System.Reflection;
+using UnityEngine.Profiling;
+using UnityEditor;
 
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.Framework
@@ -152,11 +156,23 @@ namespace AnimatorAsCode.Framework
 
         private void RecursivelyClearChildrenMachines(AnimatorStateMachine parentMachine)
         {
-            // TODO: RemoveStateMachine might already be recursive
-            foreach (var childStateMachineHolder in parentMachine.stateMachines)
+            //get the clear method
+            MethodInfo clearMethod = typeof(AnimatorStateMachine).GetMethod("Clear", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            //get the pushUndo
+            PropertyInfo pushUndoProperty = typeof(AnimatorStateMachine).GetProperty("pushUndo", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            //set the pushUndo to false
+            pushUndoProperty.SetValue(parentMachine, false);
+
+            try
             {
-                RecursivelyClearChildrenMachines(childStateMachineHolder.stateMachine);
-                parentMachine.RemoveStateMachine(childStateMachineHolder.stateMachine);
+                AssetDatabase.StartAssetEditing();
+                clearMethod.Invoke(parentMachine, null);
+            }
+            finally
+            {
+                AssetDatabase.StopAssetEditing();
             }
         }
 
