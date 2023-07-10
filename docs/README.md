@@ -1,6 +1,6 @@
 !> This documentation is incomplete! Help us improve it by contributing to the [Animator As Code Repository](https://github.com/Happyrobot33/av3-animator-as-code) or by joining the [Discord](https://discord.gg/XrJsUfwqkf) and letting us know what you want to see here!
 # Animator As Code
-Welcome to the documentation for Animator As Code! Read the [Quick Start Guide](QUICKSTART.md) to jump right in, or read the rest of this page if you want to learn more about OpenFlight itself. The public discord is here: [Discord](https://discord.gg/XrJsUfwqkf)
+Welcome to the documentation for Animator As Code! Read the [Quick Start Guide](QUICKSTART.md) to jump right in, or read the rest of this page if you want to learn more about Animator As Code itself. The public discord is here: [Discord](https://discord.gg/XrJsUfwqkf)
 
 [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/Happyrobot33/donate)
 
