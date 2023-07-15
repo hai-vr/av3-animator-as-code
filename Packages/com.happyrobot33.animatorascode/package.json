@@ -1,0 +1,14 @@
+{
+  "name": "com.happyrobot33.animatorascode",
+  "displayName": "Animator As Code",
+  "version": "1.3.0-beta.2",
+  "description": "Write concise code to generate Avatars 3.0 Animators.",
+  "license": "MIT",
+  "dependencies": {},
+  "gitDependencies": {},
+  "vpmDependencies": {
+    "com.vrchat.avatars" : "^3.2.x"
+  },
+  "legacyFolders": {},
+  "legacyFiles": {}
+}

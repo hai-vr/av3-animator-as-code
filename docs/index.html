@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no, viewport-fit=cover">
+  <meta name="description" content="Public Documentation for Animator As Code">
+  <title>AAC Docs</title>
+  <link rel="icon" type="image/x-icon" href="icon.png">
+
+  <!-- Themes (light + dark) -->
+  <link rel="stylesheet" media="(prefers-color-scheme: dark)"
+    href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+  <link rel="stylesheet" media="(prefers-color-scheme: light)"
+    href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+
+  <!-- Custom Styles -->
+  <style>
+    :root {
+      /* --theme-hue: 325; */
+    }
+    .defaultState > rect {
+      fill:#CA741E !important;
+    }
+    .entryState > rect {
+      fill:#0E682C !important;
+    }
+    .exitState > rect {
+      fill:#AC1112 !important;
+    }
+    .anyState > rect {
+      fill:#5B9283 !important;
+    }
+    .LS-Entry {
+      stroke:#CA741E !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script>
+    // Docsify Configuration
+    window.$docsify = {
+      timeUpdater: {
+        text: "<div align='left' width='200px' style='color:gray;font-size:16px'>Updated {docsify-updated}</div>",
+        formatUpdated: "{YYYY}-{MM}-{DD}",
+        whereToPlace: "bottom",  // "top" or "bottom", default to "bottom"
+      },
+      loadSidebar: true,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md',
+      },
+      subMaxLevel: 3,
+      sidebarDisplayLevel: 1,
+      //logo: 'icon.png',
+      name: 'AAC Docs',
+      tabs: {
+        persist: true,      // default
+        sync: true,      // default
+        theme: 'classic', // default
+        tabComments: true,      // default
+        tabHeadings: true       // default
+      },
+      plugins: [
+        titlePlugin({
+          prefix: 'AAC Docs: '
+        }),
+        function(hook) {
+          hook.doneEach(function () {
+            let mermaidConfig = {
+              querySelector: ".mermaid",
+            };
+            mermaid.run(mermaidConfig);
+          });
+        }
+      ]
+    };
+
+    function titlePlugin(config) {
+      return (hook, vm) => {
+        hook.doneEach((content) => {
+          document.title = config.prefix + document.title
+        });
+      }
+    }
+  </script>
+
+  <!-- Required -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
+
+  <!-- Recommended -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/zoom-image.min.js"></script>
+  <script src="//unpkg.com/prismjs/components/prism-csharp.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+
+  <!-- Plugins -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-example-panels"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-updated/src/time-updater.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      'themeVariables': {
+        'primaryColor': '#4B4D51',
+        'primaryTextColor': '#fff',
+        'primaryBorderColor': 'transparent',
+        'lineColor': '#fff',
+        'clusterBkg': 'transparent',
+        'clusterBorder': 'grey',
+      },
+      "flowchart": {
+          'curve': ""
+      }
+    });
+    window.mermaid = mermaid;
+  </script>
+  <script src="//unpkg.com/docsify-mermaid@2.0.0/dist/docsify-mermaid.js"></script>
+</body>
+
+</html>

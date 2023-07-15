@@ -1,0 +1,12 @@
+{
+    "name":"Animator As Code",
+    "id":"com.happyrobot33.animatorascode.repo",
+    "url":"https://www.matthewherber.com/av3-animator-as-code/index.json",
+    "author": {
+        "name": "Happyrobot33"
+    },
+    "description":"The main level repository for Animator As Code",
+    "githubRepos": [
+        "happyrobot33/av3-animator-as-code"
+    ]
+}
