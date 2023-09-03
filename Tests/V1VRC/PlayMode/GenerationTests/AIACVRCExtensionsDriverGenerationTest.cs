@@ -1,4 +1,4 @@
-﻿using AnimatorAsCode.V1VRC;
+﻿using AnimatorAsCode.V1.VRC;
 using NUnit.Framework;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;

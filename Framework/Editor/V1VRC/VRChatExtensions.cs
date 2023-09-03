@@ -1,10 +1,9 @@
 using System;
-using AnimatorAsCode.V1;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode.V1VRC
+namespace AnimatorAsCode.V1.VRC
 {
     public static class VRChatExtensions
     {
