@@ -16,7 +16,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.Head;
+            var whichElement = AacAv3.Av3TrackingElement.Head;
             first.TrackingTracks(whichElement);
 
             // Verify
@@ -46,7 +46,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.Head;
+            var whichElement = AacAv3.Av3TrackingElement.Head;
             first.TrackingAnimates(whichElement);
 
             // Verify
@@ -76,7 +76,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.Head;
+            var whichElement = AacAv3.Av3TrackingElement.Head;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Tracking);
 
             // Verify
@@ -106,7 +106,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.Head;
+            var whichElement = AacAv3.Av3TrackingElement.Head;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -136,7 +136,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.LeftHand;
+            var whichElement = AacAv3.Av3TrackingElement.LeftHand;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -166,7 +166,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.RightHand;
+            var whichElement = AacAv3.Av3TrackingElement.RightHand;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -196,7 +196,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.Hip;
+            var whichElement = AacAv3.Av3TrackingElement.Hip;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -226,7 +226,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.LeftFoot;
+            var whichElement = AacAv3.Av3TrackingElement.LeftFoot;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -256,7 +256,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.RightFoot;
+            var whichElement = AacAv3.Av3TrackingElement.RightFoot;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -286,7 +286,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.LeftFingers;
+            var whichElement = AacAv3.Av3TrackingElement.LeftFingers;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -316,7 +316,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.RightFingers;
+            var whichElement = AacAv3.Av3TrackingElement.RightFingers;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -346,7 +346,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.Eyes;
+            var whichElement = AacAv3.Av3TrackingElement.Eyes;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -376,7 +376,7 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            var whichElement = TrackingElement.Mouth;
+            var whichElement = AacAv3.Av3TrackingElement.Mouth;
             first.TrackingSets(whichElement, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
@@ -406,9 +406,9 @@ namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 
             // Exercise
             var first = fx.NewState("First");
-            first.TrackingSets(TrackingElement.Head, VRC_AnimatorTrackingControl.TrackingType.Animation);
-            first.TrackingSets(TrackingElement.LeftHand, VRC_AnimatorTrackingControl.TrackingType.Animation);
-            first.TrackingSets(TrackingElement.RightHand, VRC_AnimatorTrackingControl.TrackingType.Animation);
+            first.TrackingSets(AacAv3.Av3TrackingElement.Head, VRC_AnimatorTrackingControl.TrackingType.Animation);
+            first.TrackingSets(AacAv3.Av3TrackingElement.LeftHand, VRC_AnimatorTrackingControl.TrackingType.Animation);
+            first.TrackingSets(AacAv3.Av3TrackingElement.RightHand, VRC_AnimatorTrackingControl.TrackingType.Animation);
 
             // Verify
             var eState = controller.layers[0].stateMachine.states[0].state;

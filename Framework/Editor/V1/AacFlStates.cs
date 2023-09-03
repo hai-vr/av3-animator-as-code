@@ -7,7 +7,7 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V1
 {
-    internal class AacBackingAnimator
+    public class AacBackingAnimator
     {
         private readonly AacAnimatorGenerator _generator;
 
@@ -134,7 +134,7 @@ namespace AnimatorAsCode.V1
             _childNodes = new List<AacAnimatorNode>();
         }
 
-        internal AacBackingAnimator BackingAnimator()
+        public AacBackingAnimator InternalBackingAnimator()
         {
             return _backingAnimator;
         }
@@ -329,6 +329,12 @@ namespace AnimatorAsCode.V1
         public AacFlState WithAnimation(AacFlClip clip)
         {
             State.motion = clip.Clip;
+            return this;
+        }
+
+        public AacFlState WithAnimation(AacFlBlendTree blendTree)
+        {
+            State.motion = blendTree.BlendTree;
             return this;
         }
 
