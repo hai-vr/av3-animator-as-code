@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode.V0
+namespace AnimatorAsCode.V1
 {
     public abstract class AacAnimatorNode
     {

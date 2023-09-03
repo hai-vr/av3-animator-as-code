@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode.V0
+namespace AnimatorAsCode.V1
 {
     public readonly struct AacFlClip
     {

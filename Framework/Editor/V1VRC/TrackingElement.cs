@@ -1,4 +1,4 @@
-namespace AnimatorAsCode.V0.Extensions.VRChat
+namespace AnimatorAsCode.V1.Extensions.VRChat
 {
     public enum TrackingElement
     {

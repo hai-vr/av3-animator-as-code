@@ -3,7 +3,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "AnimatorAsCodeFramework"
+        "AnimatorAsCodeFramework.V1",
+        "AnimatorAsCodeFramework.V1VRC"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

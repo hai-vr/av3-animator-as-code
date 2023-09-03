@@ -1,5 +1,5 @@
 {
-    "name": "AnimatorAsCodeFramework",
+    "name": "AnimatorAsCodeFramework.V1",
     "references": [],
     "includePlatforms": [
         "Editor"
