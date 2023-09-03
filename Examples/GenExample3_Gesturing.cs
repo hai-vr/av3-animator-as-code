@@ -6,7 +6,7 @@ using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 using AnimatorAsCode.V1.VRCDestructiveWorkflow;
-using AnimatorAsCode.V1VRC;
+using AnimatorAsCode.V1.VRC;
 
 namespace AnimatorAsCodeFramework.Examples
 {

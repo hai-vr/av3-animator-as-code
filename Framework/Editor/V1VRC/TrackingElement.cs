@@ -1,5 +1,5 @@
 // ReSharper disable once CheckNamespace
-namespace AnimatorAsCode.V1VRC
+namespace AnimatorAsCode.V1.VRC
 {
     public enum TrackingElement
     {
