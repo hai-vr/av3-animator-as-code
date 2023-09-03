@@ -35,7 +35,7 @@ namespace av3_animator_as_code.Tests.V1.EditMode
 
         protected AacFlBase TestAac()
         {
-            return AacV0.Create(new AacConfiguration
+            return AacV1.Create(new AacConfiguration
             {
                 AnimatorRoot = _root.transform,
                 AssetContainer = _container,
