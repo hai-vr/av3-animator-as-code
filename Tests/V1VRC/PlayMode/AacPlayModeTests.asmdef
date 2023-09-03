@@ -4,7 +4,7 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "AnimatorAsCodeFramework.V1",
-        "AnimatorAsCodeFramework.V1VRC"
+        "AnimatorAsCodeFramework.V1.VRC"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
