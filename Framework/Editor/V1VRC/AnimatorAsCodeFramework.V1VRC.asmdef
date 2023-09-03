@@ -1,13 +1,18 @@
 {
-    "name": "AnimatorAsCodeFramework",
-    "references": [],
+    "name": "AnimatorAsCodeFramework.V1VRC",
+    "references": [
+        "GUID:7b32145194168e0409534fc5052b85ce"
+    ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "VRCSDKBase.dll",
+        "VRCSDK3A.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

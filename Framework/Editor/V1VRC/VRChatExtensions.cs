@@ -2,7 +2,7 @@ using System;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
 
-namespace AnimatorAsCode.V0.Extensions.VRChat
+namespace AnimatorAsCode.V1.Extensions.VRChat
 {
     public static class VRChatExtensions
     {
