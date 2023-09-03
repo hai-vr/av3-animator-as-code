@@ -1,15 +1,23 @@
 Migrating from V0 to V1
 ======
 
+AnimatorAsCode V1 introduces the following main breaking changes:
+- VRChat Avatars is now an optional dependency. AnimatorAsCode can now be used in non-VRChat projects.
+  - All VRChat-related functions have been split between two classes of extension methods.
+- You are now encouraged to use a non-destructive workflow by generating an animator controller asset without relying on an existing animator controller asset.
+  - VRChat methods that use a destructive workflow, such as `AacFlBase.CreateMainFxLayer()` are located on their own class of extension methods.  
+
 ## Assembly definition
 
 If you use assembly definitions, change the assembly reference from `AnimatorAsCodeFramework` to the following:
 - `AnimatorAsCodeFramework.V1` in all cases. 
 - `AnimatorAsCodeFramework.V1.VRC` if you depend on VRChat.
-- `AnimatorAsCodeFramework.V1.VRCDestructiveWorkflow` if you need to edit the playable layers of the avatar directly.
+- `AnimatorAsCodeFramework.V1.VRCDestructiveWorkflow` also if you need to edit the playable layers of the avatar directly.
   - *Consider switching to a non-destructive workflow using VRCFury or Modular Avatar! See below.*
  
 ## Code changes
+
+### Code
 
 - Change `AacV0` to `AacV1`
 - Change `using AnimatorAsCode.V0;` to `using AnimatorAsCode.V1;`
@@ -18,6 +26,10 @@ If you use assembly definitions, change the assembly reference from `AnimatorAsC
     - The extension methods are contained within the class `AnimatorAsCode.V1.VRC.AacVRCExtensions`.
   - Add `using AnimatorAsCode.V1.VRC;` in your class imports to use the extension methods.
     - The extension methods are contained within the class `AnimatorAsCode.V1.VRCDestructiveWorkflow.AacVRCDestructiveWorkflowExtensions`
+
+# TODO
+
+- TODO: Check TrackingElement being renamed to AacAv3.Av3TrackingElement
 
 ### AacConfiguration
 

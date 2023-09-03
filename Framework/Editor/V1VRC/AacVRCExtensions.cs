@@ -1,12 +1,24 @@
 using System;
+using UnityEditor;
+using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
 
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V1.VRC
 {
-    public static class VRChatExtensions
+    public static class AacVRCExtensions
     {
+        public static AacVrcAssetLibrary VrcAssets(this AacFlBase that)
+        {
+            return new AacVrcAssetLibrary();
+        }
+        
+        public static AacAv3 Av3(this AacFlLayer that)
+        {
+            return new AacAv3(that.InternalStateMachine().InternalBackingAnimator());
+        }
+
         /// <summary>
         /// Set <i>parameter</i> to a given <i>value</i>. For unsynced parameters, also see <i>DrivingLocally</i>.
         /// </summary>
@@ -196,7 +208,7 @@ namespace AnimatorAsCode.V1.VRC
             return node;
         }
 
-        public static TNode TrackingTracks<TNode>(this TNode node, TrackingElement element) where TNode : AacAnimatorNode<TNode>
+        public static TNode TrackingTracks<TNode>(this TNode node, AacAv3.Av3TrackingElement element) where TNode : AacAnimatorNode<TNode>
         {
             var tracking = node.EnsureBehaviour<VRCAnimatorTrackingControl>();
             SettingElementTo(tracking, element, VRC_AnimatorTrackingControl.TrackingType.Tracking);
@@ -204,7 +216,7 @@ namespace AnimatorAsCode.V1.VRC
             return node;
         }
 
-        public static TNode TrackingAnimates<TNode>(this TNode node, TrackingElement element) where TNode : AacAnimatorNode<TNode>
+        public static TNode TrackingAnimates<TNode>(this TNode node, AacAv3.Av3TrackingElement element) where TNode : AacAnimatorNode<TNode>
         {
             var tracking = node.EnsureBehaviour<VRCAnimatorTrackingControl>();
             SettingElementTo(tracking, element, VRC_AnimatorTrackingControl.TrackingType.Animation);
@@ -212,7 +224,7 @@ namespace AnimatorAsCode.V1.VRC
             return node;
         }
 
-        public static TNode TrackingSets<TNode>(this TNode node, TrackingElement element, VRC_AnimatorTrackingControl.TrackingType trackingType) where TNode : AacAnimatorNode<TNode>
+        public static TNode TrackingSets<TNode>(this TNode node, AacAv3.Av3TrackingElement element, VRC_AnimatorTrackingControl.TrackingType trackingType) where TNode : AacAnimatorNode<TNode>
         {
             var tracking = node.EnsureBehaviour<VRCAnimatorTrackingControl>();
             SettingElementTo(tracking, element, trackingType);
@@ -220,38 +232,38 @@ namespace AnimatorAsCode.V1.VRC
             return node;
         }
         
-        private static void SettingElementTo(VRCAnimatorTrackingControl tracking, TrackingElement element, VRC_AnimatorTrackingControl.TrackingType target)
+        private static void SettingElementTo(VRCAnimatorTrackingControl tracking, AacAv3.Av3TrackingElement element, VRC_AnimatorTrackingControl.TrackingType target)
         {
             switch (element)
             {
-                case TrackingElement.Head:
+                case AacAv3.Av3TrackingElement.Head:
                     tracking.trackingHead = target;
                     break;
-                case TrackingElement.LeftHand:
+                case AacAv3.Av3TrackingElement.LeftHand:
                     tracking.trackingLeftHand = target;
                     break;
-                case TrackingElement.RightHand:
+                case AacAv3.Av3TrackingElement.RightHand:
                     tracking.trackingRightHand = target;
                     break;
-                case TrackingElement.Hip:
+                case AacAv3.Av3TrackingElement.Hip:
                     tracking.trackingHip = target;
                     break;
-                case TrackingElement.LeftFoot:
+                case AacAv3.Av3TrackingElement.LeftFoot:
                     tracking.trackingLeftFoot = target;
                     break;
-                case TrackingElement.RightFoot:
+                case AacAv3.Av3TrackingElement.RightFoot:
                     tracking.trackingRightFoot = target;
                     break;
-                case TrackingElement.LeftFingers:
+                case AacAv3.Av3TrackingElement.LeftFingers:
                     tracking.trackingLeftFingers = target;
                     break;
-                case TrackingElement.RightFingers:
+                case AacAv3.Av3TrackingElement.RightFingers:
                     tracking.trackingRightFingers = target;
                     break;
-                case TrackingElement.Eyes:
+                case AacAv3.Av3TrackingElement.Eyes:
                     tracking.trackingEyes = target;
                     break;
-                case TrackingElement.Mouth:
+                case AacAv3.Av3TrackingElement.Mouth:
                     tracking.trackingMouth = target;
                     break;
                 default:
@@ -333,6 +345,125 @@ namespace AnimatorAsCode.V1.VRC
             temporaryPoseSpace.fixedDelay = false;
             temporaryPoseSpace.delayTime = delayNormalized;
             return node;
+        }
+    }
+
+    public class AacAv3
+    {
+        private readonly AacBackingAnimator _backingAnimator;
+
+        internal AacAv3(AacBackingAnimator backingAnimator)
+        {
+            _backingAnimator = backingAnimator;
+        }
+
+        // ReSharper disable InconsistentNaming
+        public AacFlBoolParameter IsLocal => _backingAnimator.BoolParameter("IsLocal");
+        public AacFlEnumIntParameter<Av3Viseme> Viseme => _backingAnimator.EnumParameter<Av3Viseme>("Viseme");
+        public AacFlEnumIntParameter<Av3Gesture> GestureLeft => _backingAnimator.EnumParameter<Av3Gesture>("GestureLeft");
+        public AacFlEnumIntParameter<Av3Gesture> GestureRight => _backingAnimator.EnumParameter<Av3Gesture>("GestureRight");
+        public AacFlFloatParameter GestureLeftWeight => _backingAnimator.FloatParameter("GestureLeftWeight");
+        public AacFlFloatParameter GestureRightWeight => _backingAnimator.FloatParameter("GestureRightWeight");
+        public AacFlFloatParameter AngularY => _backingAnimator.FloatParameter("AngularY");
+        public AacFlFloatParameter VelocityX => _backingAnimator.FloatParameter("VelocityX");
+        public AacFlFloatParameter VelocityY => _backingAnimator.FloatParameter("VelocityY");
+        public AacFlFloatParameter VelocityZ => _backingAnimator.FloatParameter("VelocityZ");
+        public AacFlFloatParameter Upright => _backingAnimator.FloatParameter("Upright");
+        public AacFlBoolParameter Grounded => _backingAnimator.BoolParameter("Grounded");
+        public AacFlBoolParameter Seated => _backingAnimator.BoolParameter("Seated");
+        public AacFlBoolParameter AFK => _backingAnimator.BoolParameter("AFK");
+        public AacFlIntParameter TrackingType => _backingAnimator.IntParameter("TrackingType");
+        public AacFlIntParameter VRMode => _backingAnimator.IntParameter("VRMode");
+        public AacFlBoolParameter MuteSelf => _backingAnimator.BoolParameter("MuteSelf");
+        public AacFlBoolParameter InStation => _backingAnimator.BoolParameter("InStation");
+        public AacFlFloatParameter Voice => _backingAnimator.FloatParameter("Voice");
+        // ReSharper restore InconsistentNaming
+
+        public IAacFlCondition ItIsRemote() => IsLocal.IsFalse();
+        public IAacFlCondition ItIsLocal() => IsLocal.IsTrue();
+    
+        public enum Av3TrackingElement
+        {
+            Head,
+            LeftHand,
+            RightHand,
+            Hip,
+            LeftFoot,
+            RightFoot,
+            LeftFingers,
+            RightFingers,
+            Eyes,
+            Mouth
+        }
+
+        public enum Av3Gesture
+        {
+            // Specify all the values explicitly because they should be dictated by VRChat, not enumeration order.
+            Neutral = 0,
+            Fist = 1,
+            HandOpen = 2,
+            Fingerpoint = 3,
+            Victory = 4,
+            RockNRoll = 5,
+            HandGun = 6,
+            ThumbsUp = 7
+        }
+
+        public enum Av3Viseme
+        {
+            // Specify all the values explicitly because they should be dictated by VRChat, not enumeration order.
+            // ReSharper disable InconsistentNaming
+            sil = 0,
+            pp = 1,
+            ff = 2,
+            th = 3,
+            dd = 4,
+            kk = 5,
+            ch = 6,
+            ss = 7,
+            nn = 8,
+            rr = 9,
+            aa = 10,
+            e = 11,
+            ih = 12,
+            oh = 13,
+            ou = 14
+            // ReSharper restore InconsistentNaming
+        }
+    }
+
+    public class AacVrcAssetLibrary
+    {
+        public AvatarMask LeftHandAvatarMask()
+        {
+            return AssetDatabase.LoadAssetAtPath<AvatarMask>("Packages/com.vrchat.avatars/Samples/AV3 Demo Assets/Animation/Masks/vrc_Hand Left.mask");
+        }
+
+        public AvatarMask RightHandAvatarMask()
+        {
+            return AssetDatabase.LoadAssetAtPath<AvatarMask>("Packages/com.vrchat.avatars/Samples/AV3 Demo Assets/Animation/Masks/vrc_Hand Right.mask");
+        }
+
+        public AnimationClip ProxyForGesture(AacAv3.Av3Gesture gesture, bool masculine)
+        {
+            return AssetDatabase.LoadAssetAtPath<AnimationClip>("Packages/com.vrchat.avatars/Samples/AV3 Demo Assets/Animation/ProxyAnim/" + ResolveProxyFilename(gesture, masculine));
+        }
+
+        private static string ResolveProxyFilename(AacAv3.Av3Gesture gesture, bool masculine)
+        {
+            switch (gesture)
+            {
+                case AacAv3.Av3Gesture.Neutral: return masculine ? "proxy_hands_idle.anim" : "proxy_hands_idle2.anim";
+                case AacAv3.Av3Gesture.Fist: return "proxy_hands_fist.anim";
+                case AacAv3.Av3Gesture.HandOpen: return "proxy_hands_open.anim";
+                case AacAv3.Av3Gesture.Fingerpoint: return "proxy_hands_point.anim";
+                case AacAv3.Av3Gesture.Victory: return "proxy_hands_peace.anim";
+                case AacAv3.Av3Gesture.RockNRoll: return "proxy_hands_rock.anim";
+                case AacAv3.Av3Gesture.HandGun: return "proxy_hands_gun.anim";
+                case AacAv3.Av3Gesture.ThumbsUp: return "proxy_hands_thumbs_up.anim";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(gesture), gesture, null);
+            }
         }
     }
 }
