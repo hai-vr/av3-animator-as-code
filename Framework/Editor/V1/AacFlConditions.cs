@@ -55,7 +55,7 @@ namespace AnimatorAsCode.V1
         {
         }
 
-        protected internal abstract float ValueToFloat(TParam value);
+        public abstract float ValueToFloat(TParam value);
     }
     
     public abstract class AacFlNumericParameter<TParam> : AacFlParameter<TParam>
@@ -71,8 +71,8 @@ namespace AnimatorAsCode.V1
         protected AacFlFloatParameter(string name) : base(name) { }
         public IAacFlCondition IsGreaterThan(float other) => Just(condition => condition.Add(Name, Greater, other));
         public IAacFlCondition IsLessThan(float other) => Just(condition => condition.Add(Name, Less, other));
-        
-        protected internal override float ValueToFloat(float value)
+
+        public override float ValueToFloat(float value)
         {
             return value;
         }
@@ -86,8 +86,8 @@ namespace AnimatorAsCode.V1
         public IAacFlCondition IsLessThan(int other) => Just(condition => condition.Add(Name, Less, other));
         public IAacFlCondition IsEqualTo(int other) => Just(condition => condition.Add(Name, AnimatorConditionMode.Equals, other));
         public IAacFlCondition IsNotEqualTo(int other) => Just(condition => condition.Add(Name, NotEqual, other));
-        
-        protected internal override float ValueToFloat(int value)
+
+        public override float ValueToFloat(int value)
         {
             return value;
         }
@@ -112,8 +112,8 @@ namespace AnimatorAsCode.V1
         public IAacFlCondition IsFalse() => Just(condition => condition.Add(Name, IfNot, 0));
         public IAacFlCondition IsEqualTo(bool other) => Just(condition => condition.Add(Name, other ? If : IfNot, 0));
         public IAacFlCondition IsNotEqualTo(bool other) => Just(condition => condition.Add(Name, other ? IfNot : If, 0));
-        
-        protected internal override float ValueToFloat(bool value)
+
+        public override float ValueToFloat(bool value)
         {
             return value ? 1f : 0f;
         }

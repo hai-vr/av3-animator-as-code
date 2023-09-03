@@ -1,12 +1,12 @@
 ﻿using System;
-using AnimatorAsCode.V0;
+using AnimatorAsCode.V1;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace av3_animator_as_code.Tests.EditMode
+namespace av3_animator_as_code.Tests.V1.EditMode
 {
     public abstract class AbstractSimpleSingleLayerAnimatorInternalEditModeAC
     {
@@ -40,7 +40,6 @@ namespace av3_animator_as_code.Tests.EditMode
                 AnimatorRoot = _root.transform,
                 AssetContainer = _container,
                 AssetKey = "None",
-                AvatarDescriptor = null,
                 DefaultsProvider = new AacDefaultsProvider(),
                 SystemName = "Test",
                 DefaultValueRoot = _root.transform

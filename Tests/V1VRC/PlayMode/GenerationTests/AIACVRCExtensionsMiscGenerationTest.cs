@@ -1,9 +1,9 @@
-﻿using AnimatorAsCode.V0.Extensions.VRChat;
+﻿using AnimatorAsCode.V1VRC;
 using NUnit.Framework;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase;
 
-namespace av3_animator_as_code.Tests.PlayMode.GenerationTests
+namespace av3_animator_as_code.Tests.V1VRC.PlayMode.GenerationTests
 {
     public class AIACVRCExtensionsMiscGenerationTest : AbstractSimpleSingleLayerAIAC
     {

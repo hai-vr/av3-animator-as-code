@@ -1,4 +1,5 @@
-namespace AnimatorAsCode.V1.Extensions.VRChat
+// ReSharper disable once CheckNamespace
+namespace AnimatorAsCode.V1VRC
 {
     public enum TrackingElement
     {
