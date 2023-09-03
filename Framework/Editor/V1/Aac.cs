@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V1
 {
-    public static class AacV0
+    public static class AacV1
     {
         public static AacFlBase Create(AacConfiguration configuration)
         {
@@ -264,7 +264,7 @@ namespace AnimatorAsCode.V1
                 {
                     var transform = paths[index];
                     avatarMask.SetTransformActive(index, true);
-                    avatarMask.SetTransformPath(index, AacV0.ResolveRelativePath(_configuration.AnimatorRoot, transform));
+                    avatarMask.SetTransformPath(index, AacV1.ResolveRelativePath(_configuration.AnimatorRoot, transform));
                 }
             }
 
@@ -303,31 +303,31 @@ namespace AnimatorAsCode.V1
 
         public AacFlClip NewClip()
         {
-            var clip = AacV0.NewClip(_configuration, Guid.NewGuid().ToString());
+            var clip = AacV1.NewClip(_configuration, Guid.NewGuid().ToString());
             return new AacFlClip(_configuration, clip);
         }
 
         public AacFlClip CopyClip(AnimationClip originalClip)
         {
             var newClip = UnityEngine.Object.Instantiate(originalClip);
-            var clip = AacV0.RegisterClip(_configuration, Guid.NewGuid().ToString(), newClip);
+            var clip = AacV1.RegisterClip(_configuration, Guid.NewGuid().ToString(), newClip);
             return new AacFlClip(_configuration, clip);
         }
 
         public BlendTree NewBlendTreeAsRaw()
         {
-            return AacV0.NewBlendTreeAsRaw(_configuration, Guid.NewGuid().ToString());
+            return AacV1.NewBlendTreeAsRaw(_configuration, Guid.NewGuid().ToString());
         }
 
         public AacFlClip NewClip(string name)
         {
-            var clip = AacV0.NewClip(_configuration, name);
+            var clip = AacV1.NewClip(_configuration, name);
             return new AacFlClip(_configuration, clip);
         }
 
         public AacFlClip DummyClipLasting(float numberOf, AacFlUnit unit)
         {
-            var dummyClip = AacV0.NewClip(_configuration, $"D({numberOf} {Enum.GetName(typeof(AacFlUnit), unit)})");
+            var dummyClip = AacV1.NewClip(_configuration, $"D({numberOf} {Enum.GetName(typeof(AacFlUnit), unit)})");
 
             return new AacFlClip(_configuration, dummyClip)
                 .Animating(clip => clip.Animates("_ignored", typeof(GameObject), "m_IsActive")
@@ -345,7 +345,7 @@ namespace AnimatorAsCode.V1
             var numberOf = 1f;
             var unit = AacFlUnit.Frames;
             
-            var dummyClip = AacV0.NewClip(_configuration, $"D({numberOf} {Enum.GetName(typeof(AacFlUnit), unit)})");
+            var dummyClip = AacV1.NewClip(_configuration, $"D({numberOf} {Enum.GetName(typeof(AacFlUnit), unit)})");
 
             var duration = unit == AacFlUnit.Frames ? numberOf / 60f : numberOf;
             return new AacFlClip(_configuration, dummyClip)

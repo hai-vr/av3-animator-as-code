@@ -87,7 +87,7 @@ namespace AnimatorAsCodeFramework.Examples
         /// <returns>The AAC base.</returns>
         public static AacFlBase AnimatorAsCode(string systemName, VRCAvatarDescriptor avatar, AnimatorController assetContainer, string assetKey, TemplateGenOptions options)
         {
-            var aac = AacV0.Create(new AacConfiguration
+            var aac = AacV1.Create(new AacConfiguration
             {
                 SystemName = systemName,
                 // In the examples, we consider the avatar to be also the animator root.
