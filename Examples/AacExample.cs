@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System;
-using AnimatorAsCode.V0;
+using AnimatorAsCode.V1;
+using AnimatorAsCode.V1.VRCDestructiveWorkflow;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -90,7 +91,6 @@ namespace AnimatorAsCodeFramework.Examples
             {
                 SystemName = systemName,
                 // In the examples, we consider the avatar to be also the animator root.
-                AvatarDescriptor = avatar,
                 // You can set the animator root to be different than the avatar descriptor,
                 // if you want to apply an animator to a different avatar without redefining
                 // all of the game object references which were relative to the original avatar.
@@ -105,7 +105,7 @@ namespace AnimatorAsCodeFramework.Examples
                 AssetContainer = assetContainer,
                 AssetKey = assetKey,
                 DefaultsProvider = new AacDefaultsProvider(writeDefaults: options.WriteDefaults)
-            });
+            }.WithAvatarDescriptor(avatar));
             aac.ClearPreviousAssets();
             return aac;
         }

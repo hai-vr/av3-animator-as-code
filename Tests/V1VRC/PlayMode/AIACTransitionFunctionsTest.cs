@@ -1,10 +1,10 @@
-﻿using AnimatorAsCode.V0;
+﻿using AnimatorAsCode.V1;
 using NUnit.Framework;
 using UnityEditor.Animations;
 using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
 
-namespace av3_animator_as_code.Tests.PlayMode
+namespace av3_animator_as_code.Tests.V1VRC.PlayMode
 {
     public class AIACTransitionFunctionsTest : AbstractSimpleSingleLayerAIAC
     {

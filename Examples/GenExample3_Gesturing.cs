@@ -1,11 +1,12 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
-using AnimatorAsCode.V0;
-using AnimatorAsCode.V0.Extensions.VRChat;
+using AnimatorAsCode.V1;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
+using AnimatorAsCode.V1.VRCDestructiveWorkflow;
+using AnimatorAsCode.V1VRC;
 
 namespace AnimatorAsCodeFramework.Examples
 {

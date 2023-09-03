@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections;
-using AnimatorAsCode.V0;
+using AnimatorAsCode.V1;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.TestTools;
 using Object = UnityEngine.Object;
 
-namespace av3_animator_as_code.Tests.PlayMode
+namespace av3_animator_as_code.Tests.V1VRC.PlayMode
 {
     public abstract class AbstractSimpleSingleLayerAIAC
     {
@@ -55,7 +53,6 @@ namespace av3_animator_as_code.Tests.PlayMode
                 AnimatorRoot = _root.transform,
                 AssetContainer = _container,
                 AssetKey = "None",
-                AvatarDescriptor = null,
                 DefaultsProvider = new AacDefaultsProvider(),
                 SystemName = "Test",
                 DefaultValueRoot = _root.transform

@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using AnimatorAsCode.V1.VRCDestructiveWorkflow;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using UnityEditor;
