@@ -226,6 +226,12 @@ namespace AnimatorAsCode.V0
             return new AacFlSettingCurveColor(Clip, bindings);
         }
 
+        public AacFlSettingCurveColor AnimatesHDRColor(Component anyComponent, string property)
+        {
+            var binding = Internal_BindingFromComponent(anyComponent, property);
+            return new AacFlSettingCurveColor(Clip, new[] {binding}, true);
+        }
+
         public EditorCurveBinding BindingFromComponent(Component anyComponent, string propertyName)
         {
             return Internal_BindingFromComponent(anyComponent, propertyName);
@@ -304,21 +310,23 @@ namespace AnimatorAsCode.V0
     {
         private readonly AnimationClip _clip;
         private readonly EditorCurveBinding[] _bindings;
+        private readonly bool _hdr;
 
-        public AacFlSettingCurveColor(AnimationClip clip, EditorCurveBinding[] bindings)
+        public AacFlSettingCurveColor(AnimationClip clip, EditorCurveBinding[] bindings, bool hdr = false)
         {
             _clip = clip;
             _bindings = bindings;
+            _hdr = hdr;
         }
 
         public void WithOneFrame(Color desiredValue)
         {
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, "r"), AacV0.OneFrame(desiredValue.r));
-                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, "g"), AacV0.OneFrame(desiredValue.g));
-                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, "b"), AacV0.OneFrame(desiredValue.b));
-                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, "a"), AacV0.OneFrame(desiredValue.a));
+                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, _hdr ? "x" : "r"), AacV0.OneFrame(desiredValue.r));
+                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, _hdr ? "y" : "g"), AacV0.OneFrame(desiredValue.g));
+                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, _hdr ? "z" : "b"), AacV0.OneFrame(desiredValue.b));
+                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, _hdr ? "w" : "a"), AacV0.OneFrame(desiredValue.a));
             }
         }
 
@@ -333,10 +341,10 @@ namespace AnimatorAsCode.V0
 
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, "r"), new AnimationCurve(mutatedKeyframesR.ToArray()));
-                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, "g"), new AnimationCurve(mutatedKeyframesG.ToArray()));
-                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, "b"), new AnimationCurve(mutatedKeyframesB.ToArray()));
-                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, "a"), new AnimationCurve(mutatedKeyframesA.ToArray()));
+                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, _hdr ? "x" : "r"), new AnimationCurve(mutatedKeyframesR.ToArray()));
+                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, _hdr ? "y" : "g"), new AnimationCurve(mutatedKeyframesG.ToArray()));
+                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, _hdr ? "z" : "b"), new AnimationCurve(mutatedKeyframesB.ToArray()));
+                AnimationUtility.SetEditorCurve(_clip, AacV0.ToSubBinding(binding, _hdr ? "w" : "a"), new AnimationCurve(mutatedKeyframesA.ToArray()));
             }
         }
     }

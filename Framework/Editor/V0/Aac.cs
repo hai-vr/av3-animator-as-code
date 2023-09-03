@@ -495,17 +495,17 @@ namespace AnimatorAsCode.V0
     {
         public AvatarMask LeftHandAvatarMask()
         {
-            return AssetDatabase.LoadAssetAtPath<AvatarMask>("Assets/VRCSDK/Examples3/Animation/Masks/vrc_Hand Left.mask");
+            return AssetDatabase.LoadAssetAtPath<AvatarMask>("Packages/com.vrchat.avatars/Samples/AV3 Demo Assets/Animation/Masks/vrc_Hand Left.mask");
         }
 
         public AvatarMask RightHandAvatarMask()
         {
-            return AssetDatabase.LoadAssetAtPath<AvatarMask>("Assets/VRCSDK/Examples3/Animation/Masks/vrc_Hand Right.mask");
+            return AssetDatabase.LoadAssetAtPath<AvatarMask>("Packages/com.vrchat.avatars/Samples/AV3 Demo Assets/Animation/Masks/vrc_Hand Right.mask");
         }
 
         public AnimationClip ProxyForGesture(AacAv3.Av3Gesture gesture, bool masculine)
         {
-            return AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/VRCSDK/Examples3/Animation/ProxyAnim/" + ResolveProxyFilename(gesture, masculine));
+            return AssetDatabase.LoadAssetAtPath<AnimationClip>("Packages/com.vrchat.avatars/Samples/AV3 Demo Assets/Animation/ProxyAnim/" + ResolveProxyFilename(gesture, masculine));
         }
 
         private static string ResolveProxyFilename(AacAv3.Av3Gesture gesture, bool masculine)
