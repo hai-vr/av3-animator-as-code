@@ -1,5 +1,8 @@
-Migrating from V0 to V1
+Migrating AnimatorAsCode from V0 to V1
 ======
+
+TODO: Fix mixed Linear/Easing curve generator???
+TODO: Fix undo slow operations (ask bd?)
 
 AnimatorAsCode V1 introduces the following main breaking changes:
 - VRChat Avatars is now an optional dependency. AnimatorAsCode can now be used in non-VRChat projects.

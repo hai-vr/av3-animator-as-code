@@ -198,6 +198,11 @@ namespace AnimatorAsCode.V1
             return AnyTransition(destination, Machine);
         }
 
+        public AacFlTransition AnyTransitionsTo(AacFlStateMachine destination)
+        {
+            return AnyTransition(destination, Machine);
+        }
+
         public AacFlEntryTransition EntryTransitionsTo(AacFlState destination)
         {
             return EntryTransition(destination, Machine);
@@ -236,6 +241,11 @@ namespace AnimatorAsCode.V1
         private AacFlTransition AnyTransition(AacFlState destination, AnimatorStateMachine animatorStateMachine)
         {
             return new AacFlTransition(ConfigureTransition(animatorStateMachine.AddAnyStateTransition(destination.State)), animatorStateMachine, null, destination.State);
+        }
+
+        private AacFlTransition AnyTransition(AacFlStateMachine destination, AnimatorStateMachine animatorStateMachine)
+        {
+            return new AacFlTransition(ConfigureTransition(animatorStateMachine.AddAnyStateTransition(destination.Machine)), animatorStateMachine, null, destination.Machine);
         }
 
         private AnimatorStateTransition ConfigureTransition(AnimatorStateTransition transition)

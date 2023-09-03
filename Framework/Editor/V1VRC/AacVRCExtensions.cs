@@ -9,6 +9,7 @@ namespace AnimatorAsCode.V1.VRC
 {
     public static class AacVRCExtensions
     {
+        /// Return an AacVrcAssetLibrary, which lets you select various assets from VRChat.
         public static AacVrcAssetLibrary VrcAssets(this AacFlBase that)
         {
             return new AacVrcAssetLibrary();
