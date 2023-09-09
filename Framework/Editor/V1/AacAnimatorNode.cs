@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -15,9 +13,6 @@ namespace AnimatorAsCode.V1
     {
         protected readonly AacFlStateMachine ParentMachine;
         protected readonly IAacDefaultsProvider DefaultsProvider;
-
-        // TODO: What is this for???
-        protected Dictionary<Type, object> behaviorCache = new Dictionary<Type, object>();
 
         protected AacAnimatorNode(AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider)
         {

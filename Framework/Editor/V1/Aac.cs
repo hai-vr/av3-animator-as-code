@@ -50,7 +50,7 @@ namespace AnimatorAsCode.V1
         }
     }
 
-    public struct AacFlLayer
+    public class AacFlLayer
     {
         private readonly AnimatorController _animatorController;
         private readonly AacConfiguration _configuration;
