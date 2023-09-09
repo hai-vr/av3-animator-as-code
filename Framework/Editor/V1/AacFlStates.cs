@@ -308,9 +308,6 @@ namespace AnimatorAsCode.V1
 
         public override TBehaviour EnsureBehaviour<TBehaviour>()
         {
-            if (behaviorCache.TryGetValue(typeof(TBehaviour), out var existingBehavior))
-                return (TBehaviour)existingBehavior;
-
             foreach (var behaviour in Machine.behaviours)
                 if (behaviour is TBehaviour myBehaviour)
                     return myBehaviour;
@@ -462,9 +459,6 @@ namespace AnimatorAsCode.V1
 
         public override TBehaviour EnsureBehaviour<TBehaviour>()
         {
-            if (behaviorCache.TryGetValue(typeof(TBehaviour), out var existingBehavior))
-                return (TBehaviour)existingBehavior;
-
             foreach (var behaviour in State.behaviours)
                 if (behaviour is TBehaviour myBehaviour)
                     return myBehaviour;
