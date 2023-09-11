@@ -74,37 +74,37 @@ namespace AnimatorAsCode.V1
         {
         }
 
-        // Add a BlendTree in the specified coordinates.
+        // Add a BlendTree in the specified coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree2D WithAnimation(AacFlBlendTree blendTree, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(blendTree.BlendTree, pos, furtherDefiningChild);
         }
 
-        // Add a BlendTree in the specified `x` and `y` coordinates.
+        // Add a BlendTree in the specified `x` and `y` coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree2D WithAnimation(AacFlBlendTree blendTree, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(blendTree.BlendTree, x, y, furtherDefiningChild);
         }
 
-        // Add a Clip in the specified coordinates.
+        // Add a Clip in the specified coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree2D WithAnimation(AacFlClip clip, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(clip.Clip, pos, furtherDefiningChild);
         }
 
-        // Add a Clip in the specified `x` and `y` coordinates.
+        // Add a Clip in the specified `x` and `y` coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree2D WithAnimation(AacFlClip clip, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(clip.Clip, x, y, furtherDefiningChild);
         }
 
-        // Add a raw motion in the specified coordinates.
+        // Add a raw motion in the specified coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree2D WithAnimation(Motion motion, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(motion, pos.x, pos.y, furtherDefiningChild);
         }
 
-        // Add a raw motion in the specified `x` and `y` coordinates.
+        // Add a raw motion in the specified `x` and `y` coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree2D WithAnimation(Motion motion, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             var children = BlendTree.children ?? new ChildMotion[0];
@@ -135,19 +135,19 @@ namespace AnimatorAsCode.V1
         {
         }
 
-        // Add a BlendTree in the specified threshold.
+        // Add a BlendTree in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree1D WithAnimation(AacFlBlendTree blendTree, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(blendTree.BlendTree, threshold, furtherDefiningChild);
         }
 
-        // Add a Clip in the specified threshold.
+        // Add a Clip in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree1D WithAnimation(AacFlClip clip, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(clip.Clip, threshold, furtherDefiningChild);
         }
 
-        // Add a raw motion in the specified threshold.
+        // Add a raw motion in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree1D WithAnimation(Motion motion, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             var children = BlendTree.children ?? new ChildMotion[0];
@@ -175,19 +175,19 @@ namespace AnimatorAsCode.V1
         {
         }
 
-        // Add a BlendTree driven by the specified parameter.
+        // Add a BlendTree driven by the specified parameter. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTreeDirect WithAnimation(AacFlBlendTree blendTree, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(blendTree.BlendTree, parameter, furtherDefiningChild);
         }
 
-        // Add a Clip driven by the specified parameter.
+        // Add a Clip driven by the specified parameter. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTreeDirect WithAnimation(AacFlClip clip, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             return WithAnimation(clip.Clip, parameter, furtherDefiningChild);
         }
 
-        // Add a raw motion driven by the specified parameter.
+        // Add a raw motion driven by the specified parameter. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTreeDirect WithAnimation(Motion motion, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
             var children = BlendTree.children ?? new ChildMotion[0];
@@ -215,18 +215,21 @@ namespace AnimatorAsCode.V1
         internal bool Mirror { get; set; }
         internal float CycleOffset { get; set; }
         
+        ///  Set the time scale. The time scale value is 1 by default.
         public AacFlBlendTreeChildMotion WithTimeScaleSetTo(float timeScale)
         {
             TimeScale = timeScale;
             return this;
         }
 
+        /// Set the mirror option. The mirror option value is false by default.
         public AacFlBlendTreeChildMotion WithMirrorSetTo(bool mirror)
         {
             Mirror = mirror;
             return this;
         }
 
+        /// Set the cycle offset. The cycle offset value is 0 by default.
         public AacFlBlendTreeChildMotion WithCycleOffsetSetTo(float cycleOffset)
         {
             CycleOffset = cycleOffset;

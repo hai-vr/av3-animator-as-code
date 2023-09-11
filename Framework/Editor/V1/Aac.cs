@@ -420,7 +420,7 @@ namespace AnimatorAsCode.V1
             }
         }
 
-        /// Returns an object from which you can obtain animator parameter objects. It is strongly recommended to obtain animator parameter objects directly from the layer objects instead of using NoAnimator(), as the use of NoAnimator() will not result in the registration of any parameters inside the animator controller. You should use this class if you are interoperating with other modules such as ModularAvatarAsCode, or if you are creating BlendTree assets without any animator controllers to back it.
+        /// If you are not creating an animator, this returns an object from which you can obtain animator parameter objects. You should use this class if you are creating BlendTree assets without any animator controllers to back it. Otherwise, it is strongly recommended to obtain animator parameter objects directly from the layer objects instead of using NoAnimator(), as the use of NoAnimator() will not result in the registration of any parameters inside the animator controller.
         public AacFlNoAnimator NoAnimator()
         {
             return new AacFlNoAnimator();
