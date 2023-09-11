@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -73,6 +74,46 @@ namespace AnimatorAsCode.V1
         internal static EditorCurveBinding ToSubBinding(EditorCurveBinding binding, string suffix)
         {
             return new EditorCurveBinding {path = binding.path, type = binding.type, propertyName = binding.propertyName + "." + suffix};
+        }
+
+        internal static void NoUndo<T>(T obj, Action action)
+        {
+            try
+            {
+                UndoDisable(obj);
+                action.Invoke();
+            }
+            finally
+            {
+                UndoEnable(obj);
+            }
+        }
+
+        internal static TResult NoUndo<T, TResult>(T obj, Func<TResult> action)
+        {
+            try
+            {
+                UndoDisable(obj);
+                return action.Invoke();
+            }
+            finally
+            {
+                UndoEnable(obj);
+            }
+        }
+
+        private static void UndoDisable<T>(T state)
+        {
+            typeof(T)
+                .GetProperty("pushUndo", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(state, false);
+        }
+
+        private static void UndoEnable<T>(T state)
+        {
+            typeof(T)
+                .GetProperty("pushUndo", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(state, true);
         }
     }
 }

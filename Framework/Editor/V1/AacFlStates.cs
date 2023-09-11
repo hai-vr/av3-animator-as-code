@@ -147,7 +147,7 @@ namespace AnimatorAsCode.V1
 
         public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
-            var stateMachine = Machine.AddStateMachine(name, GridPosition(x, y));
+            var stateMachine = AacInternals.NoUndo(Machine, () => Machine.AddStateMachine(name, GridPosition(x, y)));
             var aacMachine = new AacFlStateMachine(stateMachine, _emptyClip, _backingAnimator, DefaultsProvider, this);
             _defaultsProvider.ConfigureStateMachine(stateMachine);
             _childNodes.Add(aacMachine);
@@ -186,7 +186,7 @@ namespace AnimatorAsCode.V1
 
         public AacFlState NewState(string name, int x, int y)
         {
-            var state = Machine.AddState(name, GridPosition(x, y));
+            var state = AacInternals.NoUndo(Machine, () => Machine.AddState(name, GridPosition(x, y)));
             DefaultsProvider.ConfigureState(state, _emptyClip);
             var aacState = new AacFlState(state, this, DefaultsProvider);
             _childNodes.Add(aacState);
@@ -220,32 +220,32 @@ namespace AnimatorAsCode.V1
 
         public AacFlNewTransitionContinuation TransitionsTo(AacFlState destination)
         {
-            return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineTransition(Machine, destination.State), ParentMachine.Machine, Machine, destination.State);
+            return new AacFlNewTransitionContinuation(AacInternals.NoUndo(ParentMachine.Machine, () => ParentMachine.Machine.AddStateMachineTransition(Machine, destination.State)), ParentMachine.Machine, Machine, destination.State);
         }
 
         public AacFlNewTransitionContinuation TransitionsTo(AacFlStateMachine destination)
         {
-            return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineTransition(Machine, destination.Machine), ParentMachine.Machine, Machine, destination.Machine);
+            return new AacFlNewTransitionContinuation(AacInternals.NoUndo(ParentMachine.Machine, () => ParentMachine.Machine.AddStateMachineTransition(Machine, destination.Machine)), ParentMachine.Machine, Machine, destination.Machine);
         }
 
         public AacFlNewTransitionContinuation Restarts()
         {
-            return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineTransition(Machine, Machine), ParentMachine.Machine, Machine, Machine);
+            return new AacFlNewTransitionContinuation(AacInternals.NoUndo(ParentMachine.Machine, () => ParentMachine.Machine.AddStateMachineTransition(Machine, Machine)), ParentMachine.Machine, Machine, Machine);
         }
 
         public AacFlNewTransitionContinuation Exits()
         {
-            return new AacFlNewTransitionContinuation(ParentMachine.Machine.AddStateMachineExitTransition(Machine), ParentMachine.Machine, Machine, null);
+            return new AacFlNewTransitionContinuation(AacInternals.NoUndo(ParentMachine.Machine, () => ParentMachine.Machine.AddStateMachineExitTransition(Machine)), ParentMachine.Machine, Machine, null);
         }
 
         private AacFlTransition AnyTransition(AacFlState destination, AnimatorStateMachine animatorStateMachine)
         {
-            return new AacFlTransition(ConfigureTransition(animatorStateMachine.AddAnyStateTransition(destination.State)), animatorStateMachine, null, destination.State);
+            return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(animatorStateMachine, () => animatorStateMachine.AddAnyStateTransition(destination.State))), animatorStateMachine, null, destination.State);
         }
 
         private AacFlTransition AnyTransition(AacFlStateMachine destination, AnimatorStateMachine animatorStateMachine)
         {
-            return new AacFlTransition(ConfigureTransition(animatorStateMachine.AddAnyStateTransition(destination.Machine)), animatorStateMachine, null, destination.Machine);
+            return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(animatorStateMachine, () => animatorStateMachine.AddAnyStateTransition(destination.Machine))), animatorStateMachine, null, destination.Machine);
         }
 
         private AnimatorStateTransition ConfigureTransition(AnimatorStateTransition transition)
@@ -256,12 +256,12 @@ namespace AnimatorAsCode.V1
 
         private AacFlEntryTransition EntryTransition(AacFlState destination, AnimatorStateMachine animatorStateMachine)
         {
-            return new AacFlEntryTransition(animatorStateMachine.AddEntryTransition(destination.State), animatorStateMachine, null, destination.State);
+            return new AacFlEntryTransition(AacInternals.NoUndo(animatorStateMachine, () => animatorStateMachine.AddEntryTransition(destination.State)), animatorStateMachine, null, destination.State);
         }
 
         private AacFlEntryTransition EntryTransition(AacFlStateMachine destination, AnimatorStateMachine animatorStateMachine)
         {
-            return new AacFlEntryTransition(animatorStateMachine.AddEntryTransition(destination.Machine), animatorStateMachine, null, destination.Machine);
+            return new AacFlEntryTransition(AacInternals.NoUndo(animatorStateMachine, () => animatorStateMachine.AddEntryTransition(destination.Machine)), animatorStateMachine, null, destination.Machine);
         }
 
         internal Vector3 LastNodePosition()
@@ -312,7 +312,7 @@ namespace AnimatorAsCode.V1
                 if (behaviour is TBehaviour myBehaviour)
                     return myBehaviour;
 
-            return Machine.AddStateMachineBehaviour<TBehaviour>();
+            return AacInternals.NoUndo(Machine, () => Machine.AddStateMachineBehaviour<TBehaviour>());
         }
     }
 
@@ -347,41 +347,41 @@ namespace AnimatorAsCode.V1
 
         public AacFlTransition TransitionsTo(AacFlState destination)
         {
-            return new AacFlTransition(ConfigureTransition(State.AddTransition(destination.State)), _machine, State, destination.State);
+            return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.State))), _machine, State, destination.State);
         }
 
         public AacFlTransition TransitionsTo(AacFlStateMachine destination)
         {
-            return new AacFlTransition(ConfigureTransition(State.AddTransition(destination.Machine)), _machine, State, destination.Machine);
+            return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.Machine))), _machine, State, destination.Machine);
         }
 
         public AacFlTransition TransitionsFromAny()
         {
-            return new AacFlTransition(ConfigureTransition(_machine.AddAnyStateTransition(State)), _machine, null, State);
+            return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => _machine.AddAnyStateTransition(State))), _machine, null, State);
         }
 
         public AacFlEntryTransition TransitionsFromEntry()
         {
-            return new AacFlEntryTransition(_machine.AddEntryTransition(State), _machine, null, State);
+            return new AacFlEntryTransition(AacInternals.NoUndo(State, () => _machine.AddEntryTransition(State)), _machine, null, State);
         }
 
         public AacFlState AutomaticallyMovesTo(AacFlState destination)
         {
-            var transition = ConfigureTransition(State.AddTransition(destination.State));
+            var transition = ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.State)));
             transition.hasExitTime = true;
             return this;
         }
 
         public AacFlState AutomaticallyMovesTo(AacFlStateMachine destination)
         {
-            var transition = ConfigureTransition(State.AddTransition(destination.Machine));
+            var transition = ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.Machine)));
             transition.hasExitTime = true;
             return this;
         }
 
         public AacFlTransition Exits()
         {
-            return new AacFlTransition(ConfigureTransition(State.AddExitTransition()), _machine, State, null);
+            return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddExitTransition())), _machine, State, null);
         }
 
         private AnimatorStateTransition ConfigureTransition(AnimatorStateTransition transition)
@@ -463,7 +463,7 @@ namespace AnimatorAsCode.V1
                 if (behaviour is TBehaviour myBehaviour)
                     return myBehaviour;
 
-            return State.AddStateMachineBehaviour<TBehaviour>();
+            return AacInternals.NoUndo(State, () => State.AddStateMachineBehaviour<TBehaviour>());
         }
     }
 
@@ -579,7 +579,7 @@ namespace AnimatorAsCode.V1
 
         public AacFlCondition Add(string parameter, AnimatorConditionMode mode, float threshold)
         {
-            _transition.AddCondition(mode, threshold, parameter);
+            AacInternals.NoUndo(_transition, () => _transition.AddCondition(mode, threshold, parameter));
             return this;
         }
     }
@@ -821,9 +821,9 @@ namespace AnimatorAsCode.V1
                 if (_sourceNullableIfAny == null)
                 {
                     if (_destinationNullableIfExits.TryGetState(out var state))
-                        newTransition = _machine.AddEntryTransition(state);
+                        newTransition = AacInternals.NoUndo(_machine, () => _machine.AddEntryTransition(state));
                     else if (_destinationNullableIfExits.TryGetStateMachine(out var stateMachine))
-                        newTransition = _machine.AddEntryTransition(stateMachine);
+                        newTransition = AacInternals.NoUndo(_machine, () => _machine.AddEntryTransition(stateMachine));
                     else
                         throw new InvalidOperationException("_destinationNullableIfExits is not null but does not contain an AnimatorState or AnimatorStateMachine");
                 }
@@ -831,11 +831,11 @@ namespace AnimatorAsCode.V1
                 else if (_sourceNullableIfAny.TryGetStateMachine(out var stateMachine))
                 {
                     if (_destinationNullableIfExits == null)
-                        newTransition = _machine.AddStateMachineExitTransition(stateMachine);
+                        newTransition = AacInternals.NoUndo(_machine, () => _machine.AddStateMachineExitTransition(stateMachine));
                     else if (_destinationNullableIfExits.TryGetState(out var destinationState))
-                        newTransition = _machine.AddStateMachineTransition(stateMachine, destinationState);
+                        newTransition = AacInternals.NoUndo(_machine, () => _machine.AddStateMachineTransition(stateMachine, destinationState));
                     else if (_destinationNullableIfExits.TryGetStateMachine(out var destinationStateMachine))
-                        newTransition = _machine.AddStateMachineTransition(stateMachine, destinationStateMachine);
+                        newTransition = AacInternals.NoUndo(_machine, () => _machine.AddStateMachineTransition(stateMachine, destinationStateMachine));
                     else
                         throw new InvalidOperationException("_destinationNullableIfExits is not null but does not contain an AnimatorState or AnimatorStateMachine");
                 }
@@ -853,9 +853,9 @@ namespace AnimatorAsCode.V1
             if (_sourceNullableIfAny == null)
             {
                 if (_destinationNullableIfExits.TryGetState(out state))
-                    return _machine.AddAnyStateTransition(state);
+                    return AacInternals.NoUndo(_machine, () => _machine.AddAnyStateTransition(state));
                 if (_destinationNullableIfExits.TryGetStateMachine(out stateMachine))
-                    return _machine.AddAnyStateTransition(stateMachine);
+                    return AacInternals.NoUndo(_machine, () => _machine.AddAnyStateTransition(stateMachine));
                 throw new InvalidOperationException("Transition has no source nor destination.");
             }
 
@@ -864,16 +864,19 @@ namespace AnimatorAsCode.V1
             {
                 if (_destinationNullableIfExits == null)
                 {
-                    return sourceState.AddExitTransition();
+                    return AacInternals.NoUndo(sourceState, () => sourceState.AddExitTransition());
                 }
 
                 if (_destinationNullableIfExits.TryGetState(out state))
                 {
-                    return sourceState.AddTransition(state);
+                    return AacInternals.NoUndo(sourceState, () => sourceState.AddTransition(state));
                 }
 
                 if (_destinationNullableIfExits.TryGetStateMachine(out stateMachine))
-                    return sourceState.AddTransition(stateMachine);
+                {
+                    return AacInternals.NoUndo(sourceState, () => sourceState.AddTransition(stateMachine));
+                }
+
                 throw new InvalidOperationException("_destinationNullableIfExits is not null but does not contain an AnimatorState or AnimatorStateMachine");
             }
             throw new InvalidOperationException("_sourceNullableIfAny is not null but does not contain an AnimatorState");

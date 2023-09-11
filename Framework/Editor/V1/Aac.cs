@@ -471,7 +471,7 @@ namespace AnimatorAsCode.V1
             var index = FindIndexOf(layerName);
             if (index == -1) return;
 
-            _animatorController.RemoveLayer(index);
+            AacInternals.NoUndo(_animatorController, () => _animatorController.RemoveLayer(index));
         }
 
         private int FindIndexOf(string layerName)
@@ -523,7 +523,7 @@ namespace AnimatorAsCode.V1
         {
             if (_animatorController.parameters.FirstOrDefault(param => param.name == paramName) == null)
             {
-                _animatorController.AddParameter(paramName, type);
+                AacInternals.NoUndo(_animatorController, () => _animatorController.AddParameter(paramName, type));
             }
         }
 
@@ -533,7 +533,7 @@ namespace AnimatorAsCode.V1
             var originalIndexToPreserveOrdering = FindIndexOf(layerName);
             if (originalIndexToPreserveOrdering != -1)
             {
-                _animatorController.RemoveLayer(originalIndexToPreserveOrdering);
+                AacInternals.NoUndo(_animatorController, () => _animatorController.RemoveLayer(originalIndexToPreserveOrdering));
             }
 
             AddLayerWithWeight(layerName, weightWhenCreating, maskWhenCreating);
@@ -572,7 +572,7 @@ namespace AnimatorAsCode.V1
             }
             else
             {
-                _animatorController.AddLayer(_animatorController.MakeUniqueLayerName(layerName));
+                AacInternals.NoUndo(_animatorController, () => _animatorController.AddLayer(_animatorController.MakeUniqueLayerName(layerName)));
                 originalIndexToPreserveOrdering = _animatorController.layers.Length - 1;
             }
 
@@ -593,7 +593,7 @@ namespace AnimatorAsCode.V1
             foreach (var childStateMachineHolder in parentMachine.stateMachines)
             {
                 RecursivelyClearChildrenMachines(childStateMachineHolder.stateMachine);
-                parentMachine.RemoveStateMachine(childStateMachineHolder.stateMachine);
+                AacInternals.NoUndo(parentMachine, () => parentMachine.RemoveStateMachine(childStateMachineHolder.stateMachine));
             }
         }
 
@@ -609,7 +609,7 @@ namespace AnimatorAsCode.V1
 
         private void AddLayerWithWeight(string layerName, float weightWhenCreating, AvatarMask maskWhenCreating)
         {
-            _animatorController.AddLayer(_animatorController.MakeUniqueLayerName(layerName));
+            AacInternals.NoUndo(_animatorController, () => _animatorController.AddLayer(_animatorController.MakeUniqueLayerName(layerName)));
 
             var mutatedLayers = _animatorController.layers;
             mutatedLayers[mutatedLayers.Length - 1].defaultWeight = weightWhenCreating;
