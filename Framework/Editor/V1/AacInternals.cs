@@ -76,27 +76,40 @@ namespace AnimatorAsCode.V1
             return new EditorCurveBinding {path = binding.path, type = binding.type, propertyName = binding.propertyName + "." + suffix};
         }
 
-        internal static void NoUndo<T>(T obj, Action<T> action)
+        internal static void NoUndo<T>(T obj, Action action)
         {
             try
             {
                 UndoDisable(obj);
-                action.Invoke(obj);
+                action.Invoke();
             }
             finally
             {
                 UndoEnable(obj);
             }
         }
-        
-        internal static void UndoDisable<T>(T state)
+
+        internal static TResult NoUndo<T, TResult>(T obj, Func<TResult> action)
+        {
+            try
+            {
+                UndoDisable(obj);
+                return action.Invoke();
+            }
+            finally
+            {
+                UndoEnable(obj);
+            }
+        }
+
+        private static void UndoDisable<T>(T state)
         {
             typeof(T)
                 .GetProperty("pushUndo", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(state, false);
         }
 
-        internal static void UndoEnable<T>(T state)
+        private static void UndoEnable<T>(T state)
         {
             typeof(T)
                 .GetProperty("pushUndo", BindingFlags.Instance | BindingFlags.NonPublic)
