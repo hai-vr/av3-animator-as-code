@@ -7,7 +7,7 @@ using VRC.SDK3.Avatars.Components;
 namespace AnimatorAsCode.V1.VRCDestructiveWorkflow
 {
     // ReSharper disable once InconsistentNaming
-    public static class AacV1VRCDestructiveWorkflowExtensions
+    public static class AacVRCDestructiveWorkflowExtensions
     {
         private interface IAdditionalDataAvatarDescriptor {}
         
