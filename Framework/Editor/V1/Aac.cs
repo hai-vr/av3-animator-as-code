@@ -453,8 +453,8 @@ namespace AnimatorAsCode.V1
             _base = originalBase;
         }
         
-        public AacFlLayer CreateLayer(string suffix) => _base.DoCreateLayerWithoutDeleting(AnimatorController, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix));
-        public AacFlLayer CreateLayer() => _base.DoCreateLayerWithoutDeleting(AnimatorController, _configuration.SystemName);
+        public AacFlLayer NewLayer(string suffix) => _base.DoCreateLayerWithoutDeleting(AnimatorController, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix));
+        public AacFlLayer NewLayer() => _base.DoCreateLayerWithoutDeleting(AnimatorController, _configuration.SystemName);
     }
 
     public class AacAnimatorRemoval
