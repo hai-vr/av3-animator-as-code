@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V1
@@ -337,6 +338,12 @@ namespace AnimatorAsCode.V1
             return new AacFlClip(_configuration, dummyClip)
                 .Animating(clip => clip.Animates("_ignored", typeof(GameObject), "m_IsActive")
                     .WithUnit(unit, keyframes => keyframes.Constant(0, 0f).Constant(numberOf, 0f)));
+        }
+
+        /// Duplicate a new asset into the container and return it. For example, use this to create modified material variants. This asset will be removed the same way as other generated assets.
+        public T DuplicateAsset<T>(T assetToDuplicate) where T : Object
+        {
+            return AacInternals.DuplicateAssetIntoContainer(_configuration, assetToDuplicate);
         }
 
         // For backwards compatibility, generates an animation with 2 keyframes that are at a distance of 1 / 60 of 1 frame,
