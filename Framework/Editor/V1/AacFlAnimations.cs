@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V1
@@ -232,6 +233,12 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurveColor(Clip, new[] {binding}, true);
         }
 
+        public AacFlSettingCurveObjectReference AnimatesObjectReference(Component anyComponent, string property)
+        {
+            var binding = Internal_BindingFromComponent(anyComponent, property);
+            return new AacFlSettingCurveObjectReference(Clip, new[] {binding});
+        }
+
         public EditorCurveBinding BindingFromComponent(Component anyComponent, string propertyName)
         {
             return Internal_BindingFromComponent(anyComponent, propertyName);
@@ -302,6 +309,30 @@ namespace AnimatorAsCode.V1
             foreach (var binding in _bindings)
             {
                 AnimationUtility.SetEditorCurve(_clip, binding, animationCurve);
+            }
+        }
+    }
+
+    public class AacFlSettingCurveObjectReference
+    {
+        private readonly AnimationClip _clip;
+        private readonly EditorCurveBinding[] _bindings;
+
+        public AacFlSettingCurveObjectReference(AnimationClip clip, EditorCurveBinding[] bindings)
+        {
+            _clip = clip;
+            _bindings = bindings;
+        }
+
+        public void WithOneFrame(Object objectReference)
+        {
+            foreach (var binding in _bindings)
+            {
+                AnimationUtility.SetObjectReferenceCurve(_clip, binding, new[]
+                {
+                    new ObjectReferenceKeyframe { time = 0f, value = objectReference },
+                    new ObjectReferenceKeyframe { time = 1/60f, value = objectReference }
+                });
             }
         }
     }

@@ -73,6 +73,12 @@ namespace AnimatorAsCode.V1
 
         internal static string ResolveRelativePath(Transform avatar, Transform item)
         {
+            if (avatar == item)
+            {
+                // TODO: Is this correct??
+                return "";
+            }
+            
             if (item.parent != avatar && item.parent != null)
             {
                 return ResolveRelativePath(avatar, item.parent) + "/" + item.name;
