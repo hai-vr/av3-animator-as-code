@@ -50,7 +50,7 @@ namespace AnimatorAsCode.V1
             {
                 var binding = AacInternals.Binding(_component, typeof(GameObject), component.transform, "m_IsActive");
 
-                AnimationUtility.SetEditorCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
+                AacInternals.SetCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
             }
 
             return this;
@@ -60,7 +60,7 @@ namespace AnimatorAsCode.V1
         {
             var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
 
-            AnimationUtility.SetEditorCurve(Clip, binding, AacInternals.OneFrame(value));
+            AacInternals.SetCurve(Clip, binding, AacInternals.OneFrame(value));
 
             return this;
         }
@@ -72,7 +72,7 @@ namespace AnimatorAsCode.V1
             {
                 var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), component.transform, $"blendShape.{blendShapeName}");
 
-                AnimationUtility.SetEditorCurve(Clip, binding, AacInternals.OneFrame(value));
+                AacInternals.SetCurve(Clip, binding, AacInternals.OneFrame(value));
             }
 
             return this;
@@ -83,9 +83,9 @@ namespace AnimatorAsCode.V1
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
             {
-                AnimationUtility.SetEditorCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalScale.x"), AacInternals.OneFrame(scale.x));
-                AnimationUtility.SetEditorCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalScale.y"), AacInternals.OneFrame(scale.y));
-                AnimationUtility.SetEditorCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalScale.z"), AacInternals.OneFrame(scale.z));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalScale.x"), AacInternals.OneFrame(scale.x));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalScale.y"), AacInternals.OneFrame(scale.y));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalScale.z"), AacInternals.OneFrame(scale.z));
             }
 
             return this;
@@ -95,7 +95,7 @@ namespace AnimatorAsCode.V1
         {
             var binding = AacInternals.Binding(_component, typeof(GameObject), gameObject.transform, "m_IsActive");
 
-            AnimationUtility.SetEditorCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
+            AacInternals.SetCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
 
             return this;
         }
@@ -107,7 +107,7 @@ namespace AnimatorAsCode.V1
             {
                 var binding = AacInternals.Binding(_component, component.GetType(), component.transform, "m_Enabled");
 
-                AnimationUtility.SetEditorCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
+                AacInternals.SetCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
             }
 
             return this;
@@ -117,7 +117,7 @@ namespace AnimatorAsCode.V1
         {
             var binding = AacInternals.Binding(_component, component.GetType(), component.transform, "m_Enabled");
 
-            AnimationUtility.SetEditorCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
+            AacInternals.SetCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
 
             return this;
         }
@@ -265,7 +265,7 @@ namespace AnimatorAsCode.V1
         {
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, binding, AacInternals.OneFrame(desiredValue));
+                AacInternals.SetCurve(_clip, binding, AacInternals.OneFrame(desiredValue));
             }
         }
 
@@ -273,7 +273,7 @@ namespace AnimatorAsCode.V1
         {
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, binding, AacInternals.ConstantSeconds(seconds, desiredValue));
+                AacInternals.SetCurve(_clip, binding, AacInternals.ConstantSeconds(seconds, desiredValue));
             }
         }
 
@@ -300,7 +300,7 @@ namespace AnimatorAsCode.V1
 
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, binding, new AnimationCurve(mutatedKeyframes.ToArray()));
+                AacInternals.SetCurve(_clip, binding, new AnimationCurve(mutatedKeyframes.ToArray()));
             }
         }
 
@@ -308,7 +308,7 @@ namespace AnimatorAsCode.V1
         {
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, binding, animationCurve);
+                AacInternals.SetCurve(_clip, binding, animationCurve);
             }
         }
     }
@@ -354,10 +354,10 @@ namespace AnimatorAsCode.V1
         {
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "x" : "r"), AacInternals.OneFrame(desiredValue.r));
-                AnimationUtility.SetEditorCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "y" : "g"), AacInternals.OneFrame(desiredValue.g));
-                AnimationUtility.SetEditorCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "z" : "b"), AacInternals.OneFrame(desiredValue.b));
-                AnimationUtility.SetEditorCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "w" : "a"), AacInternals.OneFrame(desiredValue.a));
+                AacInternals.SetCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "x" : "r"), AacInternals.OneFrame(desiredValue.r));
+                AacInternals.SetCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "y" : "g"), AacInternals.OneFrame(desiredValue.g));
+                AacInternals.SetCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "z" : "b"), AacInternals.OneFrame(desiredValue.b));
+                AacInternals.SetCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "w" : "a"), AacInternals.OneFrame(desiredValue.a));
             }
         }
 
@@ -372,10 +372,10 @@ namespace AnimatorAsCode.V1
 
             foreach (var binding in _bindings)
             {
-                AnimationUtility.SetEditorCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "x" : "r"), new AnimationCurve(mutatedKeyframesR.ToArray()));
-                AnimationUtility.SetEditorCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "y" : "g"), new AnimationCurve(mutatedKeyframesG.ToArray()));
-                AnimationUtility.SetEditorCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "z" : "b"), new AnimationCurve(mutatedKeyframesB.ToArray()));
-                AnimationUtility.SetEditorCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "w" : "a"), new AnimationCurve(mutatedKeyframesA.ToArray()));
+                AacInternals.SetCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "x" : "r"), new AnimationCurve(mutatedKeyframesR.ToArray()));
+                AacInternals.SetCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "y" : "g"), new AnimationCurve(mutatedKeyframesG.ToArray()));
+                AacInternals.SetCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "z" : "b"), new AnimationCurve(mutatedKeyframesB.ToArray()));
+                AacInternals.SetCurve(_clip, AacInternals.ToSubBinding(binding, _hdr ? "w" : "a"), new AnimationCurve(mutatedKeyframesA.ToArray()));
             }
         }
     }

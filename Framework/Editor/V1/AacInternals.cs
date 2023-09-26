@@ -61,6 +61,12 @@ namespace AnimatorAsCode.V1
             };
         }
 
+        internal static void SetCurve(AnimationClip clip, EditorCurveBinding binding, AnimationCurve curve)
+        {
+            // https://forum.unity.com/threads/new-animationclip-property-names.367288/#post-2384172
+            clip.SetCurve(binding.path, binding.type, binding.propertyName, curve);
+        }
+
         internal static AnimationCurve OneFrame(float desiredValue)
         {
             return AnimationCurve.Constant(0f, 1 / 60f, desiredValue);
