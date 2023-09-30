@@ -1,0 +1,12 @@
+{
+  "name": "dev.hai-vr.animator-as-code.v1.base.test",
+  "displayName": "(DEV) Animator As Code - Tests",
+  "version": "1.0.9901",
+  "unity": "2019.4",
+  "description": "dev.hai-vr.animator-as-code.v1.base.test",
+  "vrchatVersion" : "2022.1.1",
+  "author" : {
+    "name" : "Haï~"
+  },
+  "url" : "https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat"
+}

@@ -21,7 +21,7 @@ namespace AnimatorAsCode.V1
     public struct AacConfiguration
     {
         public string SystemName;
-        // Please consult "MigratingFromV0ToV1.md" on how to migrate this property
+        // Please consult "https://docs.hai-vr.dev/docs/products/animator-as-code/migrating-v0-to-v1" on how to migrate this property
         // public VRCAvatarDescriptor AvatarDescriptor;
         public Transform AnimatorRoot;
         public Transform DefaultValueRoot;
