@@ -7,12 +7,12 @@ This branch `wip-v1` is currently [being prepared for a breaking change to V1](h
 
 ### Documentation
 
-- [Documentation: https://docs.hai-vr.dev/docs/products/animator-as-code](https://docs.hai-vr.dev/docs/products/animator-as-code)
-- [V1 Reference manual: https://docs.hai-vr.dev/docs/products/animator-as-code/reference](https://docs.hai-vr.dev/docs/products/animator-as-code/reference)
-- [V1 Functions reference: https://docs.hai-vr.dev/docs/products/animator-as-code/functions/base](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/base)
-- [VRChat Extension methods reference: https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat)
-- [VRChat Destructive Workflow methods reference: https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat-destructive](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat-destructive)
-- [Modular Avatar As Code reference: https://docs.hai-vr.dev/docs/products/animator-as-code/functions/modular-avatar](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/modular-avatar)
+- [Documentation](https://docs.hai-vr.dev/docs/products/animator-as-code)
+- [V1 Reference manual](https://docs.hai-vr.dev/docs/products/animator-as-code/reference)
+- [V1 Functions reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/base)
+- [VRChat Extension methods reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat)
+- [VRChat Destructive Workflow methods reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat-destructive)
+- [Modular Avatar As Code reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/modular-avatar)
 
 ## Animator As Code V0
 
