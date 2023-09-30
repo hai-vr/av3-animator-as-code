@@ -1,3 +1,10 @@
+Migration in progress
+====
+
+This branch `wip-v1` is currently [being prepared for a breaking change to V1](https://docs.hai-vr.dev/docs/products/animator-as-code/migrating-v0-to-v1).
+
+- You can browse the repository in its **[V0](https://github.com/hai-vr/av3-animator-as-code/tree/V1-2022-04) state**.
+
 # Animator As Code
 
 **Animator As Code** is a small Unity Editor facility to generate Avatars 3.0 Animator layers and animations from a [fluent builder](https://en.wikipedia.org/wiki/Fluent_interface) syntax written in C#.
