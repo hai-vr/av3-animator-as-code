@@ -1,18 +1,16 @@
-﻿#if UNITY_EDITOR
+﻿/*
+#if UNITY_EDITOR
 using System.Linq;
 using AnimatorAsCode.V1;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
-using AnimatorAsCode.V1.VRCDestructiveWorkflow;
-using AnimatorAsCode.V1.VRC;
 
 namespace AnimatorAsCodeFramework.Examples
 {
     public class GenExample3_Gesturing : MonoBehaviour
     {
-        public VRCAvatarDescriptor avatar;
+        public GameObject avatar;
         public AnimatorController assetContainer;
         public string assetKey;
         public SkinnedMeshRenderer iconMesh;
@@ -25,10 +23,11 @@ namespace AnimatorAsCodeFramework.Examples
 
         private GenExample3_Gesturing my;
         private AacFlBase aac;
+        private AacFlController ctrl;
 
         public override void OnInspectorGUI()
         {
-            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create, Remove);
+            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create);
         }
 
         private void Create()
@@ -36,22 +35,14 @@ namespace AnimatorAsCodeFramework.Examples
             my = (GenExample3_Gesturing) target;
             aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
 
+            ctrl = aac.NewAnimatorController();
             CreateMainLayer();
             CreateSupportingLayer();
         }
 
-        private void Remove()
-        {
-            var my = (GenExample3_Gesturing) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
-
-            aac.RemoveAllMainLayers();
-            aac.RemoveAllSupportingLayers("Detection");
-        }
-
         private void CreateMainLayer()
         {
-            var layer = aac.CreateMainFxLayer();
+            var layer = ctrl.NewLayer();
 
             var dirtyCheckParameter = layer.BoolParameter("AAC_INTERNAL_GesturingIcon_DirtyCheck");
 
@@ -99,7 +90,7 @@ namespace AnimatorAsCodeFramework.Examples
         private void CreateSupportingLayer()
         {
             // Create an additional FX layer.
-            var layer = aac.CreateSupportingFxLayer("Detection");
+            var layer = ctrl.NewLayer("Detection");
             var reevaluating = layer.NewState("Reevaluating", -1, 0);
 
             foreach (var left in Enumerable.Range(0, 8))
@@ -143,3 +134,4 @@ namespace AnimatorAsCodeFramework.Examples
     }
 }
 #endif
+*/

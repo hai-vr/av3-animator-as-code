@@ -1,0 +1,17 @@
+{
+    "name": "AnimatorAsCode.V1.Examples",
+    "references": [
+        "AnimatorAsCode.V1"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,7 +1,5 @@
 ﻿#if UNITY_EDITOR
-using AnimatorAsCode.V1.VRCDestructiveWorkflow;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 
@@ -9,7 +7,7 @@ namespace AnimatorAsCodeFramework.Examples
 {
     public class GenExample2_Animate : MonoBehaviour
     {
-        public VRCAvatarDescriptor avatar;
+        public GameObject avatar;
         public AnimatorController assetContainer;
         public string assetKey;
         public SkinnedMeshRenderer wedgeMesh;
@@ -22,7 +20,7 @@ namespace AnimatorAsCodeFramework.Examples
 
         public override void OnInspectorGUI()
         {
-            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create, Remove);
+            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create);
         }
 
         private void Create()
@@ -30,7 +28,8 @@ namespace AnimatorAsCodeFramework.Examples
             var my = (GenExample2_Animate) target;
             var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
 
-            var fx = aac.CreateMainFxLayer();
+            var ctrl = aac.NewAnimatorController();
+            var fx = ctrl.NewLayer();
 
             fx.NewState("Motion")
                 .WithAnimation(aac.NewClip().Animating(clip =>
@@ -43,14 +42,6 @@ namespace AnimatorAsCodeFramework.Examples
                     );
                 }))
                 .MotionTime(fx.FloatParameter("WedgeAmount"));
-        }
-
-        private void Remove()
-        {
-            var my = (GenExample2_Animate) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
-
-            aac.RemoveAllMainLayers();
         }
     }
 }

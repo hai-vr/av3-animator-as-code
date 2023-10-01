@@ -1,7 +1,5 @@
 ﻿#if UNITY_EDITOR
-using AnimatorAsCode.V1.VRCDestructiveWorkflow;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 
@@ -9,7 +7,7 @@ namespace AnimatorAsCodeFramework.Examples
 {
     public class GenExample1_ToggleSmr : MonoBehaviour
     {
-        public VRCAvatarDescriptor avatar;
+        public GameObject avatar;
         public AnimatorController assetContainer;
         public string assetKey;
         public SkinnedMeshRenderer skinnedMesh;
@@ -22,7 +20,7 @@ namespace AnimatorAsCodeFramework.Examples
 
         public override void OnInspectorGUI()
         {
-            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create, Remove);
+            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create);
         }
 
         private void Create()
@@ -30,7 +28,8 @@ namespace AnimatorAsCodeFramework.Examples
             var my = (GenExample1_ToggleSmr) target;
             var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
 
-            var fx = aac.CreateMainFxLayer();
+            var ctrl = aac.NewAnimatorController();
+            var fx = ctrl.NewLayer();
             var hidden = fx.NewState("Hidden")
                 // The runtime type of my.skinnedMesh is used within the animation.
                 // In this case, the "SkinnedMeshRenderer" component is disabled.
@@ -64,14 +63,6 @@ namespace AnimatorAsCodeFramework.Examples
                     // - The second transition:
                     .Or().When(thingParam.IsFalse());
             }
-        }
-
-        private void Remove()
-        {
-            var my = (GenExample1_ToggleSmr) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
-
-            aac.RemoveAllMainLayers();
         }
     }
 }

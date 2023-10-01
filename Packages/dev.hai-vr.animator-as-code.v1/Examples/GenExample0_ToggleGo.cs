@@ -1,7 +1,5 @@
 ﻿#if UNITY_EDITOR
-using AnimatorAsCode.V1.VRCDestructiveWorkflow;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 
@@ -9,7 +7,7 @@ namespace AnimatorAsCodeFramework.Examples
 {
     public class GenExample0_ToggleGo : MonoBehaviour
     {
-        public VRCAvatarDescriptor avatar;
+        public GameObject avatar;
         public AnimatorController assetContainer;
         public string assetKey;
         public GameObject item;
@@ -22,7 +20,7 @@ namespace AnimatorAsCodeFramework.Examples
 
         public override void OnInspectorGUI()
         {
-            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create, Remove);
+            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create);
         }
 
         private void Create()
@@ -36,7 +34,8 @@ namespace AnimatorAsCodeFramework.Examples
 
             // Create a layer in the FX animator.
             // Additional layers can be created in the FX animator (see later in the manual).
-            var fx = aac.CreateMainFxLayer();
+            var ctrl = aac.NewAnimatorController();
+            var fx = ctrl.NewLayer();
 
             // The first created state is the default one connected to the "Entry" node.
             // States are automatically placed on the grid (see later in the manual).
@@ -56,14 +55,6 @@ namespace AnimatorAsCodeFramework.Examples
             // That can be changed in the Generator settings (see later in the manual).
             hidden.TransitionsTo(shown).When(itemParam.IsTrue());
             shown.TransitionsTo(hidden).When(itemParam.IsFalse());
-        }
-
-        private void Remove()
-        {
-            var my = (GenExample0_ToggleGo) target;
-            var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
-
-            aac.RemoveAllMainLayers();
         }
     }
 }

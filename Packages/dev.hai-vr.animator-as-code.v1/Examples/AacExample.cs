@@ -1,10 +1,8 @@
 ﻿#if UNITY_EDITOR
 using System;
 using AnimatorAsCode.V1;
-using AnimatorAsCode.V1.VRCDestructiveWorkflow;
 using UnityEditor;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 
 namespace AnimatorAsCodeFramework.Examples
@@ -41,7 +39,7 @@ namespace AnimatorAsCodeFramework.Examples
             public bool WriteDefaults;
         }
 
-        public static void InspectorTemplate(Editor editor, SerializedObject serializedObj, string propName, Action createFn, Action removeFnOptional = null)
+        public static void InspectorTemplate(Editor editor, SerializedObject serializedObj, string propName, Action createFn)
         {
             var prop = serializedObj.FindProperty(propName);
             if (prop.stringValue.Trim() == "")
@@ -56,10 +54,6 @@ namespace AnimatorAsCodeFramework.Examples
             {
                 createFn.Invoke();
             }
-            if (removeFnOptional != null && GUILayout.Button("Remove"))
-            {
-                removeFnOptional.Invoke();
-            }
         }
 
         /// <summary>
@@ -71,7 +65,7 @@ namespace AnimatorAsCodeFramework.Examples
         /// <param name="assetKey">Animation assets will be generated with this name in order to clean up previously generated assets of the same system</param>
         /// <param name="options">Some options, such as whether Write Defaults is ON or OFF</param>
         /// <returns>The AAC base.</returns>
-        public static AacFlBase AnimatorAsCode(string systemName, VRCAvatarDescriptor avatar, AnimatorController assetContainer, string assetKey)
+        public static AacFlBase AnimatorAsCode(string systemName, GameObject avatar, AnimatorController assetContainer, string assetKey)
         {
             return AnimatorAsCode(systemName, avatar, assetContainer, assetKey, TemplateGenOptions.Defaults());
         }
@@ -85,7 +79,7 @@ namespace AnimatorAsCodeFramework.Examples
         /// <param name="assetKey">Animation assets will be generated with this name in order to clean up previously generated assets of the same system</param>
         /// <param name="options">Some options, such as whether Write Defaults is ON or OFF</param>
         /// <returns>The AAC base.</returns>
-        public static AacFlBase AnimatorAsCode(string systemName, VRCAvatarDescriptor avatar, AnimatorController assetContainer, string assetKey, TemplateGenOptions options)
+        public static AacFlBase AnimatorAsCode(string systemName, GameObject avatar, AnimatorController assetContainer, string assetKey, TemplateGenOptions options)
         {
             var aac = AacV1.Create(new AacConfiguration
             {
@@ -105,7 +99,7 @@ namespace AnimatorAsCodeFramework.Examples
                 AssetContainer = assetContainer,
                 AssetKey = assetKey,
                 DefaultsProvider = new AacDefaultsProvider(writeDefaults: options.WriteDefaults)
-            }.WithAvatarDescriptor(avatar));
+            });
             aac.ClearPreviousAssets();
             return aac;
         }

@@ -1,7 +1,5 @@
 ﻿#if UNITY_EDITOR
-using AnimatorAsCode.V1.VRCDestructiveWorkflow;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEditor.Animations;
 
@@ -9,7 +7,7 @@ namespace AnimatorAsCodeFramework.Examples
 {
     public class GenExampleManual_PlacingStates : MonoBehaviour
     {
-        public VRCAvatarDescriptor avatar;
+        public GameObject avatar;
         public AnimatorController assetContainer;
         public string assetKey;
     }
@@ -21,7 +19,7 @@ namespace AnimatorAsCodeFramework.Examples
 
         public override void OnInspectorGUI()
         {
-            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create, Remove);
+            AacExample.InspectorTemplate(this, serializedObject, "assetKey", Create);
         }
 
         private void Create()
@@ -29,7 +27,8 @@ namespace AnimatorAsCodeFramework.Examples
             var my = (GenExampleManual_PlacingStates) target;
             var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
 
-            var fx = aac.CreateMainFxLayer();
+            var ctrl = aac.NewAnimatorController();
+            var fx = ctrl.NewLayer();
 
             var init = fx.NewState("Init"); // This is the first state. By default it is at (0, 0)
             var a = fx.NewState("A"); // This will be placed under Init.
@@ -47,8 +46,6 @@ namespace AnimatorAsCodeFramework.Examples
         {
             var my = (GenExampleManual_PlacingStates) target;
             var aac = AacExample.AnimatorAsCode(SystemName, my.avatar, my.assetContainer, my.assetKey);
-
-            aac.RemoveAllMainLayers();
         }
     }
 }
