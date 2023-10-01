@@ -9,7 +9,7 @@ This branch `wip-v1` is currently [being prepared for a breaking change to V1](h
 
 If you are using Animator As Code in VRChat, install using the VRChat Creator Companion. Instructions are available in [this page](https://docs.hai-vr.dev/docs/products/animator-as-code/install).
 
-Otherwise you are **not** using VRChat, install it through the [Releases](https://github.com/hai-vr/av3-animator-as-code/releases).
+Otherwise if you are **not** using VRChat, install it through the [Releases](https://github.com/hai-vr/av3-animator-as-code/releases).
 
 ### Documentation
 
