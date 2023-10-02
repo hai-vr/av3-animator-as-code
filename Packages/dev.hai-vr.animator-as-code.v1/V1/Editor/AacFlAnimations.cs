@@ -80,7 +80,7 @@ namespace AnimatorAsCode.V1
 
         public AacFlClip BlendShape(SkinnedMeshRenderer renderer, string blendShapeName, AnimationCurve animationCurve)
         {
-            var binding = AacV0.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
+            var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
 
             AacInternals.SetCurve(Clip, binding, animationCurve);
 
@@ -92,9 +92,9 @@ namespace AnimatorAsCode.V1
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
             {
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.x"), AacV0.OneFrame(localPosition.x));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.y"), AacV0.OneFrame(localPosition.y));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.z"), AacV0.OneFrame(localPosition.z));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.x"), AacInternals.OneFrame(localPosition.x));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.y"), AacInternals.OneFrame(localPosition.y));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.z"), AacInternals.OneFrame(localPosition.z));
             }
 
             return this;
@@ -107,9 +107,9 @@ namespace AnimatorAsCode.V1
             {
                 // See https://forum.unity.com/threads/new-animationclip-property-names.367288/#post-2384172
                 // AacInternals.SetCurve internally uses AnimationClip.SetCurve instead of AnimationUtility.SetEditorCurve, starting from V1
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.x"), AacV0.OneFrame(localEulerAngles.x));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.y"), AacV0.OneFrame(localEulerAngles.y));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.z"), AacV0.OneFrame(localEulerAngles.z));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.x"), AacInternals.OneFrame(localEulerAngles.x));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.y"), AacInternals.OneFrame(localEulerAngles.y));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.z"), AacInternals.OneFrame(localEulerAngles.z));
             }
 
             return this;
@@ -122,10 +122,10 @@ namespace AnimatorAsCode.V1
             {
                 // See https://forum.unity.com/threads/new-animationclip-property-names.367288/#post-2384172
                 // AacInternals.SetCurve internally uses AnimationClip.SetCurve instead of AnimationUtility.SetEditorCurve, starting from V1
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.x"), AacV0.OneFrame(localQuaternionAngles.x));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.y"), AacV0.OneFrame(localQuaternionAngles.y));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.z"), AacV0.OneFrame(localQuaternionAngles.z));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.w"), AacV0.OneFrame(localQuaternionAngles.w));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.x"), AacInternals.OneFrame(localQuaternionAngles.x));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.y"), AacInternals.OneFrame(localQuaternionAngles.y));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.z"), AacInternals.OneFrame(localQuaternionAngles.z));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.w"), AacInternals.OneFrame(localQuaternionAngles.w));
             }
 
             return this;
