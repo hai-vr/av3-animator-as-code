@@ -82,7 +82,7 @@ namespace AnimatorAsCode.V1
         {
             var binding = AacV0.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
 
-            AnimationUtility.SetEditorCurve(Clip, binding, animationCurve);
+            AacInternals.SetCurve(Clip, binding, animationCurve);
 
             return this;
         }
@@ -92,9 +92,9 @@ namespace AnimatorAsCode.V1
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
             {
-                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.x"), AacV0.OneFrame(position.x));
-                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.y"), AacV0.OneFrame(position.y));
-                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.z"), AacV0.OneFrame(position.z));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.x"), AacV0.OneFrame(position.x));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.y"), AacV0.OneFrame(position.y));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.z"), AacV0.OneFrame(position.z));
             }
 
             return this;
@@ -105,9 +105,11 @@ namespace AnimatorAsCode.V1
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
             {
-                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "localEulerAnglesRaw.x"), AacV0.OneFrame(localEulerAngles.x));
-                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "localEulerAnglesRaw.y"), AacV0.OneFrame(localEulerAngles.y));
-                AnimationUtility.SetEditorCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "localEulerAnglesRaw.z"), AacV0.OneFrame(localEulerAngles.z));
+                // See https://forum.unity.com/threads/new-animationclip-property-names.367288/#post-2384172
+                // AacInternals.SetCurve internally uses AnimationClip.SetCurve instead of AnimationUtility.SetEditorCurve, starting from V1
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.x"), AacV0.OneFrame(localEulerAngles.x));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.y"), AacV0.OneFrame(localEulerAngles.y));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.z"), AacV0.OneFrame(localEulerAngles.z));
             }
 
             return this;
