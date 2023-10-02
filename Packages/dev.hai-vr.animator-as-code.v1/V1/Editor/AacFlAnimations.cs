@@ -100,7 +100,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
-        public AacFlClip Rotationing(GameObject[] gameObjectsWithNulls, Vector3 localEulerAngles)
+        public AacFlClip Rotating(GameObject[] gameObjectsWithNulls, Vector3 localEulerAngles)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
