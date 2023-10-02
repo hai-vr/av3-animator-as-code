@@ -87,20 +87,20 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
-        public AacFlClip Positioning(GameObject[] gameObjectsWithNulls, Vector3 position)
+        public AacFlClip Positioning(GameObject[] gameObjectsWithNulls, Vector3 localPosition)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
             {
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.x"), AacV0.OneFrame(position.x));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.y"), AacV0.OneFrame(position.y));
-                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.z"), AacV0.OneFrame(position.z));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.x"), AacV0.OneFrame(localPosition.x));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.y"), AacV0.OneFrame(localPosition.y));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalPosition.z"), AacV0.OneFrame(localPosition.z));
             }
 
             return this;
         }
 
-        public AacFlClip Rotating(GameObject[] gameObjectsWithNulls, Vector3 localEulerAngles)
+        public AacFlClip RotatingUsingEulerInterpolation(GameObject[] gameObjectsWithNulls, Vector3 localEulerAngles)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
             foreach (var component in defensiveObjects)
@@ -110,6 +110,22 @@ namespace AnimatorAsCode.V1
                 AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.x"), AacV0.OneFrame(localEulerAngles.x));
                 AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.y"), AacV0.OneFrame(localEulerAngles.y));
                 AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalEuler.z"), AacV0.OneFrame(localEulerAngles.z));
+            }
+
+            return this;
+        }
+
+        public AacFlClip RotatingUsingQuaternionInterpolation(GameObject[] gameObjectsWithNulls, Quaternion localQuaternionAngles)
+        {
+            var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
+            foreach (var component in defensiveObjects)
+            {
+                // See https://forum.unity.com/threads/new-animationclip-property-names.367288/#post-2384172
+                // AacInternals.SetCurve internally uses AnimationClip.SetCurve instead of AnimationUtility.SetEditorCurve, starting from V1
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.x"), AacV0.OneFrame(localQuaternionAngles.x));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.y"), AacV0.OneFrame(localQuaternionAngles.y));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.z"), AacV0.OneFrame(localQuaternionAngles.z));
+                AacInternals.SetCurve(Clip, AacV0.Binding(_component, typeof(Transform), component.transform, "m_LocalRotation.w"), AacV0.OneFrame(localQuaternionAngles.w));
             }
 
             return this;
