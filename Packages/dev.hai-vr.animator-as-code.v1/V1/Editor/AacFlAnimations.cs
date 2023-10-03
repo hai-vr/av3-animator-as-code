@@ -87,6 +87,19 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        public AacFlClip BlendShape(SkinnedMeshRenderer[] rendererWithNulls, string blendShapeName, AnimationCurve animationCurve)
+        {
+            var defensiveObjects = rendererWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
+            foreach (var component in defensiveObjects)
+            {
+                var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), component.transform, $"blendShape.{blendShapeName}");
+
+                AacInternals.SetCurve(Clip, binding, animationCurve);
+            }
+
+            return this;
+        }
+
         public AacFlClip Positioning(GameObject[] gameObjectsWithNulls, Vector3 localPosition)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
@@ -377,14 +390,14 @@ namespace AnimatorAsCode.V1
             _bindings = bindings;
         }
 
-        public void WithOneFrame(Object objectReference)
+        public void WithOneFrame(Object desiredValue)
         {
             foreach (var binding in _bindings)
             {
                 AnimationUtility.SetObjectReferenceCurve(_clip, binding, new[]
                 {
-                    new ObjectReferenceKeyframe { time = 0f, value = objectReference },
-                    new ObjectReferenceKeyframe { time = 1/60f, value = objectReference }
+                    new ObjectReferenceKeyframe { time = 0f, value = desiredValue },
+                    new ObjectReferenceKeyframe { time = 1/60f, value = desiredValue }
                 });
             }
         }
