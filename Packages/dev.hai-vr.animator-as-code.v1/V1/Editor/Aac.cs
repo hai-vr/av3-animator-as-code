@@ -29,33 +29,34 @@ namespace AnimatorAsCode.V1
         public Object GenericAssetContainer;
         public string AssetKey;
         public IAacDefaultsProvider DefaultsProvider;
-        public Dictionary<Type, object> AdditionalData; // Nullable
+        
+        private Dictionary<Type, object> _additionalData; // Nullable
 
-        public Object GetPersistentAssetContainer()
-        {
-            var container = AssetContainer != null ? AssetContainer : GenericAssetContainer;
-            if (container != null && EditorUtility.IsPersistent(container)) return container;
-            return null;
-        }
-
-        public AacConfiguration WithAdditonalData(Type key, object value)
+        public AacConfiguration WithAdditionalData<T>(T value)
         {
             var conf = this;
-            if (AdditionalData == null) conf.AdditionalData = new Dictionary<Type, object>();
-            conf.AdditionalData[key] = value;
+            if (_additionalData == null) conf._additionalData = new Dictionary<Type, object>();
+            conf._additionalData[typeof(T)] = value;
             return conf;
         }
 
-        public bool TryGetAdditionalData(Type key, out object value)
+        public bool TryGetAdditionalData<T>(out T value) where T : class
         {
-            if (AdditionalData != null && AdditionalData.TryGetValue(key, out var result))
+            if (_additionalData != null && _additionalData.TryGetValue(typeof(T), out var result))
             {
-                value = result;
+                value = (T)result;
                 return true;
             }
 
             value = null;
             return false;
+        }
+
+        internal Object GetPersistentAssetContainer()
+        {
+            var container = AssetContainer != null ? AssetContainer : GenericAssetContainer;
+            if (container != null && EditorUtility.IsPersistent(container)) return container;
+            return null;
         }
     }
 
