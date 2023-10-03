@@ -150,7 +150,7 @@ namespace AnimatorAsCode.V1
 
         public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
-            var stateMachine = AacInternals.NoUndo(Machine, () => Machine.AddStateMachine(name, GridPosition(x, y)));
+            var stateMachine = AacInternals.NoUndo(Machine, () => Machine.AddStateMachine(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
             var aacMachine = new AacFlStateMachine(stateMachine, _emptyClip, _backingAnimator, DefaultsProvider, this);
             _defaultsProvider.ConfigureStateMachine(stateMachine);
             _childNodes.Add(aacMachine);
@@ -189,22 +189,25 @@ namespace AnimatorAsCode.V1
 
         public AacFlState NewState(string name, int x, int y)
         {
-            var state = AacInternals.NoUndo(Machine, () => Machine.AddState(name, GridPosition(x, y)));
+            var state = AacInternals.NoUndo(Machine, () => Machine.AddState(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
             DefaultsProvider.ConfigureState(state, _emptyClip);
             var aacState = new AacFlState(state, this, DefaultsProvider);
             _childNodes.Add(aacState);
 
-            int suffix = 0;
-            string stateName = name;
+            return aacState;
+        }
+
+        private string EnsureNameIsDeduplicated(string name)
+        {
+            var suffix = 0;
+            var stateName = name;
             while (_stateNames.Contains(stateName))
             {
                 stateName = name + " " + (++suffix);
             }
 
-            state.name = stateName;
-            _stateNames.Add(state.name);
-            
-            return aacState;
+            _stateNames.Add(stateName);
+            return stateName;
         }
 
         public AacFlTransition AnyTransitionsTo(AacFlState destination)
