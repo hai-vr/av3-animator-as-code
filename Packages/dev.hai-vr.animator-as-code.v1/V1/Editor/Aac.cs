@@ -58,6 +58,13 @@ namespace AnimatorAsCode.V1
             if (container != null && EditorUtility.IsPersistent(container)) return container;
             return null;
         }
+
+        internal Object GetAssetContainer()
+        {
+            var container = AssetContainer != null ? AssetContainer : GenericAssetContainer;
+            if (container != null) return container;
+            return null;
+        }
     }
 
     public class AacFlLayer
