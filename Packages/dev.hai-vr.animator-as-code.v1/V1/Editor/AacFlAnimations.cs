@@ -56,6 +56,15 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        public AacFlClip Toggling(GameObject gameObject, bool value)
+        {
+            var binding = AacInternals.Binding(_component, typeof(GameObject), gameObject.transform, "m_IsActive");
+
+            AacInternals.SetCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
+
+            return this;
+        }
+
         public AacFlClip BlendShape(SkinnedMeshRenderer renderer, string blendShapeName, float value)
         {
             var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
@@ -153,15 +162,6 @@ namespace AnimatorAsCode.V1
                 AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalScale.y"), AacInternals.OneFrame(scale.y));
                 AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalScale.z"), AacInternals.OneFrame(scale.z));
             }
-
-            return this;
-        }
-
-        public AacFlClip Toggling(GameObject gameObject, bool value)
-        {
-            var binding = AacInternals.Binding(_component, typeof(GameObject), gameObject.transform, "m_IsActive");
-
-            AacInternals.SetCurve(Clip, binding, AacInternals.OneFrame(value ? 1f : 0f));
 
             return this;
         }
