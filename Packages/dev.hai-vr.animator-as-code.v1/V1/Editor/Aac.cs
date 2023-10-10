@@ -452,14 +452,76 @@ namespace AnimatorAsCode.V1
 
     public class AacFlNoAnimator
     {
+        private readonly List<string> _floatParameters = new List<string>();
+        private readonly List<string> _intParameters = new List<string>();
+        private readonly List<string> _boolParameters = new List<string>();
+        private readonly Dictionary<string, float> _floatOverrides = new Dictionary<string, float>();
+        private readonly Dictionary<string, int> _intOverrides = new Dictionary<string, int>();
+        private readonly Dictionary<string, bool> _boolOverrides = new Dictionary<string, bool>();
+
         /// Create a Float parameter, for use without a backing animator.
-        public AacFlFloatParameter FloatParameter(string parameterName) => AacFlFloatParameter.Internally(parameterName);
-        
+        public AacFlFloatParameter FloatParameter(string parameterName)
+        {
+            _floatParameters.Add(parameterName);
+            return AacFlFloatParameter.Internally(parameterName);
+        }
+
         /// Create a Int parameter, for use without a backing animator.
-        public AacFlIntParameter IntParameter(string parameterName) => AacFlIntParameter.Internally(parameterName);
-        
+        public AacFlIntParameter IntParameter(string parameterName)
+        {
+            _intParameters.Add(parameterName);
+            return AacFlIntParameter.Internally(parameterName);
+        }
+
         /// Create a Bool parameter, for use without a backing animator.
-        public AacFlBoolParameter BoolParameter(string parameterName) => AacFlBoolParameter.Internally(parameterName);
+        public AacFlBoolParameter BoolParameter(string parameterName)
+        {
+            _boolParameters.Add(parameterName);
+            return AacFlBoolParameter.Internally(parameterName);
+        }
+
+        /// Stores the Float value of `toBeForced` parameter to `value`, which will be used in the CopyParametersAndOverridesTo() function.
+        public AacFlNoAnimator OverrideValue(AacFlFloatParameter toBeForced, float value)
+        {
+            _floatOverrides[toBeForced.Name] = value;
+            return this;
+        }
+
+        /// Stores the Int value of `toBeForced` parameter to `value`, which will be used in the CopyParametersAndOverridesTo() function.
+        public AacFlNoAnimator OverrideValue(AacFlIntParameter toBeForced, int value)
+        {
+            _intOverrides[toBeForced.Name] = value;
+            return this;
+        }
+
+        /// Stores the Bool value of `toBeForced` parameter to `value`, which will be used in the CopyParametersAndOverridesTo() function.
+        public AacFlNoAnimator OverrideValue(AacFlBoolParameter toBeForced, bool value)
+        {
+            _boolOverrides[toBeForced.Name] = value;
+            return this;
+        }
+
+        /// Copy all created parameters to the other layer, and overrides it with a value if a value was stored.
+        public AacFlNoAnimator CopyParametersAndOverridesTo(AacFlLayer otherLayer)
+        {
+            foreach (var key in _floatParameters)
+            {
+                var param = otherLayer.FloatParameter(key);
+                if (_floatOverrides.TryGetValue(key, out var value)) otherLayer.OverrideValue(param, value);
+            }
+            foreach (var key in _intParameters)
+            {
+                var param = otherLayer.IntParameter(key);
+                if (_intOverrides.TryGetValue(key, out var value)) otherLayer.OverrideValue(param, value);
+            }
+            foreach (var key in _boolParameters)
+            {
+                var param = otherLayer.BoolParameter(key);
+                if (_boolOverrides.TryGetValue(key, out var value)) otherLayer.OverrideValue(param, value);
+            }
+
+            return this;
+        }
     }
 
     public class AacFlController
