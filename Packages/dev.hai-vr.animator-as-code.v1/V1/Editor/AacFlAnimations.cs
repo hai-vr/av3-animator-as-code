@@ -401,6 +401,50 @@ namespace AnimatorAsCode.V1
                 });
             }
         }
+
+        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingObjectReferenceKeyframes> action) // FIXME: Should this be renamed?
+        {
+            var mutatedObjectReferenceKeyframes = new List<ObjectReferenceKeyframe>();
+            var builder = new AacFlSettingObjectReferenceKeyframes(unit, mutatedObjectReferenceKeyframes);
+            action.Invoke(builder);
+            
+            foreach (var binding in _bindings)
+            {
+                AnimationUtility.SetObjectReferenceCurve(_clip, binding, mutatedObjectReferenceKeyframes.ToArray());
+            }
+        }
+    }
+
+    public class AacFlSettingObjectReferenceKeyframes
+    {
+        private readonly AacFlUnit _unit;
+        private readonly List<ObjectReferenceKeyframe> _mutatedKeyframes;
+
+        public AacFlSettingObjectReferenceKeyframes(AacFlUnit unit, List<ObjectReferenceKeyframe> mutatedKeyframes)
+        {
+            _unit = unit;
+            _mutatedKeyframes = mutatedKeyframes;
+        }
+
+        public AacFlSettingObjectReferenceKeyframes Setting(int timeInUnit, Object value)
+        {
+            _mutatedKeyframes.Add(new ObjectReferenceKeyframe { time = AsSeconds(timeInUnit), value = value });
+
+            return this;
+        }
+
+        private float AsSeconds(float timeInUnit)
+        {
+            switch (_unit)
+            {
+                case AacFlUnit.Frames:
+                    return timeInUnit / 60f;
+                case AacFlUnit.Seconds:
+                    return timeInUnit;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 
     public class AacFlSettingCurveColor
@@ -427,7 +471,7 @@ namespace AnimatorAsCode.V1
             }
         }
 
-        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingKeyframesColor> action)
+        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingKeyframesColor> action) // FIXME: Should this be renamed?
         {
             var mutatedKeyframesR = new List<Keyframe>();
             var mutatedKeyframesG = new List<Keyframe>();
