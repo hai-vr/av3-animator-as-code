@@ -1,9 +1,9 @@
 {
   "name": "dev.hai-vr.animator-as-code.v1",
-  "displayName": "Animator As Code",
-  "version": "1.0.9907",
+  "displayName": "Animator As Code (Alpha)",
+  "version": "1.0.9912",
   "unity": "2019.4",
-  "description": "Animator As Code",
+  "description": "Base Animator As Code library. This library only requires Unity.",
   "vrchatVersion" : "2022.1.1",
   "author" : {
     "name" : "Haï~"
