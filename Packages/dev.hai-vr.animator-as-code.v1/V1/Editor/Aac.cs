@@ -78,6 +78,13 @@ namespace AnimatorAsCode.V1
         private readonly AacConfiguration _configuration;
         private readonly string _fullLayerName;
         private readonly AacFlStateMachine _stateMachine;
+        
+        private readonly List<string> _floatParameters = new List<string>();
+        private readonly List<string> _intParameters = new List<string>();
+        private readonly List<string> _boolParameters = new List<string>();
+        private readonly Dictionary<string, float> _floatOverrides = new Dictionary<string, float>();
+        private readonly Dictionary<string, int> _intOverrides = new Dictionary<string, int>();
+        private readonly Dictionary<string, bool> _boolOverrides = new Dictionary<string, bool>();
 
         internal AacFlLayer(AnimatorController animatorController, AacConfiguration configuration, AacFlStateMachine stateMachine, string fullLayerName)
         {
@@ -138,44 +145,93 @@ namespace AnimatorAsCode.V1
         }
 
         /// Create a Bool parameter in the animator.
-        public AacFlBoolParameter BoolParameter(string parameterName) => _stateMachine.InternalBackingAnimator().BoolParameter(parameterName);
+        public AacFlBoolParameter BoolParameter(string parameterName)
+        {
+            _boolParameters.Add(parameterName);
+            return _stateMachine.InternalBackingAnimator().BoolParameter(parameterName);
+        }
         
         /// Create a Trigger parameter in the animator, but returns a Bool parameter for use in AAC.
-        public AacFlBoolParameter TriggerParameterAsBool(string parameterName) => _stateMachine.InternalBackingAnimator().TriggerParameter(parameterName);
+        public AacFlBoolParameter TriggerParameterAsBool(string parameterName)
+        {
+            _boolParameters.Add(parameterName);
+            return _stateMachine.InternalBackingAnimator().TriggerParameter(parameterName);
+        }
         
         /// Create a Float parameter in the animator.
-        public AacFlFloatParameter FloatParameter(string parameterName) => _stateMachine.InternalBackingAnimator().FloatParameter(parameterName);
+        public AacFlFloatParameter FloatParameter(string parameterName)
+        {
+            _floatParameters.Add(parameterName);
+            return _stateMachine.InternalBackingAnimator().FloatParameter(parameterName);
+        }
         
         /// Create an Int parameter in the animator.
-        public AacFlIntParameter IntParameter(string parameterName) => _stateMachine.InternalBackingAnimator().IntParameter(parameterName);
+        public AacFlIntParameter IntParameter(string parameterName)
+        {
+            _intParameters.Add(parameterName);
+            return _stateMachine.InternalBackingAnimator().IntParameter(parameterName);
+        }
         
         /// Create multiple Bool parameters in the animator, and returns a group of multiple Bools.
-        public AacFlBoolParameterGroup BoolParameters(params string[] parameterNames) => _stateMachine.InternalBackingAnimator().BoolParameters(parameterNames);
+        public AacFlBoolParameterGroup BoolParameters(params string[] parameterNames)
+        {
+            _boolParameters.AddRange(parameterNames);
+            return _stateMachine.InternalBackingAnimator().BoolParameters(parameterNames);
+        }
         
         /// Create multiple Trigger parameters in the animator, but returns a group of multiple Bools for use in AAC.
-        public AacFlBoolParameterGroup TriggerParametersAsBools(params string[] parameterNames) => _stateMachine.InternalBackingAnimator().TriggerParameters(parameterNames);
+        public AacFlBoolParameterGroup TriggerParametersAsBools(params string[] parameterNames)
+        {
+            _boolParameters.AddRange(parameterNames);
+            return _stateMachine.InternalBackingAnimator().TriggerParameters(parameterNames);
+        }
         
         /// Create multiple Float parameters in the animator, and returns a group of multiple Floats.
-        public AacFlFloatParameterGroup FloatParameters(params string[] parameterNames) => _stateMachine.InternalBackingAnimator().FloatParameters(parameterNames);
+        public AacFlFloatParameterGroup FloatParameters(params string[] parameterNames)
+        {
+            _floatParameters.AddRange(parameterNames);
+            return _stateMachine.InternalBackingAnimator().FloatParameters(parameterNames);
+        }
         
         /// Create multiple Int parameters in the animator, and returns a group of multiple Ints.
-        public AacFlIntParameterGroup IntParameters(params string[] parameterNames) => _stateMachine.InternalBackingAnimator().IntParameters(parameterNames);
+        public AacFlIntParameterGroup IntParameters(params string[] parameterNames)
+        {
+            _intParameters.AddRange(parameterNames);
+            return _stateMachine.InternalBackingAnimator().IntParameters(parameterNames);
+        }
         
         /// Combine multiple Bool parameters into a group.
-        public AacFlBoolParameterGroup BoolParameters(params AacFlBoolParameter[] parameters) => _stateMachine.InternalBackingAnimator().BoolParameters(parameters);
+        public AacFlBoolParameterGroup BoolParameters(params AacFlBoolParameter[] parameters)
+        {
+            _boolParameters.AddRange(parameters.Select(parameter => parameter.Name));
+            return _stateMachine.InternalBackingAnimator().BoolParameters(parameters);
+        }
         
         /// Combine multiple Bool parameters into a group. There is no difference with BoolParameters(...) and is provided only for semantic purposes.
-        public AacFlBoolParameterGroup TriggerParametersAsBools(params AacFlBoolParameter[] parameters) => _stateMachine.InternalBackingAnimator().TriggerParameters(parameters);
+        public AacFlBoolParameterGroup TriggerParametersAsBools(params AacFlBoolParameter[] parameters)
+        {
+            _boolParameters.AddRange(parameters.Select(parameter => parameter.Name));
+            return _stateMachine.InternalBackingAnimator().TriggerParameters(parameters);
+        }
         
         /// Combine multiple Float parameters into a group.
-        public AacFlFloatParameterGroup FloatParameters(params AacFlFloatParameter[] parameters) => _stateMachine.InternalBackingAnimator().FloatParameters(parameters);
+        public AacFlFloatParameterGroup FloatParameters(params AacFlFloatParameter[] parameters)
+        {
+            _floatParameters.AddRange(parameters.Select(parameter => parameter.Name));
+            return _stateMachine.InternalBackingAnimator().FloatParameters(parameters);
+        }
         
         /// Combine multiple Int parameters into a group.
-        public AacFlIntParameterGroup IntParameters(params AacFlIntParameter[] parameters) => _stateMachine.InternalBackingAnimator().IntParameters(parameters);
+        public AacFlIntParameterGroup IntParameters(params AacFlIntParameter[] parameters)
+        {
+            _intParameters.AddRange(parameters.Select(parameter => parameter.Name));
+            return _stateMachine.InternalBackingAnimator().IntParameters(parameters);
+        }
 
         /// Set the Bool value of `toBeForced` parameter to `value` in the animator.
         public AacFlLayer OverrideValue(AacFlBoolParameter toBeForced, bool value)
         {
+            _boolOverrides[toBeForced.Name] = value;
             var parameters = _animatorController.parameters;
             foreach (var param in parameters)
             {
@@ -193,6 +249,7 @@ namespace AnimatorAsCode.V1
         /// Set the Float value of `toBeForced` parameter to `value` in the animator.
         public AacFlLayer OverrideValue(AacFlFloatParameter toBeForced, float value)
         {
+            _floatOverrides[toBeForced.Name] = value;
             var parameters = _animatorController.parameters;
             foreach (var param in parameters)
             {
@@ -210,6 +267,7 @@ namespace AnimatorAsCode.V1
         /// Set the Int value of `toBeForced` parameter to `value` in the animator.
         public AacFlLayer OverrideValue(AacFlIntParameter toBeForced, int value)
         {
+            _intOverrides[toBeForced.Name] = value;
             var parameters = _animatorController.parameters;
             foreach (var param in parameters)
             {
@@ -294,6 +352,28 @@ namespace AnimatorAsCode.V1
         public AacFlStateMachine InternalStateMachine()
         {
             return _stateMachine;
+        }
+
+        /// Copy all created parameters to the other layer, and overrides it with a value if a value was stored.
+        public AacFlLayer CopyParametersAndOverridesTo(AacFlLayer otherLayer)
+        {
+            foreach (var key in _floatParameters)
+            {
+                var param = otherLayer.FloatParameter(key);
+                if (_floatOverrides.TryGetValue(key, out var value)) otherLayer.OverrideValue(param, value);
+            }
+            foreach (var key in _intParameters)
+            {
+                var param = otherLayer.IntParameter(key);
+                if (_intOverrides.TryGetValue(key, out var value)) otherLayer.OverrideValue(param, value);
+            }
+            foreach (var key in _boolParameters)
+            {
+                var param = otherLayer.BoolParameter(key);
+                if (_boolOverrides.TryGetValue(key, out var value)) otherLayer.OverrideValue(param, value);
+            }
+
+            return this;
         }
     }
 
