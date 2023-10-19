@@ -17,7 +17,7 @@ Otherwise if you are **not** using VRChat, install it through the [Releases](htt
 - [V1 Reference manual](https://docs.hai-vr.dev/docs/products/animator-as-code/reference)
 - [V1 Functions reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/base)
 - [VRChat reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat)
-- [VRChat (Destructive Workflow) reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat-destructive)
+- [VRChat (Destructive Workflow) reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat-destructive-workflow)
 - [Non-Destructive Modular Framework Processor reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/ndmf-processor)
 - [Modular Avatar As Code reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/modular-avatar)
 
