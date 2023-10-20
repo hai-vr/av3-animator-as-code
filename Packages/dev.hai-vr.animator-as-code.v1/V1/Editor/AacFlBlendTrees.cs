@@ -43,6 +43,9 @@ namespace AnimatorAsCode.V1
         // Define this BlendTree as being Simple1D.
         public AacFlBlendTree1D Simple1D(AacFlFloatParameter parameter)
         {
+            // FIXME: Simple 1D blend tree builders can be very capricious, as items inserted into it must be in the threshold order (???!!!)
+            // Change the API so that when items are added into the array, then it's sorted
+            
             BlendTree.blendType = BlendTreeType.Simple1D;
             BlendTree.blendParameter = parameter.Name;
             BlendTree.useAutomaticThresholds = false;
@@ -138,18 +141,24 @@ namespace AnimatorAsCode.V1
         // Add a BlendTree in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree1D WithAnimation(AacFlBlendTree blendTree, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
+            // FIXME: Simple 1D blend tree builders can be very capricious, as items inserted into it must be in the threshold order (???!!!)
+            // Change the API so that when items are added into the array, then it's sorted
             return WithAnimation(blendTree.BlendTree, threshold, furtherDefiningChild);
         }
 
         // Add a Clip in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree1D WithAnimation(AacFlClip clip, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
+            // FIXME: Simple 1D blend tree builders can be very capricious, as items inserted into it must be in the threshold order (???!!!)
+            // Change the API so that when items are added into the array, then it's sorted
             return WithAnimation(clip.Clip, threshold, furtherDefiningChild);
         }
 
         // Add a raw motion in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
         public AacFlBlendTree1D WithAnimation(Motion motion, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
         {
+            // FIXME: Simple 1D blend tree builders can be very capricious, as items inserted into it must be in the threshold order (???!!!)
+            // Change the API so that when items are added into the array, then it's sorted
             var children = BlendTree.children ?? new ChildMotion[0];
             var childrenList = children.ToList();
             
