@@ -43,9 +43,6 @@ namespace AnimatorAsCode.V1
         // Define this BlendTree as being Simple1D.
         public AacFlBlendTree1D Simple1D(AacFlFloatParameter parameter)
         {
-            // FIXME: Simple 1D blend tree builders can be very capricious, as items inserted into it must be in the threshold order (???!!!)
-            // Change the API so that when items are added into the array, then it's sorted
-            
             BlendTree.blendType = BlendTreeType.Simple1D;
             BlendTree.blendParameter = parameter.Name;
             BlendTree.useAutomaticThresholds = false;
@@ -137,33 +134,62 @@ namespace AnimatorAsCode.V1
         public AacFlBlendTree1D(BlendTree blendTree) : base(blendTree)
         {
         }
-
-        // Add a BlendTree in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree1D WithAnimation(AacFlBlendTree blendTree, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        
+        // Add a BlendTree in the specified threshold. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree1D WithAnimation(AacFlBlendTree blendTree, float threshold)
         {
-            // FIXME: Simple 1D blend tree builders can be very capricious, as items inserted into it must be in the threshold order (???!!!)
-            // Change the API so that when items are added into the array, then it's sorted
-            return WithAnimation(blendTree.BlendTree, threshold, furtherDefiningChild);
+            return WithAnimationInternal(blendTree.BlendTree, threshold, null);
         }
 
-        // Add a Clip in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree1D WithAnimation(AacFlClip clip, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a Clip in the specified threshold. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree1D WithAnimation(AacFlClip clip, float threshold)
         {
-            // FIXME: Simple 1D blend tree builders can be very capricious, as items inserted into it must be in the threshold order (???!!!)
-            // Change the API so that when items are added into the array, then it's sorted
-            return WithAnimation(clip.Clip, threshold, furtherDefiningChild);
+            return WithAnimationInternal(clip.Clip, threshold, null);
         }
 
-        // Add a raw motion in the specified threshold. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree1D WithAnimation(Motion motion, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a raw motion in the specified threshold. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree1D WithAnimation(Motion motion, float threshold)
         {
-            // FIXME: Simple 1D blend tree builders can be very capricious, as items inserted into it must be in the threshold order (???!!!)
-            // Change the API so that when items are added into the array, then it's sorted
+            return WithAnimationInternal(motion, threshold, null);
+        }
+
+        // Add a BlendTree in the specified threshold, and further define that motion. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree1D WithAnimation(AacFlBlendTree blendTree, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+            
+            return WithAnimationInternal(blendTree.BlendTree, threshold, furtherDefiningChild);
+        }
+
+        // Add a Clip in the specified threshold, and further define that motion. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree1D WithAnimation(AacFlClip clip, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+            
+            return WithAnimationInternal(clip.Clip, threshold, furtherDefiningChild);
+        }
+
+        // Add a raw motion in the specified threshold, and further define that motion. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree1D WithAnimation(Motion motion, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+            
+            return WithAnimationInternal(motion, threshold, furtherDefiningChild);
+        }
+
+        private AacFlBlendTree1D WithAnimationInternal(Motion motion, float threshold, Action<AacFlBlendTreeChildMotion> furtherDefiningChildNullable)
+        {
             var children = BlendTree.children ?? new ChildMotion[0];
             var childrenList = children.ToList();
-            
+
             var childMotionModifier = new AacFlBlendTreeChildMotion();
-            furtherDefiningChild?.Invoke(childMotionModifier);
+            furtherDefiningChildNullable?.Invoke(childMotionModifier);
             childrenList.Add(new ChildMotion
             {
                 motion = motion,
@@ -172,7 +198,13 @@ namespace AnimatorAsCode.V1
                 mirror = childMotionModifier.Mirror,
                 cycleOffset = childMotionModifier.CycleOffset
             });
-            BlendTree.children = childrenList.ToArray();
+            BlendTree.children = childrenList
+                // 1D blend trees are capricious; if the thresholds are not in the correct order, the blend tree will:
+                // - misbehave at runtime as it might only blend in the 0th item no matter what
+                // - it will display in the animator UI in a confusing manner
+                // Sort the 1D blend tree to avoid this.
+                .OrderBy(childMotion => childMotion.threshold)
+                .ToArray();
 
             return this;
         }
