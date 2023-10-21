@@ -74,45 +74,110 @@ namespace AnimatorAsCode.V1
         {
         }
 
-        // Add a BlendTree in the specified coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree2D WithAnimation(AacFlBlendTree blendTree, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a BlendTree in the specified coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(AacFlBlendTree blendTree, Vector2 pos)
         {
-            return WithAnimation(blendTree.BlendTree, pos, furtherDefiningChild);
+            return WithAnimationInternal(blendTree.BlendTree, pos.x, pos.y, null);
         }
 
-        // Add a BlendTree in the specified `x` and `y` coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree2D WithAnimation(AacFlBlendTree blendTree, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a BlendTree in the specified `x` and `y` coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(AacFlBlendTree blendTree, float x, float y)
         {
-            return WithAnimation(blendTree.BlendTree, x, y, furtherDefiningChild);
+            return WithAnimationInternal(blendTree.BlendTree, x, y, null);
         }
 
-        // Add a Clip in the specified coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree2D WithAnimation(AacFlClip clip, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a Clip in the specified coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(AacFlClip clip, Vector2 pos)
         {
-            return WithAnimation(clip.Clip, pos, furtherDefiningChild);
+            return WithAnimationInternal(clip.Clip, pos.x, pos.y, null);
         }
 
-        // Add a Clip in the specified `x` and `y` coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree2D WithAnimation(AacFlClip clip, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a Clip in the specified `x` and `y` coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(AacFlClip clip, float x, float y)
         {
-            return WithAnimation(clip.Clip, x, y, furtherDefiningChild);
+            return WithAnimationInternal(clip.Clip, x, y, null);
         }
 
-        // Add a raw motion in the specified coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree2D WithAnimation(Motion motion, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a raw motion in the specified coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(Motion motion, Vector2 pos)
         {
-            return WithAnimation(motion, pos.x, pos.y, furtherDefiningChild);
+            return WithAnimationInternal(motion, pos.x, pos.y, null);
         }
 
-        // Add a raw motion in the specified `x` and `y` coordinates. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTree2D WithAnimation(Motion motion, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a raw motion in the specified `x` and `y` coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(Motion motion, float x, float y)
+        {
+            return WithAnimationInternal(motion, x, y, null);
+        }
+
+        // Add a BlendTree in the specified coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(AacFlBlendTree blendTree, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(blendTree.BlendTree, pos.x, pos.y, furtherDefiningChild);
+        }
+
+        // Add a BlendTree in the specified `x` and `y` coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(AacFlBlendTree blendTree, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(blendTree.BlendTree, x, y, furtherDefiningChild);
+        }
+
+        // Add a Clip in the specified coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(AacFlClip clip, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(clip.Clip, pos.x, pos.y, furtherDefiningChild);
+        }
+
+        // Add a Clip in the specified `x` and `y` coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(AacFlClip clip, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(clip.Clip, x, y, furtherDefiningChild);
+        }
+
+        // Add a raw motion in the specified coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(Motion motion, Vector2 pos, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(motion, pos.x, pos.y, furtherDefiningChild);
+        }
+
+        // Add a raw motion in the specified `x` and `y` coordinates. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTree2D WithAnimation(Motion motion, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(motion, x, y, furtherDefiningChild);
+        }
+
+        private AacFlBlendTree2D WithAnimationInternal(Motion motion, float x, float y, Action<AacFlBlendTreeChildMotion> furtherDefiningChildNullable)
         {
             var children = BlendTree.children ?? new ChildMotion[0];
             var childrenList = children.ToList();
-            
-            
+
+
             var childMotionModifier = new AacFlBlendTreeChildMotion();
-            furtherDefiningChild?.Invoke(childMotionModifier);
+            furtherDefiningChildNullable?.Invoke(childMotionModifier);
             var newChildMotion = new ChildMotion
             {
                 motion = motion,
@@ -121,7 +186,7 @@ namespace AnimatorAsCode.V1
                 mirror = childMotionModifier.Mirror,
                 cycleOffset = childMotionModifier.CycleOffset
             };
-            
+
             childrenList.Add(newChildMotion);
             BlendTree.children = childrenList.ToArray();
 
@@ -216,26 +281,61 @@ namespace AnimatorAsCode.V1
         {
         }
 
-        // Add a BlendTree driven by the specified parameter. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTreeDirect WithAnimation(AacFlBlendTree blendTree, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a BlendTree driven by the specified parameter. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTreeDirect WithAnimation(AacFlBlendTree blendTree, AacFlFloatParameter parameter)
         {
-            return WithAnimation(blendTree.BlendTree, parameter, furtherDefiningChild);
+            return WithAnimationInternal(blendTree.BlendTree, parameter, null);
         }
 
-        // Add a Clip driven by the specified parameter. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTreeDirect WithAnimation(AacFlClip clip, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a Clip driven by the specified parameter. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTreeDirect WithAnimation(AacFlClip clip, AacFlFloatParameter parameter)
         {
-            return WithAnimation(clip.Clip, parameter, furtherDefiningChild);
+            return WithAnimationInternal(clip.Clip, parameter, null);
         }
 
-        // Add a raw motion driven by the specified parameter. The last parameter overload is optional: by default, the timeScale is 1, cycle offset is 0, mirror is false.
-        public AacFlBlendTreeDirect WithAnimation(Motion motion, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild = null)
+        // Add a raw motion driven by the specified parameter. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTreeDirect WithAnimation(Motion motion, AacFlFloatParameter parameter)
+        {
+            return WithAnimationInternal(motion, parameter, null);
+        }
+
+        // Add a BlendTree driven by the specified parameter, and further define that motion. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTreeDirect WithAnimation(AacFlBlendTree blendTree, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(blendTree.BlendTree, parameter, furtherDefiningChild);
+        }
+
+        // Add a Clip driven by the specified parameter, and further define that motion. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTreeDirect WithAnimation(AacFlClip clip, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(clip.Clip, parameter, furtherDefiningChild);
+        }
+
+        // Add a raw motion driven by the specified parameter, and further define that motion. By default, the timeScale is 1, cycle offset is 0, mirror is false.
+        public AacFlBlendTreeDirect WithAnimation(Motion motion, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChild)
+        {
+            // Disallow null here: as nulls are allowed in the internal function,
+            // we want to stop early if this specific non-null overload is invoked with a null param.
+            if (furtherDefiningChild == null) throw new NullReferenceException();
+
+            return WithAnimationInternal(motion, parameter, furtherDefiningChild);
+        }
+
+        private AacFlBlendTreeDirect WithAnimationInternal(Motion motion, AacFlFloatParameter parameter, Action<AacFlBlendTreeChildMotion> furtherDefiningChildNullable)
         {
             var children = BlendTree.children ?? new ChildMotion[0];
             var childrenList = children.ToList();
-            
+
             var childMotionModifier = new AacFlBlendTreeChildMotion();
-            furtherDefiningChild?.Invoke(childMotionModifier);
+            furtherDefiningChildNullable?.Invoke(childMotionModifier);
             childrenList.Add(new ChildMotion
             {
                 motion = motion,
