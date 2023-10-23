@@ -29,6 +29,12 @@ namespace AnimatorAsCode.V1
         public TNode RightOf() => MoveNextTo(null, 1, 0);
         public TNode Over() => MoveNextTo(null, 0, -1);
         public TNode Under() => MoveNextTo(null, 0, 1);
+        
+        public TNode At(int x, int y)
+        {
+            SetPosition(new Vector3(x * DefaultsProvider.Grid().x, y * DefaultsProvider.Grid().y, 0));
+            return (TNode) this;
+        }
 
         public TNode Shift(AacAnimatorNode otherState, int shiftX, int shiftY) => MoveNextTo(otherState, shiftX, shiftY);
 
