@@ -375,6 +375,25 @@ namespace AnimatorAsCode.V1
 
             return this;
         }
+        
+        // Change the layer weight of this layer.
+        public AacFlLayer WithWeight(float weight)
+        {
+            var finalFullLayerName = _fullLayerName;
+            _animatorController.layers = _animatorController.layers
+                .Select(layer =>
+                {
+                    if (layer.name == finalFullLayerName)
+                    {
+                        layer.defaultWeight = weight;
+                    }
+
+                    return layer;
+                })
+                .ToArray();
+
+            return this;
+        }
     }
 
     public class AacFlBase
