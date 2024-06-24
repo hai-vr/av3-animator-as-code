@@ -13,11 +13,13 @@ namespace AnimatorAsCode.V1
     {
         protected readonly AacFlStateMachine ParentMachine;
         protected readonly IAacDefaultsProvider DefaultsProvider;
+        protected readonly Transform AnimatorRoot;
 
-        protected AacAnimatorNode(AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider)
+        protected AacAnimatorNode(AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider, Transform animatorRoot)
         {
             ParentMachine = parentMachine;
             DefaultsProvider = defaultsProvider;
+            AnimatorRoot = animatorRoot;
         }
 
         public TNode LeftOf(AacAnimatorNode otherNode) => MoveNextTo(otherNode, -1, 0);
@@ -60,6 +62,13 @@ namespace AnimatorAsCode.V1
             return (TNode) this;
         }
 
+        public string ResolveRelativePath(Transform item)
+        {
+            return AacInternals.ResolveRelativePath(AnimatorRoot, item);
+        }
+
         public abstract TBehaviour EnsureBehaviour<TBehaviour>() where TBehaviour : StateMachineBehaviour;
+
+        public abstract TBehaviour CreateNewBehaviour<TBehaviour>() where TBehaviour : StateMachineBehaviour;
     }
 }

@@ -121,8 +121,8 @@ namespace AnimatorAsCode.V1
 
         private readonly HashSet<string> _stateNames;
 
-        internal AacFlStateMachine(AnimatorStateMachine machine, AnimationClip emptyClip, AacBackingAnimator backingAnimator, IAacDefaultsProvider defaultsProvider, AacFlStateMachine parent = null)
-            : base(parent, defaultsProvider)
+        internal AacFlStateMachine(AnimatorStateMachine machine, AnimationClip emptyClip, AacBackingAnimator backingAnimator, IAacDefaultsProvider defaultsProvider, Transform animatorRoot, AacFlStateMachine parent = null)
+            : base(parent, defaultsProvider, animatorRoot)
         {
             Machine = machine;
             _emptyClip = emptyClip;
@@ -151,7 +151,7 @@ namespace AnimatorAsCode.V1
         public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
             var stateMachine = AacInternals.NoUndo(Machine, () => Machine.AddStateMachine(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
-            var aacMachine = new AacFlStateMachine(stateMachine, _emptyClip, _backingAnimator, DefaultsProvider, this);
+            var aacMachine = new AacFlStateMachine(stateMachine, _emptyClip, _backingAnimator, DefaultsProvider, AnimatorRoot, this);
             _defaultsProvider.ConfigureStateMachine(stateMachine);
             _childNodes.Add(aacMachine);
             return aacMachine;
@@ -191,7 +191,7 @@ namespace AnimatorAsCode.V1
         {
             var state = AacInternals.NoUndo(Machine, () => Machine.AddState(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
             DefaultsProvider.ConfigureState(state, _emptyClip);
-            var aacState = new AacFlState(state, this, DefaultsProvider);
+            var aacState = new AacFlState(state, this, DefaultsProvider, AnimatorRoot);
             _childNodes.Add(aacState);
 
             return aacState;
@@ -331,6 +331,11 @@ namespace AnimatorAsCode.V1
 
             return AacInternals.NoUndo(Machine, () => Machine.AddStateMachineBehaviour<TBehaviour>());
         }
+
+        public override TBehaviour CreateNewBehaviour<TBehaviour>()
+        {
+            return AacInternals.NoUndo(Machine, () => Machine.AddStateMachineBehaviour<TBehaviour>());
+        }
     }
 
     public class AacFlState : AacAnimatorNode<AacFlState>
@@ -338,7 +343,7 @@ namespace AnimatorAsCode.V1
         public readonly AnimatorState State;
         private readonly AnimatorStateMachine _machine;
 
-        public AacFlState(AnimatorState state, AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider) : base(parentMachine, defaultsProvider)
+        public AacFlState(AnimatorState state, AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider, Transform animatorRoot) : base(parentMachine, defaultsProvider, animatorRoot)
         {
             State = state;
             _machine = parentMachine.Machine;
@@ -480,6 +485,11 @@ namespace AnimatorAsCode.V1
                 if (behaviour is TBehaviour myBehaviour)
                     return myBehaviour;
 
+            return AacInternals.NoUndo(State, () => State.AddStateMachineBehaviour<TBehaviour>());
+        }
+
+        public override TBehaviour CreateNewBehaviour<TBehaviour>()
+        {
             return AacInternals.NoUndo(State, () => State.AddStateMachineBehaviour<TBehaviour>());
         }
     }
