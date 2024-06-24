@@ -527,7 +527,7 @@ namespace AnimatorAsCode.V1
         /// NON-PUBLIC: Internal use only so that destructive workflow can access this. Maybe this can be improved
         public AacFlLayer InternalDoCreateLayer(AnimatorController animator, string layerName)
         {
-            var ag = new AacAnimatorGenerator(animator, CreateEmptyClip().Clip, _configuration.DefaultsProvider);
+            var ag = new AacAnimatorGenerator(animator, CreateEmptyClip().Clip, _configuration.DefaultsProvider, _configuration.AnimatorRoot);
             var machine = ag.CreateOrClearLayerAtSameIndex(layerName, 1f);
 
             return new AacFlLayer(animator, _configuration, machine, layerName);
@@ -535,7 +535,7 @@ namespace AnimatorAsCode.V1
 
         internal AacFlLayer DoCreateLayerWithoutDeleting(AnimatorController animator, string layerName)
         {
-            var ag = new AacAnimatorGenerator(animator, CreateEmptyClip().Clip, _configuration.DefaultsProvider);
+            var ag = new AacAnimatorGenerator(animator, CreateEmptyClip().Clip, _configuration.DefaultsProvider, _configuration.AnimatorRoot);
             var machine = ag.CreateOrClearLayerAtSameIndex(layerName, 1f, null, false);
 
             return new AacFlLayer(animator, _configuration, machine, layerName);
@@ -693,12 +693,14 @@ namespace AnimatorAsCode.V1
         private readonly AnimatorController _animatorController;
         private readonly AnimationClip _emptyClip;
         private readonly IAacDefaultsProvider _defaultsProvider;
+        private readonly Transform _animatorRoot;
 
-        internal AacAnimatorGenerator(AnimatorController animatorController, AnimationClip emptyClip, IAacDefaultsProvider defaultsProvider)
+        internal AacAnimatorGenerator(AnimatorController animatorController, AnimationClip emptyClip, IAacDefaultsProvider defaultsProvider, Transform animatorRoot)
         {
             _animatorController = animatorController;
             _emptyClip = emptyClip;
             _defaultsProvider = defaultsProvider;
+            _animatorRoot = animatorRoot;
         }
 
         internal void CreateParamsAsNeeded(params AacFlParameter[] parameters)
@@ -755,7 +757,7 @@ namespace AnimatorAsCode.V1
             }
 
             var layer = TryGetLayer(layerName);
-            var machinist = new AacFlStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider);
+            var machinist = new AacFlStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider, _animatorRoot);
             return machinist
                 .WithAnyStatePosition(0, 7)
                 .WithEntryPosition(0, -1)
@@ -790,7 +792,7 @@ namespace AnimatorAsCode.V1
             _animatorController.layers = layers;
 
             var layer = TryGetLayer(layerName);
-            var machinist = new AacFlStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider);
+            var machinist = new AacFlStateMachine(layer.stateMachine, _emptyClip, new AacBackingAnimator(this), _defaultsProvider, _animatorRoot);
             _defaultsProvider.ConfigureStateMachine(layer.stateMachine);
             return machinist;
         }

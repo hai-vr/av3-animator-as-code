@@ -137,6 +137,21 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        public AacFlClip RotatingUsingRawEulerInterpolation(GameObject[] gameObjectsWithNulls, Vector3 localEulerAnglesRaw)
+        {
+            var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
+            foreach (var component in defensiveObjects)
+            {
+                // See https://forum.unity.com/threads/new-animationclip-property-names.367288/#post-2384172
+                // AacInternals.SetCurve internally uses AnimationClip.SetCurve instead of AnimationUtility.SetEditorCurve, starting from V1
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalEulerAnglesRaw.x"), AacInternals.OneFrame(localEulerAnglesRaw.x));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalEulerAnglesRaw.y"), AacInternals.OneFrame(localEulerAnglesRaw.y));
+                AacInternals.SetCurve(Clip, AacInternals.Binding(_component, typeof(Transform), component.transform, "m_LocalEulerAnglesRaw.z"), AacInternals.OneFrame(localEulerAnglesRaw.z));
+            }
+
+            return this;
+        }
+
         public AacFlClip RotatingUsingQuaternionInterpolation(GameObject[] gameObjectsWithNulls, Quaternion localQuaternionAngles)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
