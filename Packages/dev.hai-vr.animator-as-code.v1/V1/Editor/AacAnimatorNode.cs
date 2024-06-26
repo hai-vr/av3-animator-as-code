@@ -68,5 +68,7 @@ namespace AnimatorAsCode.V1
         }
 
         public abstract TBehaviour EnsureBehaviour<TBehaviour>() where TBehaviour : StateMachineBehaviour;
+
+        public abstract TBehaviour CreateNewBehaviour<TBehaviour>() where TBehaviour : StateMachineBehaviour;
     }
 }

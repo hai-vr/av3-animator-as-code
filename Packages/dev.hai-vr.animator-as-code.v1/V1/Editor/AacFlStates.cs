@@ -331,6 +331,11 @@ namespace AnimatorAsCode.V1
 
             return AacInternals.NoUndo(Machine, () => Machine.AddStateMachineBehaviour<TBehaviour>());
         }
+
+        public override TBehaviour CreateNewBehaviour<TBehaviour>()
+        {
+            return AacInternals.NoUndo(Machine, () => Machine.AddStateMachineBehaviour<TBehaviour>());
+        }
     }
 
     public class AacFlState : AacAnimatorNode<AacFlState>
@@ -480,6 +485,11 @@ namespace AnimatorAsCode.V1
                 if (behaviour is TBehaviour myBehaviour)
                     return myBehaviour;
 
+            return AacInternals.NoUndo(State, () => State.AddStateMachineBehaviour<TBehaviour>());
+        }
+
+        public override TBehaviour CreateNewBehaviour<TBehaviour>()
+        {
             return AacInternals.NoUndo(State, () => State.AddStateMachineBehaviour<TBehaviour>());
         }
     }
