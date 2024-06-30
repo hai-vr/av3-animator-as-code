@@ -1,15 +1,14 @@
-Migration in progress
+Animator As Code V1 - Beta
 ====
 
-This branch `wip-v1` is currently [being prepared for a breaking change to V1](https://docs.hai-vr.dev/docs/products/animator-as-code/migrating-v0-to-v1).
-
-## Animator As Code V1
+Initially created by **[@hai-vr](https://github.com/hai-vr)**,
+- with major contributions from **[@galister](https://github.com/galister)** for supporting sub-state machines and the generic use of nodes and parameters.
 
 ## Installation
 
-If you are using Animator As Code in VRChat, install using the VRChat Creator Companion. Instructions are available in [this page](https://docs.hai-vr.dev/docs/products/animator-as-code/install).
+If you are using Animator As Code in VRChat, install using the VRChat Creator Companion or ALCOM. Instructions are available in [this page](https://docs.hai-vr.dev/docs/products/animator-as-code/install).
 
-Otherwise if you are **not** using VRChat, install it through the [Releases](https://github.com/hai-vr/av3-animator-as-code/releases).
+Otherwise, if you are **not** using VRChat, install it through the [Releases](https://github.com/hai-vr/av3-animator-as-code/releases).
 
 ### Documentation
 
@@ -18,7 +17,6 @@ Otherwise if you are **not** using VRChat, install it through the [Releases](htt
 - [V1 Functions reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/base)
 - [VRChat reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat)
 - [VRChat (Destructive Workflow) reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/vrchat-destructive-workflow)
-- [Non-Destructive Modular Framework Processor reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/ndmf-processor)
 - [Modular Avatar As Code reference](https://docs.hai-vr.dev/docs/products/animator-as-code/functions/modular-avatar)
 
 ## Animator As Code V0
