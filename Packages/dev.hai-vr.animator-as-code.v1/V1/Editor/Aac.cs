@@ -122,7 +122,8 @@ namespace AnimatorAsCode.V1
             _stateMachine = stateMachine;
         }
 
-        /// Create a new state, initially positioned below the last generated state of this layer.
+        /// Create a new state, initially positioned below the last generated state of this layer.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name)
         {
             var lastState = _stateMachine.LastNodePosition();
@@ -130,19 +131,22 @@ namespace AnimatorAsCode.V1
             return state;
         }
 
-        /// Create a new state at a specific position x and y, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. x positive goes right, y positive goes down.
+        /// Create a new state at a specific position x and y, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. x positive goes right, y positive goes down.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name, int x, int y)
         {
             return _stateMachine.NewState(name, x, y);
         }
 
-        /// Create a new SSM, initially positioned below the last generated state of this layer.
+        /// Create a new state machine, initially positioned below the last generated state of this layer.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name)
         {
             return _stateMachine.NewSubStateMachine(name);
         }
 
-        /// Create a new SSM at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.
+        /// Create a new state machine at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
             return _stateMachine.NewSubStateMachine(name, x, y);
@@ -154,7 +158,7 @@ namespace AnimatorAsCode.V1
             return _stateMachine.AnyTransitionsTo(destination);
         }
 
-        /// Create a transition from Any to the `destination` SSM.
+        /// Create a transition from Any to the `destination` state machine.
         public AacFlTransition AnyTransitionsTo(AacFlStateMachine destination)
         {
             return _stateMachine.AnyTransitionsTo(destination);
