@@ -9,6 +9,15 @@ using Object = UnityEngine.Object;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V1
 {
+    /// Starter class for Animator As Code V1. Call this to obtain an instance of AacFlBase.<br/><br/>
+    /// The intent of the namespace AnimatorAsCode.V1, and the class AacV1,
+    /// is to allow Animator As Code V1 to be simultaneously installed inside projects where:<br/>
+    /// - Instances of Animator As Code V0 may exist,<br/>
+    /// - Instances of Animator As Code V1 derivatives may exist,<br/>
+    /// - Future instances of Animator As Code V2 might exist.<br/><br/>
+    /// For this reason, in case of a breaking change, there should be different versions of Animator As Code released
+    /// with a different package name, namespace, and initializer class name, so that the user may install dependencies
+    /// that rely on different versions of Animator As Code in the same project.
     public static class AacV1
     {
         /// Create an Animator As Code (AAC) base.
@@ -20,18 +29,28 @@ namespace AnimatorAsCode.V1
 
     public struct AacConfiguration
     {
+        /// A name that will be used as the prefix of all animators layers created.
         public string SystemName;
         // Please consult "https://docs.hai-vr.dev/docs/products/animator-as-code/migrating-v0-to-v1" on how to migrate this property
         // public VRCAvatarDescriptor AvatarDescriptor;
+        /// A reference to the animator root. All relative paths will be made relative to this animator root.
         public Transform AnimatorRoot;
+        /// Unused. A reference to a root, where default values will be sampled from.
         public Transform DefaultValueRoot;
+        /// A persistent asset where all created assets will be added into, based on the value of ContainerMode.
         public Object AssetContainer;
+        /// Defines whether created assets should be added to the AssetContainer.
         public Container ContainerMode;
+        /// A prefix which will be used in name of all assets, so that the created assets can be removed during subsequent executions of AnimatorAsCode, assuming that your process is destructive.
         public string AssetKey;
+        /// An object that will provide default values. When in doubt, use `new AacDefaultsProvider(...)`
         public IAacDefaultsProvider DefaultsProvider;
         
         private Dictionary<Type, object> _additionalData; // Nullable
 
+        /// For use by users of extension functions: Store additional data in this configuration.<br/>
+        /// This additional data can be used during the operation of those extension functions.<br/>
+        /// Example: Use this to store a reference to a platform-specific avatar component.
         public AacConfiguration WithAdditionalData<T>(T value)
         {
             var conf = this;
@@ -40,6 +59,8 @@ namespace AnimatorAsCode.V1
             return conf;
         }
 
+        /// Attempts to retrieve additional data stored by `WithAdditionalData`.<br/>
+        /// Returns true when such data is available.
         public bool TryGetAdditionalData<T>(out T value) where T : class
         {
             if (_additionalData != null && _additionalData.TryGetValue(typeof(T), out var result))
@@ -64,14 +85,20 @@ namespace AnimatorAsCode.V1
 
         public enum Container
         {
+            /// Store all created assets in the AssetContainer.
             Everything,
+            /// Only store created assets in the AssetContainer if that asset requires persistence.<br/>
+            /// Right now, only AnimatorController assets require persistence.
             OnlyWhenPersistenceRequired,
+            /// Do not store any assets in the AssetContainer.<br/>
+            /// In this case, the value provided in the AssetContainer of the configuration does not matter.
             Never
         }
     }
 
     public class AacFlLayer
     {
+        /// Exposes the underlying AnimatorAsCode StateMachine object of this layer.
         public AacFlStateMachine StateMachine => _stateMachine;
 
         private readonly AnimatorController _animatorController;
@@ -94,7 +121,8 @@ namespace AnimatorAsCode.V1
             _stateMachine = stateMachine;
         }
 
-        /// Create a new state, initially positioned below the last generated state of this layer.
+        /// Create a new state, initially positioned below the last generated state of this layer.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name)
         {
             var lastState = _stateMachine.LastNodePosition();
@@ -102,19 +130,22 @@ namespace AnimatorAsCode.V1
             return state;
         }
 
-        /// Create a new state at a specific position x and y, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. x positive goes right, y positive goes down.
+        /// Create a new state at a specific position x and y, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. x positive goes right, y positive goes down.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name, int x, int y)
         {
             return _stateMachine.NewState(name, x, y);
         }
 
-        /// Create a new SSM, initially positioned below the last generated state of this layer.
+        /// Create a new state machine, initially positioned below the last generated state of this layer.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name)
         {
             return _stateMachine.NewSubStateMachine(name);
         }
 
-        /// Create a new SSM at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.
+        /// Create a new state machine at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
             return _stateMachine.NewSubStateMachine(name, x, y);
@@ -126,7 +157,7 @@ namespace AnimatorAsCode.V1
             return _stateMachine.AnyTransitionsTo(destination);
         }
 
-        /// Create a transition from Any to the `destination` SSM.
+        /// Create a transition from Any to the `destination` state machine.
         public AacFlTransition AnyTransitionsTo(AacFlStateMachine destination)
         {
             return _stateMachine.AnyTransitionsTo(destination);
@@ -348,7 +379,8 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
-        /// NON-PUBLIC: Internal use only so that extensions can access this. Maybe this can be improved
+        /// <b>FOR USE ONLY BY EXTENSION FUNCTIONS:</b><br/>
+        /// Exposes the internal state machine.
         public AacFlStateMachine InternalStateMachine()
         {
             return _stateMachine;
@@ -589,7 +621,7 @@ namespace AnimatorAsCode.V1
             return AacFlFloatParameter.Internally(parameterName);
         }
 
-        /// Create a Int parameter, for use without a backing animator.
+        /// Create an Int parameter, for use without a backing animator.
         public AacFlIntParameter IntParameter(string parameterName)
         {
             _intParameters.Add(parameterName);
@@ -649,6 +681,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlController
     {
+        /// Exposes the underlying Unity AnimatorController.
         public AnimatorController AnimatorController; 
         
         private readonly AacConfiguration _configuration;
@@ -661,10 +694,15 @@ namespace AnimatorAsCode.V1
             _base = originalBase;
         }
         
+        /// Create a new layer with a specific suffix. You cannot create multiple layers with the same suffix on the same controller.
         public AacFlLayer NewLayer(string suffix) => _base.DoCreateLayerWithoutDeleting(AnimatorController, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix));
+        
+        /// Create a new layer. You cannot invoke this method multiple times on the same controller.
         public AacFlLayer NewLayer() => _base.DoCreateLayerWithoutDeleting(AnimatorController, _configuration.SystemName);
     }
 
+    /// Removes animators from an animator controller.<br/>
+    /// This class is exposed for use by extension functions that need to remove layers.
     public class AacAnimatorRemoval
     {
         private readonly AnimatorController _animatorController;
@@ -674,6 +712,7 @@ namespace AnimatorAsCode.V1
             _animatorController = animatorController;
         }
 
+        /// Remove a single layer having that exact name.
         public void RemoveLayer(string layerName)
         {
             var index = FindIndexOf(layerName);

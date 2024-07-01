@@ -11,6 +11,8 @@ namespace AnimatorAsCode.V1
     public class AacFlClip
     {
         private readonly AacConfiguration _component;
+        
+        /// Exposes the underlying Unity Clip asset.
         public AnimationClip Clip { get; }
 
         public AacFlClip(AacConfiguration component, AnimationClip clip)
@@ -19,6 +21,7 @@ namespace AnimatorAsCode.V1
             Clip = clip;
         }
 
+        /// Set the clip to be looping.
         public AacFlClip Looping()
         {
             var settings = AnimationUtility.GetAnimationClipSettings(Clip);
@@ -27,7 +30,8 @@ namespace AnimatorAsCode.V1
 
             return this;
         }
-
+        
+        /// Set the clip to be non-looping.
         public AacFlClip NonLooping()
         {
             var settings = AnimationUtility.GetAnimationClipSettings(Clip);
@@ -37,12 +41,14 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Start editing the clip with a lambda expression.
         public AacFlClip Animating(Action<AacFlEditClip> action)
         {
             action.Invoke(new AacFlEditClip(_component, Clip));
             return this;
         }
 
+        /// Enable or disable GameObjects. This lasts one frame. The array can safely contain null values.
         public AacFlClip Toggling(GameObject[] gameObjectsWithNulls, bool value)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
@@ -56,6 +62,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Enable or disable a GameObject. This lasts one frame.
         public AacFlClip Toggling(GameObject gameObject, bool value)
         {
             var binding = AacInternals.Binding(_component, typeof(GameObject), gameObject.transform, "m_IsActive");
@@ -65,6 +72,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Change a blendShape of a skinned mesh. This lasts one frame.
         public AacFlClip BlendShape(SkinnedMeshRenderer renderer, string blendShapeName, float value)
         {
             var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
@@ -74,6 +82,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Change a blendShape of multiple skinned meshes. This lasts one frame. The array can safely contain null values.
         public AacFlClip BlendShape(SkinnedMeshRenderer[] rendererWithNulls, string blendShapeName, float value)
         {
             var defensiveObjects = rendererWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
@@ -87,6 +96,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Change a blendShape of a skinned mesh, with an animation curve.
         public AacFlClip BlendShape(SkinnedMeshRenderer renderer, string blendShapeName, AnimationCurve animationCurve)
         {
             var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
@@ -96,6 +106,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Change a blendShape of multiple skinned meshes, with an animation curve. The array can safely contain null values.
         public AacFlClip BlendShape(SkinnedMeshRenderer[] rendererWithNulls, string blendShapeName, AnimationCurve animationCurve)
         {
             var defensiveObjects = rendererWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
@@ -109,6 +120,8 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        // FIXME API: This is weird, this should be a Transform array, and also this needs a single-object overload.
+        /// Change the position of a GameObject in local space. This lasts one frame. This lasts one frame. The array can safely contain null values.
         public AacFlClip Positioning(GameObject[] gameObjectsWithNulls, Vector3 localPosition)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
@@ -277,12 +290,15 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurve(Clip, new[] {binding});
         }
 
+        /// Animates a color property of a component. The runtime type of the component will be used.
         public AacFlSettingCurveColor AnimatesColor(Component anyComponent, string property)
         {
             var binding = Internal_BindingFromComponent(anyComponent, property);
             return new AacFlSettingCurveColor(Clip, new[] {binding});
         }
 
+        // FIXME API: Safety is not provived on nulls. It should probably be, for convenience.
+        /// Animates a color property of several components. The runtime type of the component will be used.
         public AacFlSettingCurveColor AnimatesColor(Component[] anyComponents, string property)
         {
             var that = this;
@@ -293,18 +309,24 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurveColor(Clip, bindings);
         }
 
+        // FIXME API: The multi-component (including nulls) version of this function is missing
+        /// Animates a HDR color property of a component (uses XYZW instead of RGBA). The runtime type of the component will be used. // FIXME: this needs multi-component, with safety
         public AacFlSettingCurveColor AnimatesHDRColor(Component anyComponent, string property)
         {
             var binding = Internal_BindingFromComponent(anyComponent, property);
             return new AacFlSettingCurveColor(Clip, new[] {binding}, true);
         }
 
+        // FIXME API: The multi-component (including nulls) version of this function is missing
+        /// Animates an object reference of a component. The runtime type of the component will be used.
         public AacFlSettingCurveObjectReference AnimatesObjectReference(Component anyComponent, string property)
         {
             var binding = Internal_BindingFromComponent(anyComponent, property);
             return new AacFlSettingCurveObjectReference(Clip, new[] {binding});
         }
 
+        /// Returns an EditorCurveBinding of a component, relative to the animator root. The runtime type of the component will be used.<br/>
+        /// This is meant to be used in conjunction with traditional animation APIs.
         public EditorCurveBinding BindingFromComponent(Component anyComponent, string propertyName)
         {
             return Internal_BindingFromComponent(anyComponent, propertyName);
@@ -327,6 +349,7 @@ namespace AnimatorAsCode.V1
             _bindings = bindings;
         }
 
+        /// Define the curve to be exactly one frame by defining two constant keyframes, usually lasting 1/60th of a second, with the desired value.
         public void WithOneFrame(float desiredValue)
         {
             foreach (var binding in _bindings)
@@ -335,6 +358,7 @@ namespace AnimatorAsCode.V1
             }
         }
 
+        /// Define the curve to last a specific amount of seconds by defining two constant keyframes, with the desired value.
         public void WithFixedSeconds(float seconds, float desiredValue)
         {
             foreach (var binding in _bindings)
@@ -343,16 +367,19 @@ namespace AnimatorAsCode.V1
             }
         }
 
+        /// Start defining the keyframes with a lambda expression, expressing the unit to be in seconds.
         public void WithSecondsUnit(Action<AacFlSettingKeyframes> action)
         {
             InternalWithUnit(AacFlUnit.Seconds, action);
         }
 
+        /// Start defining the keyframes with a lambda expression, expressing the unit in frames.
         public void WithFrameCountUnit(Action<AacFlSettingKeyframes> action)
         {
             InternalWithUnit(AacFlUnit.Frames, action);
         }
 
+        /// Start defining the keyframes with a lambda expression, expressing the unit.
         public void WithUnit(AacFlUnit unit, Action<AacFlSettingKeyframes> action)
         {
             InternalWithUnit(unit, action);
@@ -370,6 +397,8 @@ namespace AnimatorAsCode.V1
             }
         }
 
+        // FIXME WEB: Missing from web docs
+        /// Define the curve as the parameter. The duration is encoded inside the curve itself.
         public void WithAnimationCurve(AnimationCurve animationCurve)
         {
             foreach (var binding in _bindings)
@@ -390,6 +419,7 @@ namespace AnimatorAsCode.V1
             _bindings = bindings;
         }
 
+        /// Define the curve to be exactly one frame by defining two constant keyframes, usually lasting 1/60th of a second, with the desired object reference value.
         public void WithOneFrame(Object desiredValue)
         {
             foreach (var binding in _bindings)
@@ -402,6 +432,8 @@ namespace AnimatorAsCode.V1
             }
         }
 
+        // FIXME WEB: Missing from web docs
+        // FIXME NON-DOCUMENTED: Missing docs
         public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingObjectReferenceKeyframes> action) // FIXME: Should this be renamed?
         {
             var mutatedObjectReferenceKeyframes = new List<ObjectReferenceKeyframe>();

@@ -41,6 +41,7 @@ namespace AnimatorAsCode.V1
 
     public abstract class AacFlParameter
     {
+        /// Expose the name of this parameter.
         public string Name { get; }
 
         protected AacFlParameter(string name)
@@ -55,6 +56,9 @@ namespace AnimatorAsCode.V1
         {
         }
 
+        /// This function is used for internal purposes:<br/>
+        /// Provide a float representation of the parameter.<br/>
+        /// This is used mainly to derive parameter driver values on the VRChat platform.
         public abstract float ValueToFloat(TParam value);
     }
     
@@ -69,9 +73,17 @@ namespace AnimatorAsCode.V1
     {
         internal static AacFlFloatParameter Internally(string name) => new AacFlFloatParameter(name);
         protected AacFlFloatParameter(string name) : base(name) { }
+        
+        /// Float is greater than other.<br/>
+        /// When used on some platforms, you need to be careful as the remote value may not be the same as the local value.
         public IAacFlCondition IsGreaterThan(float other) => Just(condition => condition.Add(Name, Greater, other));
+        
+        /// Float is less than other.<br/>
+        /// When used on some platforms, you need to be careful as the remote value may not be the same as the local value.
         public IAacFlCondition IsLessThan(float other) => Just(condition => condition.Add(Name, Less, other));
 
+        /// This function is used for internal purposes:<br/>
+        /// Returns the same value as the parameter.
         public override float ValueToFloat(float value)
         {
             return value;
@@ -82,11 +94,21 @@ namespace AnimatorAsCode.V1
     {
         internal static AacFlIntParameter Internally(string name) => new AacFlIntParameter(name);
         protected AacFlIntParameter(string name) : base(name) { }
+        
+        /// Int is strictly greater than `other`
         public IAacFlCondition IsGreaterThan(int other) => Just(condition => condition.Add(Name, Greater, other));
+        
+        /// Int is strictly less than `other`
         public IAacFlCondition IsLessThan(int other) => Just(condition => condition.Add(Name, Less, other));
+        
+        /// Int is equal to `other`
         public IAacFlCondition IsEqualTo(int other) => Just(condition => condition.Add(Name, AnimatorConditionMode.Equals, other));
+        
+        /// Int is not equal to `other`
         public IAacFlCondition IsNotEqualTo(int other) => Just(condition => condition.Add(Name, NotEqual, other));
 
+        /// This function is used for internal purposes:<br/>
+        /// Returns the int value as a float.
         public override float ValueToFloat(int value)
         {
             return value;
@@ -100,7 +122,10 @@ namespace AnimatorAsCode.V1
         {
         }
 
+        /// Int is equal to `(int)other`
         public IAacFlCondition IsEqualTo(TEnum other) => IsEqualTo((int)(object)other);
+        
+        /// Int is not equal to `(int)other`
         public IAacFlCondition IsNotEqualTo(TEnum other) => IsNotEqualTo((int)(object)other);
     }
 
@@ -108,11 +133,21 @@ namespace AnimatorAsCode.V1
     {
         internal static AacFlBoolParameter Internally(string name) => new AacFlBoolParameter(name);
         protected AacFlBoolParameter(string name) : base(name) { }
+        
+        /// Bool is true
         public IAacFlCondition IsTrue() => Just(condition => condition.Add(Name, If, 0));
+        
+        /// Bool is false
         public IAacFlCondition IsFalse() => Just(condition => condition.Add(Name, IfNot, 0));
+        
+        /// Bool is equal to `other`
         public IAacFlCondition IsEqualTo(bool other) => Just(condition => condition.Add(Name, other ? If : IfNot, 0));
+        
+        /// Bool is not equal to `other`
         public IAacFlCondition IsNotEqualTo(bool other) => Just(condition => condition.Add(Name, other ? IfNot : If, 0));
 
+        /// This function is used for internal purposes:<br/>
+        /// Returns 1 when the value is true, 0 otherwise.
         public override float ValueToFloat(bool value)
         {
             return value ? 1f : 0f;
@@ -126,7 +161,11 @@ namespace AnimatorAsCode.V1
         private AacFlFloatParameterGroup(params string[] names) { _names = names; }
         public List<AacFlFloatParameter> ToList() => _names.Select(AacFlFloatParameter.Internally).ToList();
 
+        /// All of the Floats are greater than `other`.<br/>
+        /// When used on some platforms, you need to be careful as the remote value may not be the same as the local value.
         public IAacFlCondition AreGreaterThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Greater, other));
+        /// All of the Floats are less than `other`.<br/>
+        /// When used on some platforms, you need to be careful as the remote value may not be the same as the local value.
         public IAacFlCondition AreLessThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Less, other));
     }
 
@@ -137,9 +176,13 @@ namespace AnimatorAsCode.V1
         private AacFlIntParameterGroup(params string[] names) { _names = names; }
         public List<AacFlIntParameter> ToList() => _names.Select(AacFlIntParameter.Internally).ToList();
 
+        /// All of the Ints are strictly greater than `other`
         public IAacFlCondition AreGreaterThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Greater, other));
+        /// All of the Ints are strictly less than `other`
         public IAacFlCondition AreLessThan(float other) => ForEach(_names, (name, condition) => condition.Add(name, Less, other));
+        /// All of the Ints are equal to `other`
         public IAacFlCondition AreEqualTo(float other) => ForEach(_names, (name, condition) => condition.Add(name, AnimatorConditionMode.Equals, other));
+        /// All of the Ints are not equal to `other`
         public IAacFlCondition AreNotEqualTo(float other) => ForEach(_names, (name, condition) => condition.Add(name, NotEqual, other));
     }
 
@@ -150,27 +193,30 @@ namespace AnimatorAsCode.V1
         private AacFlBoolParameterGroup(params string[] names) { _names = names; }
         public List<AacFlBoolParameter> ToList() => _names.Select(AacFlBoolParameter.Internally).ToList();
 
+        /// All of the Bools are true
         public IAacFlCondition AreTrue() => ForEach(_names, (name, condition) => condition.Add(name, If, 0));
+        
+        /// All of the Bools are false
         public IAacFlCondition AreFalse() => ForEach(_names, (name, condition) => condition.Add(name, IfNot, 0));
+        
+        /// All of the Bools are equal to `other`
         public IAacFlCondition AreEqualTo(bool other) => ForEach(_names, (name, condition) => condition.Add(name, other ? If : IfNot, 0));
 
-/// is true when all of the following conditions are met:
-/// <ul>
-/// <li>all of the parameters in the group must be false except for the parameter defined in exceptThisMustBeTrue if it is present in the group.</li>
-/// <li>the parameter defined in exceptThisMustBeTrue must be true.</li>
-/// </ul>
+        /// All the Bools except `exceptThisMustBeTrue` are false, and the Bool of `exceptThisMustBeTrue` must be true.
         public IAacFlCondition AreFalseExcept(AacFlBoolParameter exceptThisMustBeTrue)
         {
             var group = new AacFlBoolParameterGroup(exceptThisMustBeTrue.Name);
             return AreFalseExcept(group);
         }
 
+        /// All the Bools except those in `exceptTheseMustBeTrue` are false, and all of the Bools in `exceptTheseMustBeTrue` must be true.
         public IAacFlCondition AreFalseExcept(params AacFlBoolParameter[] exceptTheseMustBeTrue)
         {
             var group = new AacFlBoolParameterGroup(exceptTheseMustBeTrue.Select(parameter => parameter.Name).ToArray());
             return AreFalseExcept(group);
         }
 
+        /// All the Bools except those in `exceptTheseMustBeTrue` are false, and all of the Bools in `exceptTheseMustBeTrue` must be true.
         public IAacFlCondition AreFalseExcept(AacFlBoolParameterGroup exceptTheseMustBeTrue) => Just(condition =>
         {
             foreach (var name in _names.Where(name => !exceptTheseMustBeTrue._names.Contains(name)))
@@ -183,18 +229,21 @@ namespace AnimatorAsCode.V1
             }
         });
 
+        /// All the Bools except `exceptThisMustBeTrue` are true, and the Bool of `exceptThisMustBeTrue` must be false.
         public IAacFlCondition AreTrueExcept(AacFlBoolParameter exceptThisMustBeFalse)
         {
             var group = new AacFlBoolParameterGroup(exceptThisMustBeFalse.Name);
             return AreTrueExcept(group);
         }
 
+        /// All the Bools except those in `exceptTheseMustBeTrue` are true, and all of the Bools in `exceptTheseMustBeTrue` must be false.
         public IAacFlCondition AreTrueExcept(params AacFlBoolParameter[] exceptTheseMustBeFalse)
         {
             var group = new AacFlBoolParameterGroup(exceptTheseMustBeFalse.Select(parameter => parameter.Name).ToArray());
             return AreTrueExcept(group);
         }
 
+        /// All the Bools except those in `exceptTheseMustBeTrue` are true, and all of the Bools in `exceptTheseMustBeTrue` must be false.
         public IAacFlCondition AreTrueExcept(AacFlBoolParameterGroup exceptTheseMustBeFalse) => Just(condition =>
         {
             foreach (var name in _names.Where(name => !exceptTheseMustBeFalse._names.Contains(name)))
@@ -207,11 +256,13 @@ namespace AnimatorAsCode.V1
             }
         });
 
+        /// Generates multiple transitions, verifying whether any Bool is true. This can only be used inside `.When(...)`
         public IAacFlOrCondition IsAnyTrue()
         {
             return IsAnyEqualTo(true);
         }
 
+        /// Generates multiple transitions, verifying whether any Bool is false. This can only be used inside `.When(...)`
         public IAacFlOrCondition IsAnyFalse()
         {
             return IsAnyEqualTo(false);

@@ -110,7 +110,9 @@ namespace AnimatorAsCode.V1
 
     public class AacFlStateMachine : AacAnimatorNode<AacFlStateMachine>
     {
+        /// Exposes the underlying Unity AnimatorStateMachine object of this state machine.
         public readonly AnimatorStateMachine Machine;
+        
         private readonly AnimationClip _emptyClip;
         private readonly AacBackingAnimator _backingAnimator;
         private readonly IAacDefaultsProvider _defaultsProvider;
@@ -137,17 +139,23 @@ namespace AnimatorAsCode.V1
             _childNodes = new List<AacAnimatorNode>();
         }
 
+        /// <b>FOR USE ONLY BY EXTENSION FUNCTIONS:</b><br/>
+        /// Exposes the internal backing animator.
         public AacBackingAnimator InternalBackingAnimator()
         {
             return _backingAnimator;
         }
 
+        /// Create a new state machine, initially positioned below the last generated state of this layer.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name)
         {
             var lastState = LastNodePosition();
             return NewSubStateMachine(name, 0, 0).Shift(lastState, 0, 1);
         }
 
+        /// Create a new state machine at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
             var stateMachine = AacInternals.NoUndo(Machine, () => Machine.AddStateMachine(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
@@ -181,12 +189,16 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Create a new state, initially positioned below the last generated state of this layer.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name)
         {
             var lastState = LastNodePosition();
             return NewState(name, 0, 0).Shift(lastState, 0, 1);
         }
 
+        /// Create a new state at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name, int x, int y)
         {
             var state = AacInternals.NoUndo(Machine, () => Machine.AddState(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
@@ -210,21 +222,25 @@ namespace AnimatorAsCode.V1
             return stateName;
         }
 
+        /// Create a transition from Any to the `destination` state.
         public AacFlTransition AnyTransitionsTo(AacFlState destination)
         {
             return AnyTransition(destination, Machine);
         }
 
+        /// Create a transition from Any to the `destination` state machine.
         public AacFlTransition AnyTransitionsTo(AacFlStateMachine destination)
         {
             return AnyTransition(destination, Machine);
         }
 
+        /// Create a transition from the Entry to the `destination` state.
         public AacFlEntryTransition EntryTransitionsTo(AacFlState destination)
         {
             return EntryTransition(destination, Machine);
         }
 
+        /// Create a transition from the Entry to the `destination` state machine.
         public AacFlEntryTransition EntryTransitionsTo(AacFlStateMachine destination)
         {
             return EntryTransition(destination, Machine);
@@ -367,26 +383,33 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Create a new transition from this state to the `destination` state.
         public AacFlTransition TransitionsTo(AacFlState destination)
         {
             return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.State))), _machine, State, destination.State);
         }
 
+        /// Create a new transition from this state to the `destination` state machine.
         public AacFlTransition TransitionsTo(AacFlStateMachine destination)
         {
             return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.Machine))), _machine, State, destination.Machine);
         }
 
+        /// Create a new transition from Any to this state.
         public AacFlTransition TransitionsFromAny()
         {
             return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => _machine.AddAnyStateTransition(State))), _machine, null, State);
         }
 
+        /// Create a new transition from Entry to this state. Note that the first created state is the default state, so generally this function does not need to be invoked onto the first created state.<br/>
+        /// Calling this function will not define this state to be the default state.
         public AacFlEntryTransition TransitionsFromEntry()
         {
             return new AacFlEntryTransition(AacInternals.NoUndo(State, () => _machine.AddEntryTransition(State)), _machine, null, State);
         }
 
+        /// Create a transition with no exit time to the `destination` state.<br/>
+        /// Calling this function does not return the transition.
         public AacFlState AutomaticallyMovesTo(AacFlState destination)
         {
             var transition = ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.State)));
@@ -394,6 +417,8 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Create a transition with no exit time to the `destination` state machine.<br/>
+        /// Calling this function does not return the transition.
         public AacFlState AutomaticallyMovesTo(AacFlStateMachine destination)
         {
             var transition = ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.Machine)));
@@ -401,6 +426,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Create a transition from this state to the exit.
         public AacFlTransition Exits()
         {
             return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddExitTransition())), _machine, State, null);
@@ -412,12 +438,16 @@ namespace AnimatorAsCode.V1
             return transition;
         }
 
+        /// Set Write Defaults. If you need to do this to many states, consider changing the AacConfiguration DefaultsProvider when creating the AnimatorAsCode instance.
         public AacFlState WithWriteDefaultsSetTo(bool shouldWriteDefaults)
         {
             State.writeDefaultValues = shouldWriteDefaults;
             return this;
         }
 
+        // FIXME API: Shouldn't there be a WithMotionTimeSetTo?
+        // FIXME API inconsistency: Shouldn't this also be called WithMotionTime?
+        /// Set the Motion Time to a parameter. This was formerly known as Normalized Time.
         public AacFlState MotionTime(AacFlFloatParameter floatParam)
         {
             State.timeParameterActive = true;
@@ -426,6 +456,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set the Cycle Offset to a parameter.
         public AacFlState WithCycleOffset(AacFlFloatParameter floatParam)
         {
             State.cycleOffsetParameterActive = false;
@@ -434,6 +465,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set the Cycle Offset to a specific value.
         public AacFlState WithCycleOffsetSetTo(float cycleOffset)
         {
             State.cycleOffsetParameterActive = false;
@@ -442,6 +474,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set the Speed to a parameter.
         public AacFlState WithSpeed(AacFlFloatParameter parameter)
         {
             State.speedParameterActive = true;
@@ -450,6 +483,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set the Speed to a specific value.
         public AacFlState WithSpeedSetTo(float speed)
         {
             State.speedParameterActive = false;
@@ -503,48 +537,56 @@ namespace AnimatorAsCode.V1
             _transition = transition;
         }
 
+        /// Set interruption source to be Source.
         public AacFlTransition WithSourceInterruption()
         {
             _transition.interruptionSource = TransitionInterruptionSource.Source;
             return this;
         }
 
+        /// Set interruption source set to that value.
         public AacFlTransition WithInterruption(TransitionInterruptionSource interruptionSource)
         {
             _transition.interruptionSource = interruptionSource;
             return this;
         }
 
+        /// Set a fixed transition duration in seconds.
         public AacFlTransition WithTransitionDurationSeconds(float transitionDuration)
         {
             _transition.duration = transitionDuration;
             return this;
         }
 
+        /// Enable ordered interruption.
         public AacFlTransition WithOrderedInterruption()
         {
             _transition.orderedInterruption = true;
             return this;
         }
 
+        /// Disable ordered interruption.
         public AacFlTransition WithNoOrderedInterruption()
         {
             _transition.orderedInterruption = false;
             return this;
         }
 
+        /// Enable transition to self.
         public AacFlTransition WithTransitionToSelf()
         {
             _transition.canTransitionToSelf = true;
             return this;
         }
 
+        /// Disable transition to self.
         public AacFlTransition WithNoTransitionToSelf()
         {
             _transition.canTransitionToSelf = false;
             return this;
         }
 
+        /// Set an exit time at 1, where the animation finishes.
         public AacFlTransition AfterAnimationFinishes()
         {
             _transition.hasExitTime = true;
@@ -553,6 +595,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set an exit time at 0, so that it may transition almost immediately.
         public AacFlTransition Automatically()
         {
             _transition.hasExitTime = true;
@@ -561,6 +604,8 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        // FIXME API: Percent is misnomer
+        /// Set the exit time at a specific normalized amount.
         public AacFlTransition AfterAnimationIsAtLeastAtPercent(float exitTimeNormalized)
         {
             _transition.hasExitTime = true;
@@ -569,6 +614,8 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        // FIXME API: Percent is misnomer
+        /// Set a non-fixed transition duration in a normalized amount.
         public AacFlTransition WithTransitionDurationPercent(float transitionDurationNormalized)
         {
             _transition.hasFixedDuration = false;
@@ -648,39 +695,28 @@ namespace AnimatorAsCode.V1
             return AsContinuationWithOr();
         }
 
-        /// <summary>
         /// Applies a series of conditions to this transition, but this series of conditions cannot include an Or operator.
-        /// </summary>
-        /// <param name="actionsWithoutOr"></param>
-        /// <returns></returns>
         public AacFlTransitionContinuation When(Action<AacFlTransitionContinuationWithoutOr> actionsWithoutOr)
         {
             actionsWithoutOr(new AacFlTransitionContinuationWithoutOr(Transition));
             return AsContinuationWithOr();
         }
 
-        /// <summary>
         /// Applies a series of conditions, and this series may contain Or operators. However, the result can not be followed by an And operator. It can only be an Or operator.
-        /// </summary>
-        /// <param name="actionsWithOr"></param>
-        /// <returns></returns>
         public AacFlTransitionContinuationOnlyOr When(Action<AacFlNewTransitionContinuation> actionsWithOr)
         {
             actionsWithOr(this);
             return AsContinuationOnlyOr();
         }
 
-        /// <summary>
         /// Applies a series of conditions, and this series may contain Or operators. All And operators that follow will apply to all the conditions generated by this series, until the next Or operator.
-        /// </summary>
-        /// <param name="actionsWithOr"></param>
-        /// <returns></returns>
         public AacFlMultiTransitionContinuation When(IAacFlOrCondition actionsWithOr)
         {
             var pendingContinuations = actionsWithOr.ApplyTo(this);
             return new AacFlMultiTransitionContinuation(Transition, _machine, _sourceNullableIfAny, _destinationNullableIfExits, pendingContinuations);
         }
 
+        /// Provides a handle to start defining conditions using the And operator, for use in loops. The Or operator may be invoked at any point.
         public AacFlTransitionContinuation WhenConditions()
         {
             return AsContinuationWithOr();
