@@ -618,7 +618,7 @@ namespace AnimatorAsCode.V1
             return AacFlFloatParameter.Internally(parameterName);
         }
 
-        /// Create a Int parameter, for use without a backing animator.
+        /// Create an Int parameter, for use without a backing animator.
         public AacFlIntParameter IntParameter(string parameterName)
         {
             _intParameters.Add(parameterName);

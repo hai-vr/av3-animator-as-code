@@ -54,11 +54,9 @@ namespace AnimatorAsCode.V1
             return (TNode) this;
         }
 
-        /// Obsolete function preserved for legacy reasons. This does the same thing as MoveNextTo(). 
-        [Obsolete("Use MoveNextTo() instead")]
+        /// Move the state to be shifted next to the other state in the graph, in grid units. shiftX positive goes right, shiftY positive goes down.
         public TNode Shift(AacAnimatorNode otherState, int shiftX, int shiftY) => MoveNextTo(otherState, shiftX, shiftY);
 
-        /// Move the state to be shifted next to the other state in the graph, in grid units. shiftX positive goes right, shiftY positive goes down.
         private TNode MoveNextTo(AacAnimatorNode otherStateOrSecondToLastWhenNull, int x, int y)
         {
             if (otherStateOrSecondToLastWhenNull == null)
@@ -74,7 +72,8 @@ namespace AnimatorAsCode.V1
 
             return (TNode) this;
         }
-
+        
+        // FIXME API: Vector3 is really odd as a type.
         /// Given another position in non-grid units, move the state to be shifted next to that position, in grid units. shiftX positive goes right, shiftY positive goes down.
         public TNode Shift(Vector3 otherPosition, int shiftX, int shiftY)
         {
