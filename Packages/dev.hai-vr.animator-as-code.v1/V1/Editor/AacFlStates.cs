@@ -110,7 +110,9 @@ namespace AnimatorAsCode.V1
 
     public class AacFlStateMachine : AacAnimatorNode<AacFlStateMachine>
     {
+        /// Exposes the underlying Unity AnimatorStateMachine object of this state machine.
         public readonly AnimatorStateMachine Machine;
+        
         private readonly AnimationClip _emptyClip;
         private readonly AacBackingAnimator _backingAnimator;
         private readonly IAacDefaultsProvider _defaultsProvider;
@@ -137,6 +139,8 @@ namespace AnimatorAsCode.V1
             _childNodes = new List<AacAnimatorNode>();
         }
 
+        /// <b>FOR USE ONLY BY EXTENSION FUNCTIONS:</b><br/>
+        /// Expose the internal backing animator.
         public AacBackingAnimator InternalBackingAnimator()
         {
             return _backingAnimator;

@@ -20,18 +20,28 @@ namespace AnimatorAsCode.V1
 
     public struct AacConfiguration
     {
+        /// A name that will be used as the prefix of all animators layers created.
         public string SystemName;
         // Please consult "https://docs.hai-vr.dev/docs/products/animator-as-code/migrating-v0-to-v1" on how to migrate this property
         // public VRCAvatarDescriptor AvatarDescriptor;
+        /// A reference to the animator root. All relative paths will be made relative to this animator root.
         public Transform AnimatorRoot;
+        /// Unused. A reference to a root, where default values will be sampled from.
         public Transform DefaultValueRoot;
+        /// A persistent asset where all created assets will be added into, based on the value of ContainerMode.
         public Object AssetContainer;
+        /// Defines whether created assets should be added to the AssetContainer.
         public Container ContainerMode;
+        /// A prefix which will be used in name of all assets, so that the created assets can be removed during subsequent executions of AnimatorAsCode, assuming that your process is destructive.
         public string AssetKey;
+        /// An object that will provide default values. When in doubt, use `new AacDefaultsProvider(...)`
         public IAacDefaultsProvider DefaultsProvider;
         
         private Dictionary<Type, object> _additionalData; // Nullable
 
+        /// For use by users of extension functions: Store additional data in this configuration.<br/>
+        /// This additional data can be used during the operation of those extension functions.<br/>
+        /// Example: Use this to store a reference to a platform-specific avatar component.
         public AacConfiguration WithAdditionalData<T>(T value)
         {
             var conf = this;
@@ -40,6 +50,8 @@ namespace AnimatorAsCode.V1
             return conf;
         }
 
+        /// Attempts to retrieve additional data stored by `WithAdditionalData`.<br/>
+        /// Returns true when such data is available.
         public bool TryGetAdditionalData<T>(out T value) where T : class
         {
             if (_additionalData != null && _additionalData.TryGetValue(typeof(T), out var result))
@@ -64,14 +76,20 @@ namespace AnimatorAsCode.V1
 
         public enum Container
         {
+            /// Store all created assets in the AssetContainer.
             Everything,
+            /// Only store created assets in the AssetContainer if that asset requires persistence.<br/>
+            /// Right now, only AnimatorController assets require persistence.
             OnlyWhenPersistenceRequired,
+            /// Do not store any assets in the AssetContainer.<br/>
+            /// In this case, the value provided in the AssetContainer of the configuration does not matter.
             Never
         }
     }
 
     public class AacFlLayer
     {
+        /// Exposes the underlying AnimatorAsCode StateMachine object of this layer.
         public AacFlStateMachine StateMachine => _stateMachine;
 
         private readonly AnimatorController _animatorController;
@@ -348,7 +366,8 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
-        /// NON-PUBLIC: Internal use only so that extensions can access this. Maybe this can be improved
+        /// <b>FOR USE ONLY BY EXTENSION FUNCTIONS:</b><br/>
+        /// Expose the internal state machine.
         public AacFlStateMachine InternalStateMachine()
         {
             return _stateMachine;
