@@ -74,6 +74,7 @@ namespace AnimatorAsCode.V1
             return ContainerMode == Container.Everything ? AssetContainer : null;
         }
 
+        /// Values that define how created assets should be added to the AssetContainer.
         public enum Container
         {
             /// Store all created assets in the AssetContainer.
@@ -668,7 +669,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlController
     {
-        public AnimatorController AnimatorController; 
+        public readonly AnimatorController AnimatorController; 
         
         private readonly AacConfiguration _configuration;
         private readonly AacFlBase _base;
