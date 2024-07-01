@@ -368,7 +368,7 @@ namespace AnimatorAsCode.V1
         }
 
         /// <b>FOR USE ONLY BY EXTENSION FUNCTIONS:</b><br/>
-        /// Expose the internal state machine.
+        /// Exposes the internal state machine.
         public AacFlStateMachine InternalStateMachine()
         {
             return _stateMachine;

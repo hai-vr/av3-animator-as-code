@@ -11,6 +11,8 @@ namespace AnimatorAsCode.V1
     public class AacFlClip
     {
         private readonly AacConfiguration _component;
+        
+        /// Exposes the underlying Unity Clip asset.
         public AnimationClip Clip { get; }
 
         public AacFlClip(AacConfiguration component, AnimationClip clip)
@@ -19,6 +21,7 @@ namespace AnimatorAsCode.V1
             Clip = clip;
         }
 
+        /// Set the clip to be looping.
         public AacFlClip Looping()
         {
             var settings = AnimationUtility.GetAnimationClipSettings(Clip);
@@ -27,7 +30,8 @@ namespace AnimatorAsCode.V1
 
             return this;
         }
-
+        
+        /// Set the clip to be non-looping.
         public AacFlClip NonLooping()
         {
             var settings = AnimationUtility.GetAnimationClipSettings(Clip);
@@ -37,12 +41,14 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Start editing the clip with a lambda expression.
         public AacFlClip Animating(Action<AacFlEditClip> action)
         {
             action.Invoke(new AacFlEditClip(_component, Clip));
             return this;
         }
 
+        /// Enable or disable GameObjects. This lasts one frame. The array can safely contain null values.
         public AacFlClip Toggling(GameObject[] gameObjectsWithNulls, bool value)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
@@ -56,6 +62,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Enable or disable a GameObject. This lasts one frame.
         public AacFlClip Toggling(GameObject gameObject, bool value)
         {
             var binding = AacInternals.Binding(_component, typeof(GameObject), gameObject.transform, "m_IsActive");
@@ -65,6 +72,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Change a blendShape of a skinned mesh. This lasts one frame.
         public AacFlClip BlendShape(SkinnedMeshRenderer renderer, string blendShapeName, float value)
         {
             var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
@@ -74,6 +82,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Change a blendShape of multiple skinned meshes. This lasts one frame. The array can safely contain null values.
         public AacFlClip BlendShape(SkinnedMeshRenderer[] rendererWithNulls, string blendShapeName, float value)
         {
             var defensiveObjects = rendererWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
@@ -87,6 +96,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Change a blendShape of a skinned mesh, with an animation curve.
         public AacFlClip BlendShape(SkinnedMeshRenderer renderer, string blendShapeName, AnimationCurve animationCurve)
         {
             var binding = AacInternals.Binding(_component, typeof(SkinnedMeshRenderer), renderer.transform, $"blendShape.{blendShapeName}");
@@ -96,6 +106,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Change a blendShape of multiple skinned meshes, with an animation curve. The array can safely contain null values.
         public AacFlClip BlendShape(SkinnedMeshRenderer[] rendererWithNulls, string blendShapeName, AnimationCurve animationCurve)
         {
             var defensiveObjects = rendererWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array
@@ -109,6 +120,8 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        // FIXME API: This is weird, this should be a Transform array, and also this needs a single-object overload.
+        /// Change the position of a GameObject in local space. This lasts one frame. This lasts one frame. The array can safely contain null values.
         public AacFlClip Positioning(GameObject[] gameObjectsWithNulls, Vector3 localPosition)
         {
             var defensiveObjects = gameObjectsWithNulls.Where(o => o != null); // Allow users to remove an item in the middle of the array

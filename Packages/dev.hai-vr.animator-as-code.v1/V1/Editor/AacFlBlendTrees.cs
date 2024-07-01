@@ -13,6 +13,7 @@ namespace AnimatorAsCode.V1
             BlendTree = blendTree;
         }
 
+        /// Exposes the underlying Unity BlendTree asset.
         public BlendTree BlendTree { get; }
     }
 

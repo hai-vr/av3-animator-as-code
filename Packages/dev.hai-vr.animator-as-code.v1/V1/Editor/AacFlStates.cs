@@ -140,7 +140,7 @@ namespace AnimatorAsCode.V1
         }
 
         /// <b>FOR USE ONLY BY EXTENSION FUNCTIONS:</b><br/>
-        /// Expose the internal backing animator.
+        /// Exposes the internal backing animator.
         public AacBackingAnimator InternalBackingAnimator()
         {
             return _backingAnimator;
