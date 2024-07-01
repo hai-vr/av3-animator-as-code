@@ -290,12 +290,15 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurve(Clip, new[] {binding});
         }
 
+        /// Animates a color property of a component. The runtime type of the component will be used.
         public AacFlSettingCurveColor AnimatesColor(Component anyComponent, string property)
         {
             var binding = Internal_BindingFromComponent(anyComponent, property);
             return new AacFlSettingCurveColor(Clip, new[] {binding});
         }
 
+        // FIXME API: Safety is not provived on nulls. It should probably be, for convenience.
+        /// Animates a color property of several components. The runtime type of the component will be used.
         public AacFlSettingCurveColor AnimatesColor(Component[] anyComponents, string property)
         {
             var that = this;
