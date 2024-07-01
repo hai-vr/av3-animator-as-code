@@ -9,6 +9,15 @@ using Object = UnityEngine.Object;
 // ReSharper disable once CheckNamespace
 namespace AnimatorAsCode.V1
 {
+    /// Starter class for Animator As Code V1. Call this to obtain an instance of AacFlBase.<br/><br/>
+    /// The intent of the namespace AnimatorAsCode.V1, and the class AacV1,
+    /// is to allow Animator As Code V1 to be simultaneously installed inside projects where:<br/>
+    /// - Instances of Animator As Code V0 may exist,<br/>
+    /// - Instances of Animator As Code V1 derivatives may exist,<br/>
+    /// - Future instances of Animator As Code V2 might exist.<br/><br/>
+    /// For this reason, in case of a breaking change, there should be different versions of Animator As Code released
+    /// with a different package name, namespace, and initializer class name, so that the user may install dependencies
+    /// that rely on different versions of Animator As Code in the same project.
     public static class AacV1
     {
         /// Create an Animator As Code (AAC) base.
