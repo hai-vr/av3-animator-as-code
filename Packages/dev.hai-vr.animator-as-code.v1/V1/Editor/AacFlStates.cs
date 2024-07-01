@@ -459,7 +459,7 @@ namespace AnimatorAsCode.V1
         /// Set the Cycle Offset to a parameter.
         public AacFlState WithCycleOffset(AacFlFloatParameter floatParam)
         {
-            State.cycleOffsetParameterActive = false;
+            State.cycleOffsetParameterActive = true;
             State.cycleOffsetParameter = floatParam.Name;
 
             return this;
