@@ -146,12 +146,16 @@ namespace AnimatorAsCode.V1
             return _backingAnimator;
         }
 
+        /// Create a new state machine, initially positioned below the last generated state of this layer.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name)
         {
             var lastState = LastNodePosition();
             return NewSubStateMachine(name, 0, 0).Shift(lastState, 0, 1);
         }
 
+        /// Create a new state machine at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
             var stateMachine = AacInternals.NoUndo(Machine, () => Machine.AddStateMachine(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
@@ -185,12 +189,16 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Create a new state, initially positioned below the last generated state of this layer.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name)
         {
             var lastState = LastNodePosition();
             return NewState(name, 0, 0).Shift(lastState, 0, 1);
         }
 
+        /// Create a new state at a specific position `x` and `y`, in grid units. The grid size is defined in the DefaultsProvider of the AacConfiguration of AAC. `x` positive goes right, `y` positive goes down.<br/>
+        /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name, int x, int y)
         {
             var state = AacInternals.NoUndo(Machine, () => Machine.AddState(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
@@ -214,21 +222,25 @@ namespace AnimatorAsCode.V1
             return stateName;
         }
 
+        /// Create a transition from Any to the `destination` state.
         public AacFlTransition AnyTransitionsTo(AacFlState destination)
         {
             return AnyTransition(destination, Machine);
         }
 
+        /// Create a transition from Any to the `destination` state machine.
         public AacFlTransition AnyTransitionsTo(AacFlStateMachine destination)
         {
             return AnyTransition(destination, Machine);
         }
 
+        /// Create a transition from the Entry to the `destination` state.
         public AacFlEntryTransition EntryTransitionsTo(AacFlState destination)
         {
             return EntryTransition(destination, Machine);
         }
 
+        /// Create a transition from the Entry to the `destination` state machine.
         public AacFlEntryTransition EntryTransitionsTo(AacFlStateMachine destination)
         {
             return EntryTransition(destination, Machine);
@@ -371,26 +383,33 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Create a new transition from this state to the `destination` state.
         public AacFlTransition TransitionsTo(AacFlState destination)
         {
             return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.State))), _machine, State, destination.State);
         }
 
+        /// Create a new transition from this state to the `destination` state machine.
         public AacFlTransition TransitionsTo(AacFlStateMachine destination)
         {
             return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.Machine))), _machine, State, destination.Machine);
         }
 
+        /// Create a new transition from Any to this state.
         public AacFlTransition TransitionsFromAny()
         {
             return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => _machine.AddAnyStateTransition(State))), _machine, null, State);
         }
 
+        /// Create a new transition from Entry to this state. Note that the first created state is the default state, so generally this function does not need to be invoked onto the first created state.<br/>
+        /// Calling this function will not define this state to be the default state.
         public AacFlEntryTransition TransitionsFromEntry()
         {
             return new AacFlEntryTransition(AacInternals.NoUndo(State, () => _machine.AddEntryTransition(State)), _machine, null, State);
         }
 
+        /// Create a transition with no exit time to the `destination` state.<br/>
+        /// Calling this function does not return the transition.
         public AacFlState AutomaticallyMovesTo(AacFlState destination)
         {
             var transition = ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.State)));
@@ -398,6 +417,8 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Create a transition with no exit time to the `destination` state machine.<br/>
+        /// Calling this function does not return the transition.
         public AacFlState AutomaticallyMovesTo(AacFlStateMachine destination)
         {
             var transition = ConfigureTransition(AacInternals.NoUndo(State, () => State.AddTransition(destination.Machine)));
@@ -405,6 +426,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Create a transition from this state to the exit.
         public AacFlTransition Exits()
         {
             return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => State.AddExitTransition())), _machine, State, null);
@@ -416,12 +438,14 @@ namespace AnimatorAsCode.V1
             return transition;
         }
 
+        /// Set Write Defaults. If you need to do this to many states, consider changing the AacConfiguration DefaultsProvider when creating the AnimatorAsCode instance.
         public AacFlState WithWriteDefaultsSetTo(bool shouldWriteDefaults)
         {
             State.writeDefaultValues = shouldWriteDefaults;
             return this;
         }
 
+        /// Set the Motion Time, formerly known as Normalized Time.
         public AacFlState MotionTime(AacFlFloatParameter floatParam)
         {
             State.timeParameterActive = true;
