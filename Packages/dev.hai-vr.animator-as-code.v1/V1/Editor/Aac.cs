@@ -669,6 +669,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlController
     {
+        /// Exposes the underlying Unity AnimatorController.
         public readonly AnimatorController AnimatorController; 
         
         private readonly AacConfiguration _configuration;
@@ -681,10 +682,15 @@ namespace AnimatorAsCode.V1
             _base = originalBase;
         }
         
+        /// Create a new layer with a specific suffix. You cannot create multiple layers with the same suffix on the same controller.
         public AacFlLayer NewLayer(string suffix) => _base.DoCreateLayerWithoutDeleting(AnimatorController, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix));
+        
+        /// Create a new layer. You cannot invoke this method multiple times on the same controller.
         public AacFlLayer NewLayer() => _base.DoCreateLayerWithoutDeleting(AnimatorController, _configuration.SystemName);
     }
 
+    /// Removes animators from an animator controller.<br/>
+    /// This class is exposed for use by extension functions that need to remove layers.
     public class AacAnimatorRemoval
     {
         private readonly AnimatorController _animatorController;
@@ -694,6 +700,7 @@ namespace AnimatorAsCode.V1
             _animatorController = animatorController;
         }
 
+        /// Remove a single layer having that exact name.
         public void RemoveLayer(string layerName)
         {
             var index = FindIndexOf(layerName);
