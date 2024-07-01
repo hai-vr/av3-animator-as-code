@@ -445,7 +445,9 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
-        /// Set the Motion Time, formerly known as Normalized Time.
+        // FIXME API: Shouldn't there be a WithMotionTimeSetTo?
+        // FIXME API inconsistency: Shouldn't this also be called WithMotionTime?
+        /// Set the Motion Time to a parameter. This was formerly known as Normalized Time.
         public AacFlState MotionTime(AacFlFloatParameter floatParam)
         {
             State.timeParameterActive = true;
@@ -454,6 +456,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set the Cycle Offset to a parameter.
         public AacFlState WithCycleOffset(AacFlFloatParameter floatParam)
         {
             State.cycleOffsetParameterActive = true;
@@ -462,6 +465,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set the Cycle Offset to a specific value.
         public AacFlState WithCycleOffsetSetTo(float cycleOffset)
         {
             State.cycleOffsetParameterActive = false;
@@ -470,6 +474,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set the Speed to a parameter.
         public AacFlState WithSpeed(AacFlFloatParameter parameter)
         {
             State.speedParameterActive = true;
@@ -478,6 +483,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Set the Speed to a specific value.
         public AacFlState WithSpeedSetTo(float speed)
         {
             State.speedParameterActive = false;
