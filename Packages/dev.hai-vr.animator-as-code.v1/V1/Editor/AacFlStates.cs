@@ -445,10 +445,19 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
-        // FIXME API: Shouldn't there be a WithMotionTimeSetTo?
-        // FIXME API inconsistency: Shouldn't this also be called WithMotionTime?
-        /// Set the Motion Time to a parameter. This was formerly known as Normalized Time.
+        /// Obsolete. Use `WithMotionTime()` instead.<br/>
+        /// Set the Motion Time to a parameter. This was formerly known as Normalized Time.<br/>
+        /// <br/>
+        /// This function is preserved for compatibility.<br/>
+        /// The behaviour is identical to `WithMotionTime()`.
+        [Obsolete("This function was renamed to WithMotionTime(AacFlFloatParameter)")]
         public AacFlState MotionTime(AacFlFloatParameter floatParam)
+        {
+            return WithMotionTime(floatParam);
+        }
+        
+        /// Set the Motion Time to a parameter. This was formerly known as Normalized Time.
+        public AacFlState WithMotionTime(AacFlFloatParameter floatParam)
         {
             State.timeParameterActive = true;
             State.timeParameter = floatParam.Name;
