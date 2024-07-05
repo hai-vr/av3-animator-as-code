@@ -119,8 +119,88 @@ namespace AnimatorAsCode.V1
 
             return this;
         }
+        
+        public AacFlClip Positioning(Transform transform, Vector3 localPosition)
+        {
+            // Single-valued overloads must not tolerate null values
+            if (transform == null) throw new NullReferenceException("Transform must not be null");
+            return Positioning(new GameObject[]{ transform.gameObject }, localPosition);
+        }
 
-        // FIXME API: This is weird, this should be a Transform array, and also this needs a single-object overload.
+        public AacFlClip RotatingUsingEulerInterpolation(Transform transform, Vector3 localEulerAngles)
+        {
+            // Single-valued overloads must not tolerate null values
+            if (transform == null) throw new NullReferenceException("Transform must not be null");
+            return RotatingUsingEulerInterpolation(new GameObject[]{ transform.gameObject }, localEulerAngles);
+        }
+        
+        public AacFlClip RotatingUsingQuaternionInterpolation(Transform transform, Quaternion localQuaternionAngles)
+        {
+            // Single-valued overloads must not tolerate null values
+            if (transform == null) throw new NullReferenceException("Transform must not be null");
+            return RotatingUsingQuaternionInterpolation(new GameObject[]{ transform.gameObject }, localQuaternionAngles);
+        }
+        
+        public AacFlClip Scaling(Transform transform, Vector3 scale)
+        {
+            // Single-valued overloads must not tolerate null values
+            if (transform == null) throw new NullReferenceException("Transform must not be null");
+            return Scaling(new GameObject[]{ transform.gameObject }, scale);
+        }
+        
+        public AacFlClip Positioning(GameObject gameObject, Vector3 localPosition)
+        {
+            // Single-valued overloads must not tolerate null values
+            if (gameObject == null) throw new NullReferenceException("GameObject must not be null");
+            return Positioning(new GameObject[]{ gameObject }, localPosition);
+        }
+
+        public AacFlClip RotatingUsingEulerInterpolation(GameObject gameObject, Vector3 localEulerAngles)
+        {
+            // Single-valued overloads must not tolerate null values
+            if (gameObject == null) throw new NullReferenceException("GameObject must not be null");
+            return RotatingUsingEulerInterpolation(new GameObject[]{ gameObject }, localEulerAngles);
+        }
+        
+        public AacFlClip RotatingUsingQuaternionInterpolation(GameObject gameObject, Quaternion localQuaternionAngles)
+        {
+            // Single-valued overloads must not tolerate null values
+            if (gameObject == null) throw new NullReferenceException("GameObject must not be null");
+            return RotatingUsingQuaternionInterpolation(new GameObject[]{ gameObject }, localQuaternionAngles);
+        }
+        
+        public AacFlClip Scaling(GameObject gameObject, Vector3 scale)
+        {
+            // Single-valued overloads must not tolerate null values
+            if (gameObject == null) throw new NullReferenceException("GameObject must not be null");
+            return Scaling(new GameObject[]{ gameObject }, scale);
+        }
+        
+        public AacFlClip Positioning(Transform[] transformsWithNulls, Vector3 localPosition)
+        {
+            return Positioning(AsGameObjectsWithNulls(transformsWithNulls), localPosition);
+        }
+
+        public AacFlClip RotatingUsingEulerInterpolation(Transform[] transformsWithNulls, Vector3 localEulerAngles)
+        {
+            return RotatingUsingEulerInterpolation(AsGameObjectsWithNulls(transformsWithNulls), localEulerAngles);
+        }
+        
+        public AacFlClip RotatingUsingQuaternionInterpolation(Transform[] transformsWithNulls, Quaternion localQuaternionAngles)
+        {
+            return RotatingUsingQuaternionInterpolation(AsGameObjectsWithNulls(transformsWithNulls), localQuaternionAngles);
+        }
+        
+        public AacFlClip Scaling(Transform[] transformsWithNulls, Vector3 scale)
+        {
+            return Scaling(AsGameObjectsWithNulls(transformsWithNulls), scale);
+        }
+
+        private static GameObject[] AsGameObjectsWithNulls(Transform[] transformsWithNulls)
+        {
+            return transformsWithNulls.Select(o => o != null ? o.gameObject : null).ToArray();
+        }
+
         /// Change the position of a GameObject in local space. This lasts one frame. This lasts one frame. The array can safely contain null values.
         public AacFlClip Positioning(GameObject[] gameObjectsWithNulls, Vector3 localPosition)
         {
@@ -201,6 +281,7 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
+        /// Swap a material of a Renderer on the specified slot (indexed at 0). This lasts one frame.
         public AacFlClip SwappingMaterial(Renderer renderer, int slot, Material material)
         {
             var binding = AacInternals.Binding(_component, renderer.GetType(), renderer.transform, $"m_Materials.Array.data[{slot}]");
@@ -212,7 +293,9 @@ namespace AnimatorAsCode.V1
 
             return this;
         }
-
+        
+        /// Swap a material of a Particle System on the specified slot (indexed at 0). This lasts one frame.<br/>
+        /// In practice, this will animate the ParticleSystemRenderer of that particle system.
         public AacFlClip SwappingMaterial(ParticleSystem particleSystem, int slot, Material material)
         {
             var binding = AacInternals.Binding(_component, typeof(ParticleSystemRenderer), particleSystem.transform, $"m_Materials.Array.data[{slot}]");
@@ -397,7 +480,6 @@ namespace AnimatorAsCode.V1
             }
         }
 
-        // FIXME WEB: Missing from web docs
         /// Define the curve as the parameter. The duration is encoded inside the curve itself.
         public void WithAnimationCurve(AnimationCurve animationCurve)
         {
@@ -432,9 +514,16 @@ namespace AnimatorAsCode.V1
             }
         }
 
-        // FIXME WEB: Missing from web docs
-        // FIXME NON-DOCUMENTED: Missing docs
-        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingObjectReferenceKeyframes> action) // FIXME: Should this be renamed?
+        /// Obsolete. Use `WithUnit()` instead.<br/>
+        /// Start defining the keyframes with a lambda expression, expressing the unit.
+        [Obsolete("This function was renamed to WithUnit(...)")]
+        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingObjectReferenceKeyframes> action)
+        {
+            WithUnit(unit, action);
+        }
+        
+        /// Start defining the keyframes with a lambda expression, expressing the unit.
+        public void WithUnit(AacFlUnit unit, Action<AacFlSettingObjectReferenceKeyframes> action)
         {
             var mutatedObjectReferenceKeyframes = new List<ObjectReferenceKeyframe>();
             var builder = new AacFlSettingObjectReferenceKeyframes(unit, mutatedObjectReferenceKeyframes);
@@ -458,6 +547,7 @@ namespace AnimatorAsCode.V1
             _mutatedKeyframes = mutatedKeyframes;
         }
 
+        /// Create a keyframe for an object reference. The unit is defined by the function that invokes this lambda expression.
         public AacFlSettingObjectReferenceKeyframes Setting(int timeInUnit, Object value)
         {
             _mutatedKeyframes.Add(new ObjectReferenceKeyframe { time = AsSeconds(timeInUnit), value = value });

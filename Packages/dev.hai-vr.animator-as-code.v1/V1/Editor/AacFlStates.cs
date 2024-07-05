@@ -612,9 +612,23 @@ namespace AnimatorAsCode.V1
 
             return this;
         }
-
-        // FIXME API: Percent is misnomer
+        
         /// Set the exit time at a specific normalized amount.
+        public AacFlTransition AfterAnimationIsAtLeastAtNormalized(float exitTimeNormalized)
+        {
+            return AfterAnimationIsAtLeastAtPercent(exitTimeNormalized);
+        }
+        
+        /// Set a non-fixed transition duration in a normalized amount.
+        public AacFlTransition WithTransitionDurationNormalized(float transitionDurationNormalized)
+        {
+            return WithTransitionDurationPercent(transitionDurationNormalized);
+        }
+
+        /// Set the exit time at a specific normalized amount.<br/>
+        /// <br/>
+        /// Note: Percent is a misnomer. You are expected to provide a value expressed as a normalized value (where 1 represents the clip duration).<br/>
+        /// This function behaves identically to `AfterAnimationIsAtLeastAtNormalized(float)`
         public AacFlTransition AfterAnimationIsAtLeastAtPercent(float exitTimeNormalized)
         {
             _transition.hasExitTime = true;
@@ -623,8 +637,10 @@ namespace AnimatorAsCode.V1
             return this;
         }
 
-        // FIXME API: Percent is misnomer
-        /// Set a non-fixed transition duration in a normalized amount.
+        /// Set a non-fixed transition duration in a normalized amount.<br/>
+        /// <br/>
+        /// Note: Percent is a misnomer. You are expected to provide a value expressed as a normalized value (where 1 represents the clip duration).<br/>
+        /// This function behaves identically to `WithTransitionDurationNormalized(float)`
         public AacFlTransition WithTransitionDurationPercent(float transitionDurationNormalized)
         {
             _transition.hasFixedDuration = false;
