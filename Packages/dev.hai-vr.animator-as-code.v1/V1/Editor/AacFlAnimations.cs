@@ -320,6 +320,7 @@ namespace AnimatorAsCode.V1
             Clip = clip;
         }
 
+        /// Animates a path the traditional way.
         public AacFlSettingCurve Animates(string path, Type type, string propertyName)
         {
             var binding = new EditorCurveBinding
@@ -331,6 +332,7 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurve(Clip, new[] {binding});
         }
 
+        /// Animates an object in the hierarchy relative to the animator root, the traditional way.
         public AacFlSettingCurve Animates(Transform transform, Type type, string propertyName)
         {
             var binding = AacInternals.Binding(_component, type, transform, propertyName);
@@ -338,13 +340,15 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurve(Clip, new[] {binding});
         }
 
+        /// Animates the active property of a GameObject, toggling it.
         public AacFlSettingCurve Animates(GameObject gameObject)
         {
             var binding = AacInternals.Binding(_component, typeof(GameObject), gameObject.transform, "m_IsActive");
 
             return new AacFlSettingCurve(Clip, new[] {binding});
         }
-
+        
+        /// Animates the property of a component. The runtime type of the component will be used.
         public AacFlSettingCurve Animates(Component anyComponent, string property)
         {
             var binding = Internal_BindingFromComponent(anyComponent, property);
@@ -352,16 +356,15 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurve(Clip, new[] {binding});
         }
 
-        public AacFlSettingCurve Animates(Component[] anyComponents, string property)
+        /// Animates the property of several components. The runtime type of the component will be used. The array can safely contain null values.
+        public AacFlSettingCurve Animates(Component[] anyComponentsWithNulls, string property)
         {
-            var that = this;
-            var bindings = anyComponents
-                .Select(anyComponent => that.Internal_BindingFromComponent(anyComponent, property))
-                .ToArray();
-
+            var bindings = Internal_BindingsFromComponentsWithNulls(anyComponentsWithNulls, property);
+            
             return new AacFlSettingCurve(Clip, bindings);
         }
 
+        /// Animates a Float parameter of the animator (may sometimes be referred to as an Animated Animator Parameter, or AAP).
         public AacFlSettingCurve AnimatesAnimator(AacFlParameter floatParameter)
         {
             var binding = new EditorCurveBinding
@@ -380,27 +383,29 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurveColor(Clip, new[] {binding});
         }
 
-        // FIXME API: Safety is not provived on nulls. It should probably be, for convenience.
         /// Animates a color property of several components. The runtime type of the component will be used.
-        public AacFlSettingCurveColor AnimatesColor(Component[] anyComponents, string property)
+        public AacFlSettingCurveColor AnimatesColor(Component[] anyComponentsWithNulls, string property)
         {
-            var that = this;
-            var bindings = anyComponents
-                .Select(anyComponent => that.Internal_BindingFromComponent(anyComponent, property))
-                .ToArray();
-
+            var bindings = Internal_BindingsFromComponentsWithNulls(anyComponentsWithNulls, property);
+            
             return new AacFlSettingCurveColor(Clip, bindings);
         }
 
-        // FIXME API: The multi-component (including nulls) version of this function is missing
-        /// Animates a HDR color property of a component (uses XYZW instead of RGBA). The runtime type of the component will be used. // FIXME: this needs multi-component, with safety
+        /// Animates an HDR color property of a component (uses XYZW instead of RGBA). The runtime type of the component will be used.
         public AacFlSettingCurveColor AnimatesHDRColor(Component anyComponent, string property)
         {
             var binding = Internal_BindingFromComponent(anyComponent, property);
             return new AacFlSettingCurveColor(Clip, new[] {binding}, true);
         }
 
-        // FIXME API: The multi-component (including nulls) version of this function is missing
+        /// Animates an HDR color property of several components (uses XYZW instead of RGBA). The runtime type of the component will be used.
+        public AacFlSettingCurveColor AnimatesHDRColor(Component[] anyComponentsWithNulls, string property)
+        {
+            var bindings = Internal_BindingsFromComponentsWithNulls(anyComponentsWithNulls, property);
+            
+            return new AacFlSettingCurveColor(Clip, bindings, true);
+        }
+
         /// Animates an object reference of a component. The runtime type of the component will be used.
         public AacFlSettingCurveObjectReference AnimatesObjectReference(Component anyComponent, string property)
         {
@@ -408,11 +413,27 @@ namespace AnimatorAsCode.V1
             return new AacFlSettingCurveObjectReference(Clip, new[] {binding});
         }
 
+        /// Animates an object reference of several components. The runtime type of the component will be used.
+        public AacFlSettingCurveObjectReference AnimatesObjectReference(Component[] anyComponentsWithNulls, string property)
+        {
+            var bindings = Internal_BindingsFromComponentsWithNulls(anyComponentsWithNulls, property);
+
+            return new AacFlSettingCurveObjectReference(Clip, bindings);
+        }
+
         /// Returns an EditorCurveBinding of a component, relative to the animator root. The runtime type of the component will be used.<br/>
         /// This is meant to be used in conjunction with traditional animation APIs.
         public EditorCurveBinding BindingFromComponent(Component anyComponent, string propertyName)
         {
             return Internal_BindingFromComponent(anyComponent, propertyName);
+        }
+
+        private EditorCurveBinding[] Internal_BindingsFromComponentsWithNulls(Component[] anyComponentsWithNulls, string property)
+        {
+            return anyComponentsWithNulls
+                .Where(o => o != null)
+                .Select(anyComponent => Internal_BindingFromComponent(anyComponent, property))
+                .ToArray();
         }
 
         private EditorCurveBinding Internal_BindingFromComponent(Component anyComponent, string propertyName)
