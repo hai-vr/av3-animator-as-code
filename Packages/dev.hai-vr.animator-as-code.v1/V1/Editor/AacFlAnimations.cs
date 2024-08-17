@@ -614,7 +614,16 @@ namespace AnimatorAsCode.V1
             }
         }
 
-        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingKeyframesColor> action) // FIXME: Should this be renamed?
+        /// Obsolete. Use `WithUnit()` instead.<br/>
+        /// Start defining the keyframes with a lambda expression, expressing the unit.
+        [Obsolete("This function was renamed to WithUnit(...)")]
+        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingKeyframesColor> action)
+        {
+            WithUnit(unit, action);
+        }
+
+        /// Start defining the keyframes with a lambda expression, expressing the unit.
+        public void WithUnit(AacFlUnit unit, Action<AacFlSettingKeyframesColor> action)
         {
             var mutatedKeyframesR = new List<Keyframe>();
             var mutatedKeyframesG = new List<Keyframe>();
