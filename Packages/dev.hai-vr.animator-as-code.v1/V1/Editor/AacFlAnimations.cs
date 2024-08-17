@@ -538,16 +538,16 @@ namespace AnimatorAsCode.V1
         /// Obsolete. Use `WithUnit()` instead.<br/>
         /// Start defining the keyframes with a lambda expression, expressing the unit.
         [Obsolete("This function was renamed to WithUnit(...)")]
-        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingObjectReferenceKeyframes> action)
+        public void WithKeyframes(AacFlUnit unit, Action<AacFlSettingKeyframesObjectReference> action)
         {
             WithUnit(unit, action);
         }
         
         /// Start defining the keyframes with a lambda expression, expressing the unit.
-        public void WithUnit(AacFlUnit unit, Action<AacFlSettingObjectReferenceKeyframes> action)
+        public void WithUnit(AacFlUnit unit, Action<AacFlSettingKeyframesObjectReference> action)
         {
             var mutatedObjectReferenceKeyframes = new List<ObjectReferenceKeyframe>();
-            var builder = new AacFlSettingObjectReferenceKeyframes(unit, mutatedObjectReferenceKeyframes);
+            var builder = new AacFlSettingKeyframesObjectReference(unit, mutatedObjectReferenceKeyframes);
             action.Invoke(builder);
             
             foreach (var binding in _bindings)
@@ -557,19 +557,19 @@ namespace AnimatorAsCode.V1
         }
     }
 
-    public class AacFlSettingObjectReferenceKeyframes
+    public class AacFlSettingKeyframesObjectReference
     {
         private readonly AacFlUnit _unit;
         private readonly List<ObjectReferenceKeyframe> _mutatedKeyframes;
 
-        public AacFlSettingObjectReferenceKeyframes(AacFlUnit unit, List<ObjectReferenceKeyframe> mutatedKeyframes)
+        public AacFlSettingKeyframesObjectReference(AacFlUnit unit, List<ObjectReferenceKeyframe> mutatedKeyframes)
         {
             _unit = unit;
             _mutatedKeyframes = mutatedKeyframes;
         }
 
         /// Create a keyframe for an object reference. The unit is defined by the function that invokes this lambda expression.
-        public AacFlSettingObjectReferenceKeyframes Setting(int timeInUnit, Object value)
+        public AacFlSettingKeyframesObjectReference Setting(int timeInUnit, Object value)
         {
             _mutatedKeyframes.Add(new ObjectReferenceKeyframe { time = AsSeconds(timeInUnit), value = value });
 
