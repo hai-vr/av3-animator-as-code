@@ -19,7 +19,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlNonInitializedBlendTree : AacFlBlendTree
     {
-        public AacFlNonInitializedBlendTree(BlendTree blendTree) : base(blendTree)
+        internal AacFlNonInitializedBlendTree(BlendTree blendTree) : base(blendTree)
         {
         }
 
@@ -71,7 +71,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlBlendTree2D : AacFlBlendTree
     {
-        public AacFlBlendTree2D(BlendTree blendTree) : base(blendTree)
+        internal AacFlBlendTree2D(BlendTree blendTree) : base(blendTree)
         {
         }
 
@@ -197,7 +197,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlBlendTree1D : AacFlBlendTree
     {
-        public AacFlBlendTree1D(BlendTree blendTree) : base(blendTree)
+        internal AacFlBlendTree1D(BlendTree blendTree) : base(blendTree)
         {
         }
         
@@ -278,7 +278,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlBlendTreeDirect : AacFlBlendTree
     {
-        public AacFlBlendTreeDirect(BlendTree blendTree) : base(blendTree)
+        internal AacFlBlendTreeDirect(BlendTree blendTree) : base(blendTree)
         {
         }
 
@@ -356,7 +356,11 @@ namespace AnimatorAsCode.V1
         internal float TimeScale { get; set; } = 1f;
         internal bool Mirror { get; set; }
         internal float CycleOffset { get; set; }
-        
+
+        internal AacFlBlendTreeChildMotion()
+        {
+        }
+
         ///  Set the time scale. The time scale value is 1 by default.
         public AacFlBlendTreeChildMotion WithTimeScaleSetTo(float timeScale)
         {

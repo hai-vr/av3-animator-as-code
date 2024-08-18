@@ -12,7 +12,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly AacAnimatorGenerator _generator;
 
-        public AacBackingAnimator(AacAnimatorGenerator animatorGenerator)
+        internal AacBackingAnimator(AacAnimatorGenerator animatorGenerator)
         {
             _generator = animatorGenerator;
         }
@@ -362,7 +362,7 @@ namespace AnimatorAsCode.V1
         
         private readonly AnimatorStateMachine _machine;
 
-        public AacFlState(AnimatorState state, AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider, Transform animatorRoot) : base(parentMachine, defaultsProvider, animatorRoot)
+        internal AacFlState(AnimatorState state, AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider, Transform animatorRoot) : base(parentMachine, defaultsProvider, animatorRoot)
         {
             State = state;
             _machine = parentMachine.Machine;
@@ -544,7 +544,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly AnimatorStateTransition _transition;
 
-        public AacFlTransition(AnimatorStateTransition transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        internal AacFlTransition(AnimatorStateTransition transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
             _transition = transition;
         }
@@ -655,7 +655,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlEntryTransition : AacFlNewTransitionContinuation
     {
-        public AacFlEntryTransition(AnimatorTransition transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        internal AacFlEntryTransition(AnimatorTransition transition, AnimatorStateMachine machine, AnimatorState sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
         }
     }
@@ -674,7 +674,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly AnimatorTransitionBase _transition;
 
-        public AacFlCondition(AnimatorTransitionBase transition)
+        internal AacFlCondition(AnimatorTransitionBase transition)
         {
             _transition = transition;
         }
@@ -695,7 +695,7 @@ namespace AnimatorAsCode.V1
         private readonly AacTransitionEndpoint _sourceNullableIfAny;
         private readonly AacTransitionEndpoint _destinationNullableIfExits;
 
-        public AacFlNewTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits)
+        internal AacFlNewTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits)
         {
             Transition = transition;
             _machine = machine;
@@ -765,7 +765,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlTransitionContinuation : AacFlTransitionContinuationAbstractWithOr
     {
-        public AacFlTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        internal AacFlTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
         }
 
@@ -805,7 +805,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly List<AacFlTransitionContinuation> _pendingContinuations;
 
-        public AacFlMultiTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits, List<AacFlTransitionContinuation> pendingContinuations) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        internal AacFlMultiTransitionContinuation(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits, List<AacFlTransitionContinuation> pendingContinuations) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
             _pendingContinuations = pendingContinuations;
         }
@@ -852,7 +852,7 @@ namespace AnimatorAsCode.V1
 
     public class AacFlTransitionContinuationOnlyOr : AacFlTransitionContinuationAbstractWithOr
     {
-        public AacFlTransitionContinuationOnlyOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
+        internal AacFlTransitionContinuationOnlyOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits) : base(transition, machine, sourceNullableIfAny, destinationNullableIfExits)
         {
         }
     }
@@ -864,7 +864,7 @@ namespace AnimatorAsCode.V1
         private readonly AacTransitionEndpoint _sourceNullableIfAny;
         private readonly AacTransitionEndpoint _destinationNullableIfExits;
 
-        public AacFlTransitionContinuationAbstractWithOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits)
+        protected AacFlTransitionContinuationAbstractWithOr(AnimatorTransitionBase transition, AnimatorStateMachine machine, AacTransitionEndpoint sourceNullableIfAny, AacTransitionEndpoint destinationNullableIfExits)
         {
             Transition = transition;
             _machine = machine;
@@ -980,7 +980,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly AnimatorTransitionBase _transition;
 
-        public AacFlTransitionContinuationWithoutOr(AnimatorTransitionBase transition)
+        internal AacFlTransitionContinuationWithoutOr(AnimatorTransitionBase transition)
         {
             _transition = transition;
         }
@@ -1008,12 +1008,12 @@ namespace AnimatorAsCode.V1
         private readonly AnimatorState _state;
         private readonly AnimatorStateMachine _stateMachine;
 
-        public AacTransitionEndpoint(AnimatorState state)
+        private AacTransitionEndpoint(AnimatorState state)
         {
             _state = state;
         }
 
-        public AacTransitionEndpoint(AnimatorStateMachine stateMachine)
+        private AacTransitionEndpoint(AnimatorStateMachine stateMachine)
         {
             _stateMachine = stateMachine;
         }

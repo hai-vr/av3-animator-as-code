@@ -16,7 +16,7 @@ namespace AnimatorAsCode.V1
         /// Exposes the underlying Unity Clip asset.
         [PublicAPI] public AnimationClip Clip { get; }
 
-        public AacFlClip(AacConfiguration component, AnimationClip clip)
+        internal AacFlClip(AacConfiguration component, AnimationClip clip)
         {
             _component = component;
             Clip = clip;
@@ -315,7 +315,7 @@ namespace AnimatorAsCode.V1
         private readonly AacConfiguration _component;
         [PublicAPI] public AnimationClip Clip { get; }
 
-        public AacFlEditClip(AacConfiguration component, AnimationClip clip)
+        internal AacFlEditClip(AacConfiguration component, AnimationClip clip)
         {
             _component = component;
             Clip = clip;
@@ -448,7 +448,7 @@ namespace AnimatorAsCode.V1
         private readonly AnimationClip _clip;
         private readonly EditorCurveBinding[] _bindings;
 
-        public AacFlSettingCurve(AnimationClip clip, EditorCurveBinding[] bindings)
+        internal AacFlSettingCurve(AnimationClip clip, EditorCurveBinding[] bindings)
         {
             _clip = clip;
             _bindings = bindings;
@@ -517,7 +517,7 @@ namespace AnimatorAsCode.V1
         private readonly AnimationClip _clip;
         private readonly EditorCurveBinding[] _bindings;
 
-        public AacFlSettingCurveObjectReference(AnimationClip clip, EditorCurveBinding[] bindings)
+        internal AacFlSettingCurveObjectReference(AnimationClip clip, EditorCurveBinding[] bindings)
         {
             _clip = clip;
             _bindings = bindings;
@@ -563,7 +563,7 @@ namespace AnimatorAsCode.V1
         private readonly AacFlUnit _unit;
         private readonly List<ObjectReferenceKeyframe> _mutatedKeyframes;
 
-        public AacFlSettingKeyframesObjectReference(AacFlUnit unit, List<ObjectReferenceKeyframe> mutatedKeyframes)
+        internal AacFlSettingKeyframesObjectReference(AacFlUnit unit, List<ObjectReferenceKeyframe> mutatedKeyframes)
         {
             _unit = unit;
             _mutatedKeyframes = mutatedKeyframes;
@@ -597,7 +597,7 @@ namespace AnimatorAsCode.V1
         private readonly EditorCurveBinding[] _bindings;
         private readonly bool _hdr;
 
-        public AacFlSettingCurveColor(AnimationClip clip, EditorCurveBinding[] bindings, bool hdr = false)
+        internal AacFlSettingCurveColor(AnimationClip clip, EditorCurveBinding[] bindings, bool hdr = false)
         {
             _clip = clip;
             _bindings = bindings;
@@ -648,7 +648,7 @@ namespace AnimatorAsCode.V1
         private readonly AacFlUnit _unit;
         private readonly List<Keyframe> _mutatedKeyframes;
 
-        public AacFlSettingKeyframes(AacFlUnit unit, List<Keyframe> mutatedKeyframes)
+        internal AacFlSettingKeyframes(AacFlUnit unit, List<Keyframe> mutatedKeyframes)
         {
             _unit = unit;
             _mutatedKeyframes = mutatedKeyframes;
@@ -715,7 +715,7 @@ namespace AnimatorAsCode.V1
         private AacFlSettingKeyframes _b;
         private AacFlSettingKeyframes _a;
 
-        public AacFlSettingKeyframesColor(AacFlUnit unit, List<Keyframe> mutatedKeyframesR, List<Keyframe> mutatedKeyframesG, List<Keyframe> mutatedKeyframesB, List<Keyframe> mutatedKeyframesA)
+        internal AacFlSettingKeyframesColor(AacFlUnit unit, List<Keyframe> mutatedKeyframesR, List<Keyframe> mutatedKeyframesG, List<Keyframe> mutatedKeyframesB, List<Keyframe> mutatedKeyframesA)
         {
             _r = new AacFlSettingKeyframes(unit, mutatedKeyframesR);
             _g = new AacFlSettingKeyframes(unit, mutatedKeyframesG);

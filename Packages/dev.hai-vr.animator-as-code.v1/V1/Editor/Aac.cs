@@ -616,6 +616,10 @@ namespace AnimatorAsCode.V1
         private readonly Dictionary<string, int> _intOverrides = new Dictionary<string, int>();
         private readonly Dictionary<string, bool> _boolOverrides = new Dictionary<string, bool>();
 
+        internal AacFlNoAnimator()
+        {
+        }
+
         /// Create a Float parameter, for use without a backing animator.
         public AacFlFloatParameter FloatParameter(string parameterName)
         {
@@ -689,7 +693,7 @@ namespace AnimatorAsCode.V1
         private readonly AacConfiguration _configuration;
         private readonly AacFlBase _base;
 
-        public AacFlController(AacConfiguration configuration, AnimatorController animatorAnimatorController, AacFlBase originalBase)
+        internal AacFlController(AacConfiguration configuration, AnimatorController animatorAnimatorController, AacFlBase originalBase)
         {
             AnimatorController = animatorAnimatorController;
             _configuration = configuration;
@@ -709,7 +713,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly AnimatorController _animatorController;
 
-        public AacAnimatorRemoval(AnimatorController animatorController)
+        internal AacAnimatorRemoval(AnimatorController animatorController)
         {
             _animatorController = animatorController;
         }

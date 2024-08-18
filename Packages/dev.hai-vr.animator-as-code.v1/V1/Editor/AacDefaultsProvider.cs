@@ -1,4 +1,5 @@
-﻿using UnityEditor.Animations;
+﻿using JetBrains.Annotations;
+using UnityEditor.Animations;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -18,7 +19,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly bool _writeDefaults;
 
-        public AacDefaultsProvider(bool writeDefaults = false)
+        [PublicAPI] public AacDefaultsProvider(bool writeDefaults = false)
         {
             _writeDefaults = writeDefaults;
         }

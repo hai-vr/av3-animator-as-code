@@ -12,7 +12,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly Action<AacFlCondition> _action;
 
-        public AacFlConditionSimple(Action<AacFlCondition> action)
+        private AacFlConditionSimple(Action<AacFlCondition> action)
         {
             _action = action;
         }
@@ -279,7 +279,7 @@ namespace AnimatorAsCode.V1
         private readonly string[] _names;
         private readonly bool _value;
 
-        public AacFlBoolParameterIsAnyOrCondition(string[] names, bool value)
+        internal AacFlBoolParameterIsAnyOrCondition(string[] names, bool value)
         {
             _names = names;
             _value = value;
