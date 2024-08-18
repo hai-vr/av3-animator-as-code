@@ -23,6 +23,14 @@ namespace AnimatorAsCode.V1
             AnimatorRoot = animatorRoot;
         }
 
+        internal AacFlStateMachine RootMachine()
+        {
+            if (ParentMachine != null) return ParentMachine.RootMachine();
+            if (this is AacFlStateMachine root)
+                return root;
+            return null;
+        }
+
         /// Move the node the left of the other node in the graph.
         public TNode LeftOf(AacAnimatorNode otherNode) => MoveNextTo(otherNode, -1, 0);
         

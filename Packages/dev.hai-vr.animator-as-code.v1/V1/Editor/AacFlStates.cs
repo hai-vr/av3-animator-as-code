@@ -226,7 +226,9 @@ namespace AnimatorAsCode.V1
         /// Create a transition from Any to the `destination` state.
         public AacFlTransition AnyTransitionsTo(AacFlState destination)
         {
-            return AnyTransition(destination, Machine);
+            // Sub-state machines "cannot" have Any state transitions created directly from them.
+            // Internally, Any always comes from the root state machine, but visually in the graph, it will come from the sub-state machine.
+            return AnyTransition(destination, RootMachine().Machine);
         }
 
         /// Create a transition from Any to the `destination` state machine.
@@ -401,7 +403,10 @@ namespace AnimatorAsCode.V1
         /// Create a new transition from Any to this state.
         public AacFlTransition TransitionsFromAny()
         {
-            return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => _machine.AddAnyStateTransition(State))), _machine, null, State);
+            // Sub-state machines "cannot" have Any state transitions created directly from them.
+            // Internally, Any always comes from the root state machine, but visually in the graph, it will come from the sub-state machine.
+            var rootMachine = RootMachine().Machine;
+            return new AacFlTransition(ConfigureTransition(AacInternals.NoUndo(State, () => rootMachine.AddAnyStateTransition(State))), rootMachine, null, State);
         }
 
         /// Create a new transition from Entry to this state. Note that the first created state is the default state, so generally this function does not need to be invoked onto the first created state.<br/>
