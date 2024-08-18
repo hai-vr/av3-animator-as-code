@@ -159,7 +159,7 @@ namespace AnimatorAsCode.V1
         /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlStateMachine NewSubStateMachine(string name, int x, int y)
         {
-            var stateMachine = AacInternals.NoUndo(Machine, () => Machine.AddStateMachine(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
+            var stateMachine = AacInternals.NoUndo(Machine, () => Machine.AddStateMachine(SanitizeAndEnsureNameIsDeduplicated(name), GridPosition(x, y)));
             var aacMachine = new AacFlStateMachine(stateMachine, _emptyClip, _backingAnimator, DefaultsProvider, AnimatorRoot, this);
             _defaultsProvider.ConfigureStateMachine(stateMachine);
             _childNodes.Add(aacMachine);
@@ -202,7 +202,7 @@ namespace AnimatorAsCode.V1
         /// 🔺 If the name is already used, a number will be appended at the end.
         public AacFlState NewState(string name, int x, int y)
         {
-            var state = AacInternals.NoUndo(Machine, () => Machine.AddState(EnsureNameIsDeduplicated(name), GridPosition(x, y)));
+            var state = AacInternals.NoUndo(Machine, () => Machine.AddState(SanitizeAndEnsureNameIsDeduplicated(name), GridPosition(x, y)));
             DefaultsProvider.ConfigureState(state, _emptyClip);
             var aacState = new AacFlState(state, this, DefaultsProvider, AnimatorRoot);
             _childNodes.Add(aacState);
@@ -210,8 +210,10 @@ namespace AnimatorAsCode.V1
             return aacState;
         }
 
-        private string EnsureNameIsDeduplicated(string name)
+        private string SanitizeAndEnsureNameIsDeduplicated(string name)
         {
+            name = SanitizeName(name);
+            
             var suffix = 0;
             var stateName = name;
             while (_stateNames.Contains(stateName))
@@ -221,6 +223,17 @@ namespace AnimatorAsCode.V1
 
             _stateNames.Add(stateName);
             return stateName;
+        }
+
+        private string SanitizeName(string name)
+        {
+            // If the name contains a period ".", it can cause the animator to misbehave
+            // as in, transitions will not work properly.
+            // incredible but true
+            // Apparently this is because substates use the dot as a separator or something
+            // Sanitize the name so that menu state names such as "J. Inner" don't mess things up
+            // return Regex.Replace(controlName, "[^A-Za-z0-9]", "");
+            return name.Replace(".", "_");
         }
 
         /// Create a transition from Any to the `destination` state.
