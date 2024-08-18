@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -683,14 +684,14 @@ namespace AnimatorAsCode.V1
     public class AacFlController
     {
         /// Exposes the underlying Unity AnimatorController.
-        public readonly AnimatorController AnimatorController; 
-        
+        [PublicAPI] public AnimatorController AnimatorController { get; }
+
         private readonly AacConfiguration _configuration;
         private readonly AacFlBase _base;
 
-        public AacFlController(AacConfiguration configuration, AnimatorController animatorController, AacFlBase originalBase)
+        public AacFlController(AacConfiguration configuration, AnimatorController animatorAnimatorController, AacFlBase originalBase)
         {
-            AnimatorController = animatorController;
+            AnimatorController = animatorAnimatorController;
             _configuration = configuration;
             _base = originalBase;
         }

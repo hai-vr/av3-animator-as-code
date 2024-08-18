@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -111,8 +112,8 @@ namespace AnimatorAsCode.V1
     public class AacFlStateMachine : AacAnimatorNode<AacFlStateMachine>
     {
         /// Exposes the underlying Unity AnimatorStateMachine object of this state machine.
-        public readonly AnimatorStateMachine Machine;
-        
+        [PublicAPI] public AnimatorStateMachine Machine { get; }
+
         private readonly AnimationClip _emptyClip;
         private readonly AacBackingAnimator _backingAnimator;
         private readonly IAacDefaultsProvider _defaultsProvider;
@@ -356,7 +357,9 @@ namespace AnimatorAsCode.V1
 
     public class AacFlState : AacAnimatorNode<AacFlState>
     {
-        public readonly AnimatorState State;
+        /// Exposes the underlying Unity AnimatorState of this state.
+        [PublicAPI] public AnimatorState State { get; }
+        
         private readonly AnimatorStateMachine _machine;
 
         public AacFlState(AnimatorState state, AacFlStateMachine parentMachine, IAacDefaultsProvider defaultsProvider, Transform animatorRoot) : base(parentMachine, defaultsProvider, animatorRoot)
@@ -685,7 +688,9 @@ namespace AnimatorAsCode.V1
 
     public class AacFlNewTransitionContinuation
     {
-        public readonly AnimatorTransitionBase Transition;
+        /// Exposes the underlying Unity AnimatorTransitionBase of this transition.
+        [PublicAPI] public AnimatorTransitionBase Transition { get; }
+        
         private readonly AnimatorStateMachine _machine;
         private readonly AacTransitionEndpoint _sourceNullableIfAny;
         private readonly AacTransitionEndpoint _destinationNullableIfExits;

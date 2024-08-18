@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -13,7 +14,7 @@ namespace AnimatorAsCode.V1
         private readonly AacConfiguration _component;
         
         /// Exposes the underlying Unity Clip asset.
-        public AnimationClip Clip { get; }
+        [PublicAPI] public AnimationClip Clip { get; }
 
         public AacFlClip(AacConfiguration component, AnimationClip clip)
         {
@@ -312,7 +313,7 @@ namespace AnimatorAsCode.V1
     public class AacFlEditClip
     {
         private readonly AacConfiguration _component;
-        public AnimationClip Clip { get; }
+        [PublicAPI] public AnimationClip Clip { get; }
 
         public AacFlEditClip(AacConfiguration component, AnimationClip clip)
         {
