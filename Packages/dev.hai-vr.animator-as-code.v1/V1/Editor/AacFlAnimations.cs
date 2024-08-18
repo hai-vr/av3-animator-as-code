@@ -648,7 +648,9 @@ namespace AnimatorAsCode.V1
         private readonly AacFlUnit _unit;
         private readonly List<Keyframe> _mutatedKeyframes;
 
-        internal AacFlSettingKeyframes(AacFlUnit unit, List<Keyframe> mutatedKeyframes)
+        // Will be made private/internal in V1.2.0.
+        [Obsolete("This will be made private/internal in V1.2.0")]
+        public AacFlSettingKeyframes(AacFlUnit unit, List<Keyframe> mutatedKeyframes)
         {
             _unit = unit;
             _mutatedKeyframes = mutatedKeyframes;
