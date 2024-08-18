@@ -713,7 +713,7 @@ namespace AnimatorAsCode.V1
     {
         private readonly AnimatorController _animatorController;
 
-        internal AacAnimatorRemoval(AnimatorController animatorController)
+        [PublicAPI] public AacAnimatorRemoval(AnimatorController animatorController)
         {
             _animatorController = animatorController;
         }
