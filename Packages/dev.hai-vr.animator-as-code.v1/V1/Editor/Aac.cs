@@ -449,12 +449,35 @@ namespace AnimatorAsCode.V1
         }
     }
 
+    /// Provides methods for use by extension functions, exposing methods departing from normal fluent interface usage.
+    /// These methods are entering a staging phase as of V1.1.0. It is not recommended to use them.
+    public static class AacAccessorForExtensions
+    {
+        /// NOT FOR PUBLIC USE: This method is entering a staging phase as of V1.1.0. It is not recommended to use it.
+        public static AacConfiguration AccessConfiguration(AacFlBase aacBase)
+        {
+            return aacBase.AccessConfiguration();
+        }
+
+        /// NOT FOR PUBLIC USE: This method is entering a staging phase as of V1.1.0. It is not recommended to use it.
+        public static AacFlLayer AccessCreateLayer(AacFlBase aacBase, AnimatorController animator, string layerName)
+        {
+            return aacBase.AccessCreateLayer(animator, layerName);
+        }
+    }
+
     public class AacFlBase
     {
         private readonly AacConfiguration _configuration;
 
-        /// NON-PUBLIC: Internal use only so that destructive workflow can access this. Maybe this can be improved
+        /// NOT FOR PUBLIC USE: Internal use only so that destructive workflow can access this. Maybe this can be improved
+        [Obsolete("This will be made private/internal in V1.2.0. Use AacAccessorForExtensions.AccessConfiguration(...) instead")]
         public AacConfiguration InternalConfiguration()
+        {
+            return _configuration;
+        }
+
+        internal AacConfiguration AccessConfiguration()
         {
             return _configuration;
         }
@@ -550,16 +573,27 @@ namespace AnimatorAsCode.V1
         //---- ## Destructive workflow
 
         /// Destructive workflow: Create a main layer for an arbitrary AnimatorController, clearing the previous one of the same system. You are not obligated to have a main layer.
-        public AacFlLayer CreateMainArbitraryControllerLayer(AnimatorController controller) => InternalDoCreateLayer(controller, _configuration.DefaultsProvider.ConvertLayerName(_configuration.SystemName));
+        public AacFlLayer CreateMainArbitraryControllerLayer(AnimatorController controller) => DoCreateLayer(controller, _configuration.DefaultsProvider.ConvertLayerName(_configuration.SystemName));
         
         /// Destructive workflow: Create a supporting layer for an arbitrary AnimatorController, clearing the previous one of the same system and suffix. You can create multiple supporting layers with different suffixes, and you are not obligated to have a main layer to create a supporting layer.
-        public AacFlLayer CreateSupportingArbitraryControllerLayer(AnimatorController controller, string suffix) => InternalDoCreateLayer(controller, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix));
+        public AacFlLayer CreateSupportingArbitraryControllerLayer(AnimatorController controller, string suffix) => DoCreateLayer(controller, _configuration.DefaultsProvider.ConvertLayerNameWithSuffix(_configuration.SystemName, suffix));
         
         /// Destructive workflow: Clears the topmost layer of an arbitrary AnimatorController, and returns it.
-        public AacFlLayer CreateFirstArbitraryControllerLayer(AnimatorController controller) => InternalDoCreateLayer(controller, controller.layers[0].name);
+        public AacFlLayer CreateFirstArbitraryControllerLayer(AnimatorController controller) => DoCreateLayer(controller, controller.layers[0].name);
 
-        /// NON-PUBLIC: Internal use only so that destructive workflow can access this. Maybe this can be improved
+        /// NOT FOR PUBLIC USE: Internal use only so that destructive workflow can access this. Maybe this can be improved
+        [Obsolete("This will be made private/internal in V1.2.0. Use AacAccessorForExtensions.CreateLayer(...) instead")]
         public AacFlLayer InternalDoCreateLayer(AnimatorController animator, string layerName)
+        {
+            return DoCreateLayer(animator, layerName);
+        }
+        
+        internal AacFlLayer AccessCreateLayer(AnimatorController animator, string layerName)
+        {
+            return DoCreateLayer(animator, layerName);
+        }
+
+        private AacFlLayer DoCreateLayer(AnimatorController animator, string layerName)
         {
             var ag = new AacAnimatorGenerator(animator, CreateEmptyClip().Clip, _configuration.DefaultsProvider, _configuration.AnimatorRoot);
             var machine = ag.CreateOrClearLayerAtSameIndex(layerName, 1f);
