@@ -1038,11 +1038,17 @@ namespace AnimatorAsCode.V1
 
         public static implicit operator AacTransitionEndpoint(AnimatorState state)
         {
+            // We don't want a null AnimatorState to become an AacTransitionEndpoint that contains null in it 
+            if (state == null) return null;
+            
             return new AacTransitionEndpoint(state);
         }
 
         public static implicit operator AacTransitionEndpoint(AnimatorStateMachine stateMachine)
         {
+            // We don't want a null AnimatorStateMachine to become an AacTransitionEndpoint that contains null in it
+            if (stateMachine == null) return null;
+            
             return new AacTransitionEndpoint(stateMachine);
         }
 
