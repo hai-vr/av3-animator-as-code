@@ -472,9 +472,9 @@ namespace AnimatorAsCode.V1
     {
         private readonly AacConfiguration _configuration;
 
-        /// NOT FOR PUBLIC USE: Internal use only so that destructive workflow can access this. Maybe this can be improved
-        [Obsolete("This will be made private/internal in V1.2.0. Use AacAccessorForExtensions.AccessConfiguration(...) instead")]
-        public AacConfiguration InternalConfiguration()
+        /// NOT FOR PUBLIC USE: Internal use only so that destructive workflow can access this. Has been replaced with AacAccessorForExtensions.AccessConfiguration
+        [Obsolete("This has been made private/internal in V1.2.0. Use AacAccessorForExtensions.AccessConfiguration(...) instead")]
+        internal AacConfiguration InternalConfiguration()
         {
             return _configuration;
         }
@@ -583,9 +583,9 @@ namespace AnimatorAsCode.V1
         /// Destructive workflow: Clears the topmost layer of an arbitrary AnimatorController, and returns it.
         public AacFlLayer CreateFirstArbitraryControllerLayer(AnimatorController controller) => DoCreateLayer(controller, controller.layers[0].name);
 
-        /// NOT FOR PUBLIC USE: Internal use only so that destructive workflow can access this. Maybe this can be improved
-        [Obsolete("This will be made private/internal in V1.2.0. Use AacAccessorForExtensions.CreateLayer(...) instead")]
-        public AacFlLayer InternalDoCreateLayer(AnimatorController animator, string layerName)
+        /// NOT FOR PUBLIC USE: Internal use only so that destructive workflow can access this. Has been replaced with AacAccessorForExtensions.CreateLayer
+        [Obsolete("This has been made private/internal in V1.2.0. Use AacAccessorForExtensions.CreateLayer(...) instead")]
+        internal AacFlLayer InternalDoCreateLayer(AnimatorController animator, string layerName)
         {
             return DoCreateLayer(animator, layerName);
         }
