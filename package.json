@@ -1,0 +1,10 @@
+{
+  "name": "av3-animator-as-code",
+  "version": "1.0.0",
+  "description": "Write concise code to generate Avatars 3.0 Animators.",
+  "documentationUrl": "https://github.com/hai-vr/av3-animator-as-code",
+  "author": {
+    "name": "hai-vr",
+    "url": "https://github.com/hai-vr/av3-animator-as-code"
+  }
+}
