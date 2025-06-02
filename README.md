@@ -19,7 +19,7 @@ Initially created by **[@hai-vr](https://github.com/hai-vr)**,
 
 If you are using Animator As Code in VRChat, install using the VRChat Creator Companion or ALCOM. Instructions are available in [this page](https://docs.hai-vr.dev/docs/products/animator-as-code/install).
 
-Otherwise, if you are **not** using VRChat, install it through the [Releases](https://github.com/hai-vr/av3-animator-as-code/releases).
+Otherwise, if you are **not** using VRChat, you may install it through the [Releases](https://github.com/hai-vr/av3-animator-as-code/releases), or install it through the Unity Package Manager by adding the git url `https://github.com/hai-vr/av3-animator-as-code.git?path=/Packages/dev.hai-vr.animator-as-code.v1`, or updating your `Packages/manifest.json` directly by adding the line `"dev.hai-vr.animator-as-code.v1": "https://github.com/hai-vr/av3-animator-as-code.git?path=/Packages/dev.hai-vr.animator-as-code.v1"`.
 
 ### Documentation
 
