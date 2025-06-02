@@ -30,5 +30,3 @@ Assembly-CSharp-Editor.csproj
 cfe-project.sln.DotSettings.user
 VRC.SDKBase.Editor.BuildPipeline.csproj
 VRC.SDKBase.Editor.ShaderStripping.csproj
-LICENSE.meta
-README.md.meta
