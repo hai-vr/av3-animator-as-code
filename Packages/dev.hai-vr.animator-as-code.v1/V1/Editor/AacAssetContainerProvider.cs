@@ -23,16 +23,19 @@ namespace AnimatorAsCode.V1
 
         public void SaveAsPersistenceRequired(Object objectToAdd)
         {
+            if (_configuration.AssetContainer == null) return;
             if (_configuration.ContainerMode != AacConfiguration.Container.Never) AssetDatabase.AddObjectToAsset(objectToAdd, _configuration.AssetContainer);
         }
 
         public void SaveAsRegular(Object objectToAdd)
         {
+            if (_configuration.AssetContainer == null) return;
             if (_configuration.ContainerMode == AacConfiguration.Container.Everything) AssetDatabase.AddObjectToAsset(objectToAdd, _configuration.AssetContainer);
         }
 
         public void ClearPreviousAssets()
         {
+            if (_configuration.AssetContainer == null) return;
             var allSubAssets = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(_configuration.AssetContainer));
             foreach (var subAsset in allSubAssets)
             {
