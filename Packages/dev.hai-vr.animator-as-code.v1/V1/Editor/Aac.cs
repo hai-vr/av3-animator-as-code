@@ -522,6 +522,18 @@ namespace AnimatorAsCode.V1
             var clip = AacInternals.NewClip(_configuration, name);
             return new AacFlClip(_configuration, clip);
         }
+        
+        /// Create a new BlendTree asset with a name. However, the name is only used as a suffix for the asset. The asset is generated into the container.
+        public AacFlNonInitializedBlendTree NewBlendTree(string name)
+        {
+            return new AacFlNonInitializedBlendTree(AacInternals.NewBlendTreeAsRaw(_configuration, name));
+        }
+
+        /// Create a new BlendTree asset with a name and returns a native BlendTree object. However, the name is only used as a suffix for the asset. The asset is generated into the container. You may use NewBlendTree() instead to obtain a fluent interface.
+        public BlendTree NewBlendTreeAsRaw(string name)
+        {
+            return AacInternals.NewBlendTreeAsRaw(_configuration, name);
+        }
 
         /// Create a new clip which animates a dummy transform for a specific duration specified in an unit (Frames or Seconds).
         public AacFlClip DummyClipLasting(float numberOf, AacFlUnit unit)
